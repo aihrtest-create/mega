@@ -448,11 +448,11 @@ function MegaFoodStep() {
                         <div>
                           {/* Картинка блюда с эффектом парения */}
                           {item.image && (
-                            <div className="relative w-full h-48 rounded-2xl bg-white/80 overflow-hidden flex items-center justify-center p-2 mb-4 shadow-inner group-hover:bg-white transition-colors duration-300">
+                            <div className="relative w-full h-56 rounded-2xl bg-white/80 overflow-hidden flex items-center justify-center mb-4 shadow-inner group-hover:bg-white transition-colors duration-300">
                               <img
                                 src={getPublicUrl(item.image)}
                                 alt={item.name}
-                                className="max-w-full max-h-full object-contain filter drop-shadow-md group-hover:scale-105 group-hover:-translate-y-1.5 transition-transform duration-500 ease-out"
+                                className="w-full h-full object-cover filter drop-shadow-md group-hover:scale-105 group-hover:-translate-y-1.5 transition-transform duration-500 ease-out"
                               />
                               {qty > 0 && (
                                 <div className="absolute top-3 right-3 bg-[#FF6022] text-white rounded-full p-1.5 shadow-md shadow-[#FF6022]/20 scale-100 animate-in fade-in zoom-in duration-200">
@@ -510,7 +510,7 @@ function MegaFoodStep() {
                             >
                               <button
                                 type="button"
-                                onClick={() => updateMegaQty(item.id, -1)}
+                                onClick={(e) => { e.stopPropagation(); updateMegaQty(item.id, -1); }}
                                 className="w-9 h-9 rounded-xl bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-[#1A1A1A] font-bold transition-colors active:scale-90"
                               >
                                 <Minus className="w-4 h-4 stroke-[3px]" />
@@ -520,7 +520,7 @@ function MegaFoodStep() {
                               </span>
                               <button
                                 type="button"
-                                onClick={() => updateMegaQty(item.id, 1)}
+                                onClick={(e) => { e.stopPropagation(); updateMegaQty(item.id, 1); }}
                                 className="w-9 h-9 rounded-xl bg-[#FF6022] hover:bg-[#E05018] flex items-center justify-center text-white font-bold transition-colors shadow-sm active:scale-90"
                               >
                                 <Plus className="w-4 h-4 stroke-[3px]" />

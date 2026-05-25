@@ -15,12 +15,14 @@ const API_BASE = import.meta.env.VITE_API_URL || 'https://194-87-118-33.nip.io';
 // ──────────────────────────────────────────────
 // localStorage cache helpers
 // ──────────────────────────────────────────────
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CACHE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 function getActiveParkId(): ParkId {
   const params = new URLSearchParams(window.location.search);
-  return params.get("park") === "mega" ? "mega" : "hello";
+  if (params.get("park") === "hello") return "hello";
+  if (window.location.pathname.includes("/hello")) return "hello";
+  return "mega";
 }
 
 function getCacheKey(leadId: string | null, parkId: ParkId) {

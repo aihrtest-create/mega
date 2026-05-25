@@ -395,7 +395,7 @@ export function Step1Format() {
         })}
 
         {/* Custom Package - Expressive large card */}
-        {!isMega && <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -465,7 +465,7 @@ export function Step1Format() {
               </div>
             </div>
           </div>
-        </motion.div>}
+        </motion.div>
 
       </div>
     </motion.div>

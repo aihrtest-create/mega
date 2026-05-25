@@ -73,15 +73,19 @@ export function StepIndicator() {
               {/* Circle */}
               <div
                 className={`w-[34px] h-[34px] rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isCompleted
+                  isCurrent
+                    ? isCompleted
+                      ? "bg-[#FF6022] text-white ring-[2px] ring-[#FF6022] ring-offset-[2px] ring-offset-white"
+                      : "bg-white text-[#FF6022] ring-[2.5px] ring-[#FF6022] shadow-[0_0_0_4px_rgba(255,96,34,0.1)]"
+                    : isCompleted
                     ? "bg-[#FF6022] text-white shadow-sm"
-                    : isCurrent
-                    ? "bg-white text-[#FF6022] ring-[2.5px] ring-[#FF6022] shadow-[0_0_0_4px_rgba(255,96,34,0.1)]"
                     : "bg-[#F0F0F0] text-[#ABABAB]"
                 }`}
               >
-                {isCompleted ? (
+                {isCompleted && !isCurrent ? (
                   <Check className="w-4 h-4" strokeWidth={3} />
+                ) : isCompleted && isCurrent ? (
+                  <span className="text-[12px] font-bold text-white">{displayNum}</span>
                 ) : (
                   <span className={`text-[12px] font-bold ${isCurrent ? "text-[#FF6022]" : ""}`}>
                     {displayNum}

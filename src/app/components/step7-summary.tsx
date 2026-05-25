@@ -154,10 +154,11 @@ export function Step7Summary() {
     if (isMega) return 0;
     if (!state.questType || state.questType === "none") return 0;
     if (state.packageType === "custom") {
-      return state.questType.startsWith("phygital_") ? 12000 : 15000;
+      return state.questType.startsWith("phygital_") ? 12000 : 16000;
     } else if (state.questType.startsWith("classic_")) {
-      if (state.packageType === "basic") return 10000;
-      if (state.packageType === "premium") return 5000;
+      if (state.packageType === "basic") return 16000;
+      if (state.packageType === "premium") return 16000;
+      if (state.packageType === "exclusive") return 9000;
     }
     return 0;
   };

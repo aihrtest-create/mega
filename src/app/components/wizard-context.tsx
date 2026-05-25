@@ -218,13 +218,15 @@ function getMegaSteps(packageType: WizardState["packageType"]) {
     // Insert step 7 before 9
     steps.splice(steps.indexOf(9), 0, 7);
   }
-  const summaryIndex = steps.indexOf(12);
   if (packageType === "premium" || packageType === "exclusive") {
-    steps.splice(summaryIndex, 0, 13);
+    // Insert step 13 before 9
+    steps.splice(steps.indexOf(9), 0, 13);
   }
   if (packageType === "exclusive") {
-    steps.splice(steps.indexOf(12), 0, 14);
+    // Insert step 14 before 9
+    steps.splice(steps.indexOf(9), 0, 14);
   }
+  const summaryIndex = steps.indexOf(12);
   return steps;
 }
 
@@ -492,12 +494,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         next = 16;
       }
 
+      // After Additional Services (16) → go to Disco (13) or Adult Location (6)
       if (s === 16) {
-        next = 9;
-      }
-
-      // After Food (Step 9) → go to Disco (Step 13) if Premium/Exclusive, else Adult Location (Step 6)
-      if (s === 9) {
         if (state.packageType === "premium" || state.packageType === "exclusive") {
           next = 13;
         } else {
@@ -505,7 +503,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // After Disco (Step 13) → go to Balloon (Step 14) if Exclusive, else Adult Location (Step 6)
+      // After Disco (13) → go to Balloon (14) if Exclusive, else Adult Location (6)
       if (s === 13) {
         if (state.packageType === "exclusive") {
           next = 14;
@@ -514,24 +512,38 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // After Balloon (Step 14) → go to Adult Location (Step 6)
+      // After Balloon (14) → go to Adult Location (6)
       if (s === 14) {
         next = 6;
       }
 
-      // After Adult Location (Step 6) → go to Cakes (Step 10) "Доп. услуги"
+      // After Adult Location (6) → go to Cakes (10)
       if (s === 6) {
         next = 10;
       }
 
-      // Skip Included bonuses (Step 11) if custom AND no gifts earned
-      if (s === 10 && state.packageType === "custom" && !hasCustomGifts(state)) {
+      // After Cakes (10) → go to Included (11) or Food (9)
+      if (s === 10) {
+        if (state.packageType === "custom" && !hasCustomGifts(state)) {
+          next = 9;
+        } else {
+          next = 11;
+        }
+      }
+
+      // After Included (11) → go to Food (9)
+      if (s === 11) {
+        next = 9;
+      }
+
+      // After Food (9) → go to Summary (12)
+      if (s === 9) {
         next = 12;
       }
       
       return Math.min(next, TOTAL_STEPS);
     });
-  }, [isMega, state.questType, state.packageType]);
+  }, [isMega, state.questType, state.packageType, state.date, state.isWeekend]);
 
   const prevStep = useCallback(() => {
     setStep((s) => {
@@ -544,33 +556,45 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
       let prev = s - 1;
       
-      // Going back from Adult Location (Step 6)
-      if (s === 6) {
+      // Going back from Summary (12)
+      if (s === 12) {
+        prev = 9; // Food is now the last step before summary
+      }
+      // Going back from Food (9)
+      else if (s === 9) {
+        if (state.packageType === "custom" && !hasCustomGifts(state)) {
+          prev = 10;
+        } else {
+          prev = 11;
+        }
+      }
+      // Going back from Included Bonuses (11)
+      else if (s === 11) {
+        prev = 10;
+      }
+      // Going back from Cakes (10)
+      else if (s === 10) {
+        prev = 6;
+      }
+      // Going back from Adult Location (6)
+      else if (s === 6) {
         if (state.packageType === "exclusive") {
           prev = 14;
         } else if (state.packageType === "premium") {
           prev = 13;
         } else {
-          prev = 9;
+          prev = 16;
         }
       }
-      // Going back from Balloon (Step 14)
+      // Going back from Balloon (14)
       else if (s === 14) {
         prev = 13;
       }
-      // Going back from Disco (Step 13)
+      // Going back from Disco (13)
       else if (s === 13) {
-        prev = 9;
-      }
-      // Going back from Cakes (Step 10) → back to Adult Location (Step 6)
-      else if (s === 10) {
-        prev = 6;
-      }
-      // Going back from Food (Step 9) -> Additional Services (16)
-      else if (s === 9) {
         prev = 16;
       }
-      // Going back from Additional Services (16) -> Additional Activities (15)
+      // Going back from Additional Services (16)
       else if (s === 16) {
         prev = 15;
       }
@@ -582,28 +606,26 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
           prev = 8;
         }
       }
-      // Going back from MC (Step 8)
+      // Going back from MC (8)
       else if (s === 8) {
         if (state.packageType === "premium") {
           prev = 5;
+        } else if (state.packageType === "exclusive" || state.packageType === "custom") {
+          prev = 7;
         }
       }
-      // Going back from Shows (Step 7)
+      // Going back from Shows (7)
       else if (s === 7) {
         prev = 5;
       }
-      // If going back from Kids Location (Step 5) and not phygital quest, skip Animators (Step 4)
+      // If going back from Kids Location (5) and not phygital quest, skip Animators (4)
       else if (s === 5 && !state.questType?.startsWith("phygital_")) {
         prev = 3;
-      }
-      // If going back from Summary (Step 12) and custom, skip Included Bonuses (Step 11) if no gifts
-      else if (s === 12 && state.packageType === "custom" && !hasCustomGifts(state)) {
-        prev = 10;
       }
       
       return Math.max(prev, 1);
     });
-  }, [isMega, state.questType, state.packageType]);
+  }, [isMega, state.questType, state.packageType, state.date, state.isWeekend]);
   const updateState = useCallback(
     (partial: Partial<WizardState>) => setState((s) => ({ ...s, ...partial })),
     []
@@ -652,12 +674,12 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     // Quest addon
     if (state.questType && state.questType !== "none") {
       if (state.packageType === "custom") {
-        total += state.questType.startsWith("phygital_") ? 12000 : 15000;
+        total += state.questType.startsWith("phygital_") ? 12000 : 16000;
       } else if (state.questType.startsWith("classic_")) {
         // Surcharge for classic quests in packages
-        if (state.packageType === "basic") total += 10000;
-        else if (state.packageType === "premium") total += 5000;
-        // exclusive = free
+        if (state.packageType === "basic") total += 16000;
+        else if (state.packageType === "premium") total += 16000;
+        else if (state.packageType === "exclusive") total += 9000;
       }
     }
 
@@ -760,8 +782,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
   const visibleSteps = React.useMemo(() => {
     if (isMega) return getMegaSteps(state.packageType);
 
-    // Actual navigation order: 1→2→3→4?→5→7?→8?→9→13?→14?→6→10→11?→12
-    const list = [1, 2, 3, 4, 5, 7, 8, 9, 13, 14, 6, 10, 11, 12];
+    // Actual navigation order: 1→2→3→4?→5→7?→8?→(15,16 hidden)→13?→14?→6→10→11?→9→12
+    const list = [1, 2, 3, 4, 5, 7, 8, 13, 14, 6, 10, 11, 9, 12];
     return list.filter((s) => {
       // Skip Animators (Step 4) if not a phygital quest
       if (s === 4 && state.questType && !state.questType.startsWith("phygital_")) return false;

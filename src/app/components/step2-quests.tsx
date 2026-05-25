@@ -156,6 +156,8 @@ function QuestPopup({
   onSelect: () => void;
   isSelected: boolean;
 }) {
+  const { state, isMega } = useWizard();
+  const isCustom = state.packageType === "custom";
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
 
@@ -294,6 +296,14 @@ function QuestPopup({
                 <Zap className="w-4 h-4 text-[#747474]" />
                 <span className="text-sm font-medium text-[#1A1A1A]">{quest.animators} аниматор</span>
               </div>
+              {!isMega && (
+                <div className="flex items-center gap-2 bg-[#FF6022]/10 border border-[#FF6022]/20 rounded-xl px-3 py-2">
+                  <span className="text-xs text-[#ABABAB] line-through font-medium">20 000 ₽</span>
+                  <span className="text-sm font-bold text-[#FF6022]">
+                    {isCustom ? "Акция: 12 000 ₽" : "Акция: Входит в пакет!"}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Phygital Mascot Banner */}
@@ -433,11 +443,13 @@ export function Step2Quests() {
     if (isMega) {
       updateState({ questType: id });
     } else if (state.packageType === "basic") {
-      setSurchargePopup({ questId: id, amount: 10000 });
+      setSurchargePopup({ questId: id, amount: 16000 });
     } else if (state.packageType === "premium") {
-      setSurchargePopup({ questId: id, amount: 5000 });
+      setSurchargePopup({ questId: id, amount: 16000 });
+    } else if (state.packageType === "exclusive") {
+      setSurchargePopup({ questId: id, amount: 9000 });
     } else {
-      // exclusive = free, custom = price shown on card
+      // custom = price shown on card
       updateState({ questType: id });
     }
   };
@@ -511,6 +523,12 @@ export function Step2Quests() {
                       />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
 
+                    {!isMega && (
+                      <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#FF6022] to-[#FF8A00] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-2xl shadow-lg shadow-[#FF6022]/30 flex items-center gap-1 border border-white/20">
+                        🔥 Хит · Акция
+                      </div>
+                    )}
+
                     <button 
                       className="absolute top-4 right-4 bg-gradient-to-tr from-[#FF6022] to-[#FF8A00] text-white text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-full flex items-center gap-2 z-10 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-[#FF6022]/40"
                       onClick={(e) => {
@@ -541,8 +559,28 @@ export function Step2Quests() {
                         {isMega && (
                           <p className="text-[11px] text-[#4CAF50] font-extrabold mt-1">Входит в пакет</p>
                         )}
-                        {!isMega && isCustom && (
-                          <p className="text-[11px] text-[#FF6022] font-extrabold mt-1">12 000 ₽</p>
+                        {!isMega && (
+                          <div className="mt-2">
+                            {isCustom ? (
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[10px] text-[#ABABAB] line-through">20 000 ₽</span>
+                                <span className="text-[12px] text-[#FF6022] font-black">12 000 ₽</span>
+                                <span className="text-[9px] font-extrabold text-white bg-gradient-to-r from-[#FF6022] to-[#FF8A00] px-1.5 py-0.5 rounded-full shadow-sm">
+                                  -40% Акция
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="flex flex-col gap-0.5">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[10px] text-[#ABABAB] line-through">20 000 ₽</span>
+                                  <span className="text-[11px] text-[#4CAF50] font-extrabold">Входит в пакет!</span>
+                                </div>
+                                <span className="text-[9px] text-[#2E7D32] bg-[#E8F5E9] border border-[#C8E6C9] font-bold px-1.5 py-0.5 rounded-md self-start">
+                                  🔥 Акция до конца месяца
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         )}
                       </div>
 
@@ -574,13 +612,16 @@ export function Step2Quests() {
                 <span className="font-semibold text-[#4CAF50] bg-[#4CAF50]/10 px-2.5 py-0.5 rounded-md">Входит в пакет</span>
               )}
               {!isMega && isCustom && (
-                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">15 000 ₽</span>
+                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">16 000 ₽</span>
               )}
               {!isMega && state.packageType === "basic" && (
-                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+10 000 ₽</span>
+                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+16 000 ₽</span>
               )}
               {!isMega && state.packageType === "premium" && (
-                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+5 000 ₽</span>
+                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+16 000 ₽</span>
+              )}
+              {!isMega && state.packageType === "exclusive" && (
+                <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+9 000 ₽</span>
               )}
             </div>
           </div>
@@ -639,8 +680,13 @@ export function Step2Quests() {
                         {isMega && (
                           <p className="text-[11px] text-[#4CAF50] font-extrabold mt-1">Входит в пакет</p>
                         )}
-                        {!isMega && isCustom && (
-                          <p className="text-[11px] text-[#FF6022] font-extrabold mt-1">15 000 ₽</p>
+                        {!isMega && (
+                          <p className="text-[11px] text-[#FF6022] font-extrabold mt-1">
+                            {isCustom && "16 000 ₽"}
+                            {state.packageType === "basic" && "+16 000 ₽"}
+                            {state.packageType === "premium" && "+16 000 ₽"}
+                            {state.packageType === "exclusive" && "+9 000 ₽"}
+                          </p>
                         )}
                       </div>
 

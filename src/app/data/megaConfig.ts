@@ -7,9 +7,9 @@ export const MEGA_PACKAGE_PRICES: Record<string, [number, number]> = {
 };
 
 export const MEGA_ROOM_DETAILS: Record<string, { label: string; hours: number }> = {
-  basic: { label: "Интерактивная комната — 2,5 часа", hours: 2.5 },
-  premium: { label: "Интерактивная комната — 2,5 часа", hours: 2.5 },
-  exclusive: { label: "Интерактивная комната — 3 часа", hours: 3 },
+  basic: { label: "Фиджитал Патирум — 2,5 часа", hours: 2.5 },
+  premium: { label: "Фиджитал Патирум — 2,5 часа", hours: 2.5 },
+  exclusive: { label: "Фиджитал Патирум — 3 часа", hours: 3 },
 };
 
 export const MEGA_MC_PRICE = 15000;
@@ -34,6 +34,7 @@ export interface MegaFoodItem {
   price: number;
   subtitle?: string;
   details: string[];
+  image?: string;
 }
 
 export interface MegaFoodCategory {
@@ -61,6 +62,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Картофель фри + кетчуп — 8 порций",
           "Кесадилья с курицей + сметана — 2 порции",
         ],
+        image: "/images/food/mega_udc_1.png",
       },
       {
         id: "mega_udc_2",
@@ -72,6 +74,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Наггетсы + сырный соус — 4 порции",
           "Куриный шашлычок + кетчуп + фри — 8 порций",
         ],
+        image: "/images/food/mega_udc_2.png",
       },
       {
         id: "mega_udc_3",
@@ -84,6 +87,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Кесадилья с курицей + сметана — 2 порции",
           "Фруктовая тарелка",
         ],
+        image: "/images/food/mega_udc_3.png",
       },
     ],
   },
@@ -103,6 +107,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Картофель фри + кетчуп — 8 порций",
           "Пицца маргарита — 4 порции",
         ],
+        image: "/images/food/mega_osterio_1.png",
       },
       {
         id: "mega_osterio_2",
@@ -115,6 +120,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Наггетсы + сырный соус — 6 порций",
           "Картофель фри + кетчуп — 8 порций",
         ],
+        image: "/images/food/mega_osterio_2.png",
       },
       {
         id: "mega_osterio_3",
@@ -128,6 +134,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Пицца с ветчиной — 4 порции",
           "Пицца маргарита — 4 порции",
         ],
+        image: "/images/food/mega_osterio_3.png",
       },
     ],
   },

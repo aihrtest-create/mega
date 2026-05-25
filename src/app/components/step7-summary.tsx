@@ -358,7 +358,7 @@ export function Step7Summary() {
         {state.patiroomDetails && (
           <SummaryRow
             icon={<MapPin className="w-4 h-4" />}
-            label={isMega ? "Интерактивная комната" : "Патирум"}
+            label={isMega ? "Фиджитал Патирум" : "Патирум"}
             value={state.patiroomDetails}
             priceText={formatPrice(getPatiroomPrice())}
             stepNumber={isMega ? undefined : 5}

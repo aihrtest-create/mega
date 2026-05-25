@@ -219,7 +219,7 @@ function WizardContent() {
 }
 
 export default function App() {
-  const isPresentation = window.location.pathname === '/presentation' || window.location.pathname === '/planner-park/presentation';
+  const isPresentation = window.location.pathname === '/presentation' || window.location.pathname === '/mega/presentation';
 
   if (isPresentation) {
     return <Presentation />;

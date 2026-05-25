@@ -53,7 +53,7 @@ const slides = [
         <div className="relative">
           <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-purple-500/20 rounded-3xl blur-xl" />
           <img 
-            src="/planner-park/screenshots/1-splash.webp" 
+            src="/mega/screenshots/1-splash.webp" 
             alt="Splash Screen" 
             className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
           />
@@ -70,7 +70,7 @@ const slides = [
         <div className="order-2 md:order-1 relative">
           <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-emerald-500/20 rounded-3xl blur-xl" />
           <img 
-            src="/planner-park/screenshots/2-base-package.webp" 
+            src="/mega/screenshots/2-base-package.webp" 
             alt="Base Packages" 
             className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
           />
@@ -126,7 +126,7 @@ const slides = [
         <div className="relative">
           <div className="absolute -inset-4 bg-gradient-to-tr from-pink-500/20 to-orange-500/20 rounded-3xl blur-xl" />
           <img 
-            src="/planner-park/screenshots/3-package-selected.webp" 
+            src="/mega/screenshots/3-package-selected.webp" 
             alt="Customization" 
             className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
             style={{ objectPosition: 'top' }}

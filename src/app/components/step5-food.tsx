@@ -1,0 +1,459 @@
+import { useWizard } from "./wizard-context";
+import { motion, AnimatePresence } from "motion/react";
+import { Check, UtensilsCrossed, Minus, Plus, ChevronRight, X } from "lucide-react";
+import { useState } from "react";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { FOOD_MENU, FoodCategory, FoodItem } from "../data/foodMenu";
+import { MEGA_FOOD_CATEGORIES, getMegaFoodTotal } from "../data/megaConfig";
+
+const getPublicUrl = (path: string) => {
+  if (!path) return path;
+  if (path.startsWith('http') || path.startsWith('data:')) return path;
+  return ((import.meta as any).env?.BASE_URL || '/') + path.replace(/^\//, '');
+};
+
+const KIDS_SET_ITEMS = [
+  { name: "Пицца Маргарита", quantity: 2, emoji: "🍕" },
+  { name: "Пицца Пепперони", quantity: 1, emoji: "🍕" },
+  { name: "Пицца 4 сыра", quantity: 1, emoji: "🧀" },
+  { name: "Наггетсы", quantity: 4, emoji: "🍗" },
+  { name: "Картофель фри", quantity: 4, emoji: "🍟" },
+  { name: "Овощной котёнок", quantity: 4, emoji: "🥗" },
+  { name: "Фруктовый медвеж-к", quantity: 2, emoji: "🍉" },
+  { name: "Морс клюквенный (1л)", quantity: 4, emoji: "🧃" },
+  { name: "Вода б/г (1л)", quantity: 4, emoji: "💧" },
+];
+
+export function Step5Food() {
+  const { state, updateState, isMega } = useWizard();
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  if (isMega) {
+    return <MegaFoodStep />;
+  }
+
+  // Is Kids Set paid? Basic or Custom = paid. Premium or Exclusive = included (but can be removed)
+  const isPaidSet = state.packageType === "basic" || state.packageType === "custom";
+
+  const handleUpdateItemQty = (id: string, delta: number) => {
+    const current = state.customFood[id] || 0;
+    const next = Math.max(0, current + delta);
+    updateState({ customFood: { ...state.customFood, [id]: next } });
+  };
+
+  const getCategoryCount = (categoryId: string) => {
+    const cat = FOOD_MENU.find(c => c.id === categoryId);
+    if (!cat) return 0;
+    return cat.items.reduce((sum, item) => sum + (state.customFood[item.id] || 0), 0);
+  };
+
+  const getTotalCustomItems = () => {
+    return Object.values(state.customFood).reduce((sum, qty) => sum + qty, 0);
+  };
+
+  const activeCategoryData = FOOD_MENU.find(c => c.id === activeCategory);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.3 }}
+      className="px-4 pb-16"
+    >
+      <div className="text-center mb-8 px-4 pt-2">
+        <h2 className="text-3xl font-black text-[#1A1A1A] mb-2 leading-tight flex items-center justify-center gap-3">
+          <span className="text-4xl drop-shadow-md hover:scale-110 transition-transform cursor-pointer">🍕</span>
+          Питание
+        </h2>
+        <p className="text-base font-bold text-[#747474] leading-relaxed">Вкуснейшие угощения для гостей</p>
+      </div>
+
+      {/* 1. Набор детской еды */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-3">
+          <UtensilsCrossed className="w-5 h-5 text-[#FF6022]" />
+          <h3 className="text-[#1A1A1A] font-semibold">Готовое решение</h3>
+        </div>
+
+        <motion.div
+          animate={{
+             backgroundColor: state.includeFood ? "#FFF5F2" : "#FFFFFF",
+             boxShadow: state.includeFood ? "0 10px 30px -10px rgba(255, 96, 34, 0.2)" : "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
+             borderColor: state.includeFood ? "#FF6022" : "#E5E5E5"
+          }}
+          className="w-full rounded-3xl overflow-hidden border-2 transition-all flex flex-col relative cursor-pointer"
+          onClick={() => updateState({ includeFood: !state.includeFood })}
+        >
+           {/* Top Image Section */}
+           <div 
+              className="relative h-56 bg-white group m-1 rounded-[24px] overflow-hidden" 
+           >
+              <ImageWithFallback
+                src={getPublicUrl("/images/food/kids_set.webp")}
+                alt="Набор детской еды"
+                className="w-full h-full object-cover mix-blend-multiply group-hover:scale-[1.02] transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+              
+              {/* Badge for Included Packages */}
+              {!isPaidSet && state.includeFood && (
+                <div className="absolute top-3 left-4 z-10">
+                  <span
+                    className="inline-flex items-center gap-2 text-white text-[12px] font-extrabold px-5 py-2.5 rounded-2xl uppercase tracking-wider"
+                    style={{
+                      background: "#6C4AED",
+                      boxShadow: "0 4px 16px rgba(108, 74, 237, 0.45)",
+                      transform: "rotate(-2deg)",
+                      display: "inline-flex",
+                    }}
+                  >
+                    <Check className="w-4 h-4" /> Включено в пакет
+                  </span>
+                </div>
+              )}
+
+              {state.includeFood && (
+                <div className="absolute top-4 right-4 bg-[#FF6022] rounded-full p-1.5 shadow-md z-10 transition-transform scale-in">
+                  <Check className="w-5 h-5 text-white" />
+                </div>
+              )}
+              
+              {/* Info overlap */}
+              <div className="absolute bottom-3 left-4 right-4 z-10 flex items-end justify-between pointer-events-none">
+                <div>
+                  <h4 className="text-white font-bold text-xl leading-tight mb-0.5">Набор детской еды</h4>
+                  {isPaidSet && (
+                    <p className="text-[#FF6022] font-bold text-sm">12 070 ₽</p>
+                  )}
+                </div>
+                <div
+                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors pointer-events-auto shadow-sm ${
+                    state.includeFood
+                      ? "bg-[#FF6022] text-white shadow-[#FF6022]/40"
+                      : "bg-white text-[#1A1A1A]"
+                  }`}
+                  onClick={(e) => {
+                     e.stopPropagation();
+                     updateState({ includeFood: !state.includeFood });
+                  }}
+                >
+                  {state.includeFood ? "Выбрано" : "Добавить"}
+                </div>
+              </div>
+           </div>
+
+           {/* Bottom Composition Section */}
+           <div className="p-4 px-5 bg-transparent border-t border-black/5">
+             <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-semibold text-[#FF6022] uppercase tracking-wider">Состав (на 8-10 детей):</p>
+             </div>
+             <div className="flex flex-wrap gap-2 relative z-0">
+               {KIDS_SET_ITEMS.map((item, idx) => (
+                 <span
+                   key={idx}
+                   className={`text-xs font-medium px-3 py-1.5 rounded-full border flex items-center gap-1 shadow-sm transition-colors ${state.includeFood ? "bg-white border-[#FF6022]/20 text-[#1A1A1A]" : "bg-[#F8F9FA] border-[#E5E5E5] text-[#747474]"}`}
+                 >
+                   <span className={state.includeFood ? "opacity-100" : "opacity-70"}>{item.emoji}</span> 
+                   <span>{item.name}</span>
+                   <span className={state.includeFood ? "text-[#747474] ml-1 font-bold" : "text-[#A3A3A3] ml-1"}>x{item.quantity}</span>
+                 </span>
+               ))}
+             </div>
+           </div>
+        </motion.div>
+        
+        {/* Helper Note for Premium/Exclusive subtraction */}
+        {!isPaidSet && !state.includeFood && (
+          <motion.p 
+             initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+             className="text-xs text-[#FF6022] font-semibold text-center mt-3"
+          >
+             Сумма вашего пакета уменьшена на 12 070 ₽
+          </motion.p>
+        )}
+      </div>
+
+      {/* 2. Собрать по меню */}
+      <div>
+        <div className="flex items-center justify-between mb-3 mt-8">
+          <div className="flex items-center gap-2">
+             <div className="w-5 h-5 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white text-[10px]">✨</div>
+             <h3 className="text-[#1A1A1A] font-semibold">Дополнительное меню</h3>
+          </div>
+          {getTotalCustomItems() > 0 && (
+             <span className="text-xs bg-[#1A1A1A] text-white px-2 py-0.5 rounded-full font-medium shadow-sm">
+               Выбрано: {getTotalCustomItems()}
+             </span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          {FOOD_MENU.map(cat => {
+             const count = getCategoryCount(cat.id);
+             return (
+               <motion.button
+                 key={cat.id}
+                 whileTap={{ scale: 0.98 }}
+                 onClick={() => setActiveCategory(cat.id)}
+                 className={`relative p-4 rounded-2xl border text-left flex flex-col justify-between aspect-[1.4/1] overflow-hidden transition-all ${count > 0 ? "bg-[#FF6022]/5 border-[#FF6022]/30 shadow-sm" : "bg-white border-[#E5E5E5] shadow-sm hover:shadow-md"}`}
+               >
+                  <span className="text-3xl mb-2 filter drop-shadow-sm">{cat.icon}</span>
+                  <div className="flex items-start justify-between w-full">
+                     <span className="text-sm font-semibold text-[#1A1A1A] leading-tight pr-2">{cat.title}</span>
+                     {count > 0 ? (
+                        <div className="bg-[#FF6022] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shrink-0 shadow-sm">
+                           {count}
+                        </div>
+                     ) : (
+                        <ChevronRight className="w-4 h-4 text-[#C4C4C4] shrink-0" />
+                     )}
+                  </div>
+               </motion.button>
+             );
+          })}
+        </div>
+      </div>
+
+
+      {/* Bottom Sheet Modal for interactive menu */}
+      <AnimatePresence>
+        {activeCategory && activeCategoryData && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed top-[-50vh] bottom-[-50vh] left-0 right-0 z-[90] bg-black/50 backdrop-blur-md"
+              onClick={() => setActiveCategory(null)}
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 h-[85vh] bg-white rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[100] flex flex-col pb-safe"
+            >
+              <div className="flex-shrink-0 pt-4 pb-2 px-5 sticky top-0 bg-white/90 backdrop-blur z-10 rounded-t-3xl border-b border-gray-100">
+                 <div className="w-12 h-1.5 bg-[#E5E5E5] rounded-full mx-auto mb-4" />
+                 <div className="flex items-center justify-between pb-2">
+                    <h3 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
+                       {activeCategoryData.icon} {activeCategoryData.title}
+                    </h3>
+                    <button onClick={() => setActiveCategory(null)} className="p-2 bg-gray-100 rounded-full active:scale-95">
+                       <X className="w-5 h-5 text-gray-500" />
+                    </button>
+                 </div>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+                 <div className="flex flex-col gap-4">
+                    {activeCategoryData.items.map(item => {
+                       const qty = state.customFood[item.id] || 0;
+                       return (
+                          <div key={item.id} className="flex items-center justify-between p-4 rounded-2xl ring-1 ring-[#E5E5E5] bg-white shadow-sm hover:shadow-md transition-shadow">
+                             <div className="flex-1 pr-3">
+                                <h4 className="text-sm font-semibold text-[#1A1A1A] leading-tight mb-1">{item.name}</h4>
+                                <div className="flex items-center gap-2">
+                                   <p className="text-sm font-bold text-[#FF6022]">{item.price} ₽</p>
+                                   {item.weight && <span className="text-xs text-[#A3A3A3] font-medium">{item.weight}</span>}
+                                </div>
+                             </div>
+                             
+                             {qty === 0 ? (
+                                <button 
+                                   onClick={() => handleUpdateItemQty(item.id, 1)}
+                                   className="bg-[#F5F5F5] hover:bg-[#E5E5E5] text-[#1A1A1A] px-4 py-2 rounded-xl text-sm font-semibold transition-colors active:scale-95"
+                                >
+                                   Добавить
+                                </button>
+                             ) : (
+                                <div className="flex items-center gap-3 bg-[#FF6022]/10 px-2 py-1.5 rounded-xl border border-[#FF6022]/20">
+                                   <button 
+                                      onClick={() => handleUpdateItemQty(item.id, -1)}
+                                      className="w-7 h-7 flex items-center justify-center bg-white rounded-lg shadow-sm text-[#FF6022] active:scale-95"
+                                   >
+                                      <Minus className="w-4 h-4" />
+                                   </button>
+                                   <span className="font-bold text-[#1A1A1A] min-w-[20px] text-center">{qty}</span>
+                                   <button 
+                                      onClick={() => handleUpdateItemQty(item.id, 1)}
+                                      className="w-7 h-7 flex items-center justify-center bg-[#FF6022] rounded-lg shadow-sm text-white active:scale-95"
+                                   >
+                                      <Plus className="w-4 h-4" />
+                                   </button>
+                                </div>
+                             )}
+                          </div>
+                       )
+                    })}
+                 </div>
+                 
+                 {/* Bottom padding for scrolling */}
+                 <div className="h-20"></div>
+              </div>
+
+              {/* Bottom sticky button */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-gray-100 pb-safe">
+                 <button
+                    onClick={() => setActiveCategory(null)}
+                    className="w-full bg-[#1A1A1A] text-white py-3.5 rounded-xl font-bold shadow-md transition-all active:scale-[0.98]"
+                 >
+                    Готово
+                 </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+    </motion.div>
+  );
+}
+
+function MegaFoodStep() {
+  const { state, updateState } = useWizard();
+  const total = getMegaFoodTotal(state.megaFood);
+
+  const updateMegaQty = (id: string, delta: number) => {
+    const current = state.megaFood[id] || 0;
+    const next = Math.max(0, current + delta);
+    updateState({ megaFood: { ...state.megaFood, [id]: next } });
+  };
+
+  const setMegaQty = (id: string, qty: number) => {
+    updateState({ megaFood: { ...state.megaFood, [id]: Math.max(0, qty) } });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.3 }}
+      className="px-4 pb-16"
+    >
+      <div className="text-center mb-8 px-4 pt-2">
+        <h2 className="text-3xl font-black text-[#1A1A1A] mb-2 leading-tight flex items-center justify-center gap-3">
+          <span className="text-4xl drop-shadow-md">🍽️</span>
+          Питание
+        </h2>
+        <p className="text-base font-bold text-[#747474] leading-relaxed">
+          Комбо-обеды рассчитаны на 8 детей. Количество сетов можно изменить.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => updateState({ megaOwnCatering: !state.megaOwnCatering })}
+        className={`w-full text-left rounded-3xl border-2 p-5 mb-6 transition-all ${
+          state.megaOwnCatering
+            ? "bg-[#FFF5F2] border-[#FF6022] shadow-lg shadow-[#FF6022]/10"
+            : "bg-white border-[#E5E5E5] shadow-sm"
+        }`}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-black uppercase tracking-wider text-[#FF6022] mb-1">
+              Без расчета в смете
+            </div>
+            <h3 className="text-lg font-black text-[#1A1A1A] mb-2">Свой кейтеринг</h3>
+            <p className="text-sm text-[#747474] leading-relaxed">
+              Можно принести торт, фрукты, овощи и сладкие угощения. Соки и воды приобретаются в парке.
+            </p>
+          </div>
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+            state.megaOwnCatering ? "bg-[#FF6022] text-white" : "bg-[#F5F5F5] text-[#C4C4C4]"
+          }`}>
+            <Check className="w-5 h-5" />
+          </div>
+        </div>
+      </button>
+
+      <div className="flex flex-col gap-6">
+        {MEGA_FOOD_CATEGORIES.map((category) => (
+          <section key={category.id}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">{category.icon}</span>
+              <div>
+                <h3 className="text-[#1A1A1A] font-black leading-tight">{category.title}</h3>
+                {category.note && <p className="text-xs text-[#747474] font-medium">{category.note}</p>}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {category.items.map((item) => {
+                const qty = state.megaFood[item.id] || 0;
+                return (
+                  <div
+                    key={item.id}
+                    className={`rounded-3xl border p-4 transition-all ${
+                      qty > 0
+                        ? "bg-[#FFF5F2] border-[#FF6022]/40 shadow-sm"
+                        : "bg-white border-[#E5E5E5]"
+                    }`}
+                  >
+                    <div className="flex gap-4 items-start">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[15px] font-black text-[#1A1A1A] leading-tight">{item.name}</h4>
+                        {item.subtitle && <p className="text-xs text-[#747474] mt-1">{item.subtitle}</p>}
+                        <p className="text-sm font-black text-[#FF6022] mt-2">
+                          {item.price.toLocaleString("ru-RU")} ₽
+                        </p>
+                      </div>
+
+                      {qty === 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => setMegaQty(item.id, 1)}
+                          className="px-4 py-2 rounded-full bg-[#FF6022] text-white text-sm font-bold shadow-md shadow-[#FF6022]/20 active:scale-95"
+                        >
+                          Добавить
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => updateMegaQty(item.id, -1)}
+                            className="w-9 h-9 rounded-full bg-white border border-[#E5E5E5] flex items-center justify-center active:scale-95"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="w-7 text-center text-sm font-black text-[#1A1A1A]">{qty}</span>
+                          <button
+                            type="button"
+                            onClick={() => updateMegaQty(item.id, 1)}
+                            className="w-9 h-9 rounded-full bg-[#FF6022] text-white flex items-center justify-center active:scale-95"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {item.details.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {item.details.map((detail) => (
+                          <span key={detail} className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-[#E5E5E5] text-[#747474]">
+                            {detail}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      {total > 0 && (
+        <div className="mt-6 rounded-3xl bg-[#1A1A1A] text-white p-5 flex items-center justify-between">
+          <span className="text-sm font-bold text-white/70">Питание в смете</span>
+          <span className="text-2xl font-black">{total.toLocaleString("ru-RU")} ₽</span>
+        </div>
+      )}
+    </motion.div>
+  );
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Park — День рождения мечты</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1A1A1A;min-height:100vh;overflow-x:hidden}
+    .hero{background:linear-gradient(135deg,#FF6022 0%,#FF8A50 50%,#FFB347 100%);padding:60px 20px 40px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.1) 0%,transparent 70%);animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    .hero-emoji{font-size:64px;margin-bottom:16px;display:block;animation:bounce 2s infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .hero h1{font-size:32px;font-weight:900;color:#fff;margin-bottom:8px;line-height:1.2}
+    .hero p{font-size:16px;color:rgba(255,255,255,.9);max-width:360px;margin:0 auto}
+    .form-wrap{max-width:420px;margin:-20px auto 0;padding:0 16px;position:relative;z-index:2}
+    .form-card{background:#fff;border-radius:24px;padding:32px 24px;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+    .form-title{font-size:20px;font-weight:800;margin-bottom:4px;text-align:center}
+    .form-sub{font-size:14px;color:#747474;text-align:center;margin-bottom:24px}
+    .field{margin-bottom:16px}
+    .field label{display:block;font-size:13px;font-weight:600;color:#1A1A1A;margin-bottom:6px}
+    .field input{width:100%;padding:14px 16px;border:2px solid #E5E5E5;border-radius:14px;font-size:15px;font-family:inherit;transition:border-color .2s;background:#FAFAFA}
+    .field input:focus{outline:none;border-color:#FF6022;background:#fff}
+    .messenger-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+    .messenger-opt{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border:2px solid #E5E5E5;border-radius:14px;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s;background:#FAFAFA;user-select:none}
+    .messenger-opt:hover{border-color:#FFB347}
+    .messenger-opt.active{border-color:#FF6022;background:#FFF5F0;color:#FF6022}
+    .messenger-opt input{display:none}
+    .submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,#FF6022,#FF8A50);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;position:relative;overflow:hidden}
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,96,34,.35)}
+    .submit-btn:active{transform:translateY(0)}
+    .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none}
+
+    /* Success screen */
+    .success-screen{display:none;text-align:center;padding:40px 20px}
+    .success-screen.active{display:block}
+    .form-screen.hidden{display:none}
+    .success-icon{width:80px;height:80px;background:#E8F5E9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:40px}
+    .success-screen h2{font-size:22px;font-weight:800;margin-bottom:8px}
+    .success-screen p{font-size:14px;color:#747474;margin-bottom:24px;max-width:300px;margin-left:auto;margin-right:auto}
+    .bot-link{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:linear-gradient(135deg,#FF6022,#FF8A50);color:#fff;border-radius:16px;font-size:16px;font-weight:700;text-decoration:none;transition:all .2s}
+    .bot-link:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,96,34,.35)}
+    .bot-link-sub{font-size:12px;color:#ABABAB;margin-top:12px}
+
+    .footer{text-align:center;padding:40px 20px;color:#ABABAB;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <span class="hero-emoji">🎂</span>
+    <h1>День рождения мечты</h1>
+    <p>Соберите идеальный праздник для вашего ребёнка в Hello Park</p>
+  </div>
+
+  <div class="form-wrap">
+    <div class="form-card">
+      <!-- Form -->
+      <div class="form-screen" id="form-screen">
+        <div class="form-title">Оставьте заявку</div>
+        <div class="form-sub">Мы подготовим персональный конфигуратор для вашего праздника</div>
+
+        <form id="lead-form" onsubmit="return submitForm(event)">
+          <div class="field">
+            <label>Ваше имя</label>
+            <input type="text" id="name" placeholder="Как к вам обращаться?" required>
+          </div>
+          <div class="field">
+            <label>Номер телефона</label>
+            <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" required>
+          </div>
+
+          <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px">Удобный способ связи</label>
+          <div class="messenger-select">
+            <label class="messenger-opt active" onclick="selectMessenger(this,'telegram')">
+              <input type="radio" name="messenger" value="telegram" checked>
+              💬 Telegram
+            </label>
+            <label class="messenger-opt" onclick="selectMessenger(this,'max')">
+              <input type="radio" name="messenger" value="max">
+              📱 Max
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submit-btn">Получить конфигуратор 🎉</button>
+        </form>
+      </div>
+
+      <!-- Success -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">✅</div>
+        <h2>Отлично!</h2>
+        <p>Перейдите к нашему ассистенту — он пришлёт вам персональный конфигуратор праздника</p>
+        <a class="bot-link" id="bot-link" href="#" target="_blank">
+          <span id="bot-link-icon">💬</span>
+          <span id="bot-link-text">Перейти в Telegram</span>
+        </a>
+        <div class="bot-link-sub">Нажмите «Старт» в боте, чтобы получить ссылку</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© Hello Park — Парк развлечений</div>
+
+<script>
+  // ===== НАСТРОЙКИ: замени на свои =====
+  const API_URL = window.location.origin; // Сервер на том же домене
+  const TG_BOT_USERNAME = 'helloseligerBot';  // Hello Park BD
+  const MAX_BOT_USERNAME = 'id312339856265_bot';  // Hello Park Avenu
+  // =====================================
+
+  let selectedMessenger = 'telegram';
+
+  function selectMessenger(el, value) {
+    selectedMessenger = value;
+    document.querySelectorAll('.messenger-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  async function submitForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Отправляем...';
+
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    try {
+      const res = await fetch(`${API_URL}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, messenger: selectedMessenger }),
+      });
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.error);
+
+      const leadId = data.lead.id;
+
+      // Generate bot deeplink
+      if (selectedMessenger === 'telegram') {
+        document.getElementById('bot-link').href = `https://t.me/${TG_BOT_USERNAME}?start=lead_${leadId}`;
+        document.getElementById('bot-link-icon').textContent = '💬';
+        document.getElementById('bot-link-text').textContent = 'Перейти в Telegram';
+      } else {
+        document.getElementById('bot-link').href = `https://max.ru/${MAX_BOT_USERNAME}?start=lead_${leadId}`;
+        document.getElementById('bot-link-icon').textContent = '📱';
+        document.getElementById('bot-link-text').textContent = 'Перейти в Max';
+      }
+
+      // Show success screen
+      document.getElementById('form-screen').classList.add('hidden');
+      document.getElementById('success-screen').classList.add('active');
+
+    } catch (err) {
+      alert('Ошибка: ' + (err.message || 'Попробуйте ещё раз'));
+      btn.disabled = false;
+      btn.textContent = 'Получить конфигуратор 🎉';
+    }
+  }
+</script>
+</body>
+</html>

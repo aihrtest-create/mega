@@ -20,7 +20,8 @@ import {
   ChevronRight,
   Trash2,
 } from "lucide-react";
-import { format, isWeekend } from "date-fns";
+import { format } from "date-fns";
+import { isWeekendOrHoliday2026 } from "../data/holidays";
 import { ru } from "date-fns/locale";
 import { CAKES } from "./step-cakes";
 import { ANIMATORS } from "./step3-animators";
@@ -137,7 +138,7 @@ export function Step7Summary() {
     updateState({ contactPhone: formatted });
   };
 
-  const effectiveWeekend = state.date ? isWeekend(state.date) : state.isWeekend;
+  const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
 
   const getPackagePrice = () => {
     if (isMega && state.packageType) {
@@ -467,7 +468,7 @@ export function Step7Summary() {
             icon={<Calendar className="w-4 h-4" />}
             label="Дата"
             value={`${format(state.date, "d MMMM yyyy", { locale: ru })}, ${state.time}${
-              isWeekend(state.date) ? " (выходной)" : " (будний)"
+              isWeekendOrHoliday2026(state.date) ? " (выходной)" : " (будний)"
             }`}
           />
         )}

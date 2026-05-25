@@ -13,9 +13,9 @@ import {
   addMonths,
   subMonths,
   getDay,
-  isWeekend,
 } from "date-fns";
 import { ru } from "date-fns/locale";
+import { isWeekendOrHoliday2026 } from "../data/holidays";
 
 const TIME_SLOTS = [
   "10:00",
@@ -100,7 +100,7 @@ export function Step6DateTime() {
 
             const isPast = isBefore(day, today);
             const isSelected = state.date && isSameDay(day, state.date);
-            const isWeekendDay = isWeekend(day);
+            const isWeekendDay = isWeekendOrHoliday2026(day);
 
             return (
               <button
@@ -123,7 +123,7 @@ export function Step6DateTime() {
           })}
         </div>
 
-        {state.date && isWeekend(state.date) && (
+        {state.date && isWeekendOrHoliday2026(state.date) && (
           <div className="mt-3 bg-[#FF6022]/5 rounded-xl px-3 py-2 text-center border border-[#FF6022]/10">
             <p className="text-xs text-[#FF6022]">
               Выходной день — действуют выходные тарифы

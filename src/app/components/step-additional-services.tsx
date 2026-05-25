@@ -1,6 +1,6 @@
 import { useWizard } from "./wizard-context";
 import { motion, AnimatePresence } from "motion/react";
-import { Check, Info, X } from "lucide-react";
+import { Check, Info, X, Clock } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
@@ -58,81 +58,92 @@ export function StepAdditionalServices() {
       transition={{ duration: 0.3 }}
       className="px-4 pb-6"
     >
-      {/* Title */}
-      <div className="mb-8 pl-1">
-        <h2 className="text-[34px] font-black text-[#5C28B6] leading-[1.1] tracking-tight">
+      {/* Header */}
+      <div className="text-center mb-6 px-4 pt-2">
+        <h2 className="text-3xl font-black text-[#1A1A1A] mb-2 leading-tight flex items-center justify-center gap-3">
+          <span className="text-4xl drop-shadow-md hover:scale-110 transition-transform cursor-pointer">📸</span>
           Дополнительные услуги
         </h2>
+        <p className="text-base font-bold text-[#747474] leading-relaxed">
+          Выберите дополнительные услуги для праздника
+        </p>
       </div>
 
-      {/* Grid of Services — Stacked vertically */}
-      <div className="flex flex-col gap-10 mb-8">
-        {SERVICES.map((service) => {
+      {/* Grid of Services — Stacked vertically like phygital quests */}
+      <div className="flex flex-col gap-[28px] mb-8">
+        {SERVICES.map((service, i) => {
           const isSelected = state.additionalServices.includes(service.id);
           return (
             <motion.div
               key={service.id}
-              whileTap={{ scale: 0.99 }}
-              onClick={() => toggleService(service.id)}
-              className="flex flex-col cursor-pointer group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
             >
-              {/* Image Container with Badges */}
-              <div className="relative">
-                <div className={`relative aspect-[16/10] w-full rounded-[36px] overflow-hidden border-[4px] transition-all duration-300 ${
-                  isSelected 
-                    ? "border-[#FF6022] shadow-[0_12px_24px_rgba(255,96,34,0.15)] scale-[1.01]" 
-                    : "border-transparent shadow-md hover:shadow-lg"
-                }`}>
-                  <ImageWithFallback
-                    src={getPublicUrl(service.image)}
-                    alt={service.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Top Left/Right overlay */}
-                  <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedInfo(service.id);
-                      }}
-                      className="bg-white/95 backdrop-blur-md text-[#5C28B6] hover:bg-white text-[11px] font-extrabold uppercase tracking-wider px-4 py-2.5 rounded-full flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95 shadow-md"
-                    >
-                      <Info className="w-3.5 h-3.5" />
-                      Подробнее
-                    </button>
+              <div
+                className={`relative h-[300px] sm:h-[350px] rounded-[32px] overflow-hidden bg-white transition-all cursor-pointer group ${
+                  isSelected ? "ring-4 shadow-xl scale-[1.01]" : "ring-1 ring-[#E5E5E5] shadow-sm"
+                }`}
+                style={isSelected ? { boxShadow: `0 0 0 4px #FF6022, 0 0 24px #FF602240, 0 12px 40px #FF602220` } : {}}
+                onClick={() => toggleService(service.id)}
+              >
+                <ImageWithFallback
+                  src={getPublicUrl(service.image)}
+                  alt={service.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
 
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                        isSelected 
-                          ? "bg-[#FF6022] text-white shadow-md shadow-[#FF6022]/30" 
-                          : "bg-white/40 backdrop-blur-md text-transparent border border-white/60"
-                    }`}>
-                       <Check className="w-4 h-4" strokeWidth={3} />
+                {/* Top Left Badge */}
+                <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#FF6022] to-[#FF8A00] text-white text-[10px] font-black uppercase tracking-wider px-3 py-1.5 rounded-2xl shadow-lg shadow-[#FF6022]/30 flex items-center gap-1 border border-white/20">
+                  ⭐ Популярно
+                </div>
+
+                {/* Top Right Info Button */}
+                <button
+                  className="absolute top-4 right-4 bg-gradient-to-tr from-[#FF6022] to-[#FF8A00] text-white text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-full flex items-center gap-2 z-10 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-[#FF6022]/40"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedInfo(service.id);
+                  }}
+                >
+                  <Info className="w-4 h-4" />Подробнее
+                </button>
+
+                {/* Bottom White Panel Overlay (Pill) */}
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-white/95 backdrop-blur-xl rounded-[24px] p-4 shadow-2xl flex items-center justify-between border border-white/20">
+                  <div className="flex-1 min-w-0 pr-3">
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <span className="text-xl leading-none">{service.id === 'photo' ? '📸' : '🎨'}</span>
+                      <h4 className="text-[15px] font-bold text-[#1A1A1A] truncate">{service.name}</h4>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <div className="flex items-center gap-1 bg-[#F5F5F5] rounded-md px-2 py-1">
+                        <Clock className="w-3 h-3 text-[#747474]" />
+                        <span className="text-[10px] text-[#1A1A1A] font-medium">{service.duration}</span>
+                      </div>
+                      <div className="flex items-center gap-1 bg-[#F5F5F5] rounded-md px-2 py-1">
+                        <span className="text-[10px] text-[#1A1A1A] font-medium">{service.extra}</span>
+                      </div>
+                    </div>
+
+                    <div className="mt-2.5">
+                      <span className="text-[14px] text-[#FF6022] font-black">
+                        {service.price.toLocaleString("ru-RU")} ₽
+                      </span>
                     </div>
                   </div>
-                </div>
 
-                {/* Overlapping Badges at Bottom Right */}
-                <div className="absolute bottom-[-16px] right-6 flex gap-2.5 z-20">
-                  {/* Pink Badge */}
-                  <div className="w-16 h-16 rounded-full bg-[#f83e81] text-white flex flex-col items-center justify-center text-center shadow-lg transform translate-y-2">
-                    <span className="text-[14px] font-black leading-none">60</span>
-                    <span className="text-[9px] font-bold leading-none mt-0.5">минут</span>
+                  {/* Selection Checkbox */}
+                  <div 
+                    className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                      isSelected ? "text-white shadow-lg bg-[#FF6022]" : "bg-gray-50 text-[#D1D1D1] group-hover:bg-gray-100"
+                    }`}
+                    style={isSelected ? { boxShadow: `0 10px 15px -3px #FF60224d` } : {}}
+                  >
+                    <Check className="w-5 h-5 flex-shrink-0" />
                   </div>
-                  {/* Green Badge */}
-                  <div className="w-16 h-16 rounded-full bg-[#00f05e] text-black flex flex-col items-center justify-center text-center shadow-lg">
-                    <span className="text-[14px] font-black leading-none">{service.id === 'photo' ? '40-50' : '10'}</span>
-                    <span className="text-[9px] font-bold leading-none mt-0.5">{service.id === 'photo' ? 'фото' : 'человек'}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Text Section Below Image */}
-              <div className="mt-4 pl-2 flex flex-col items-start">
-                <h3 className="text-[20px] font-black text-[#5C28B6] tracking-tight leading-tight transition-colors group-hover:text-[#4A1E96]">
-                  {service.name}
-                </h3>
-                <div className="inline-block bg-[#ffc202] text-black text-[13px] font-black px-5 py-1.5 rounded-full mt-2 shadow-sm">
-                  {service.price.toLocaleString("ru-RU")}₽
                 </div>
               </div>
             </motion.div>
@@ -141,8 +152,8 @@ export function StepAdditionalServices() {
       </div>
 
       {state.additionalServices.length > 0 && (
-        <div className="bg-[#5C28B6]/5 rounded-3xl p-4 mb-6 text-center border border-[#5C28B6]/15">
-          <p className="text-sm text-[#5C28B6] font-medium">
+        <div className="bg-[#FF6022]/5 rounded-[24px] p-4 mb-6 text-center border border-[#FF6022]/20">
+          <p className="text-sm text-[#FF6022] font-medium">
             Выбрано: {state.additionalServices.length} услуги ={" "}
             <span className="text-base font-extrabold">
               {state.additionalServices.reduce((acc, id) => {
@@ -188,7 +199,7 @@ export function StepAdditionalServices() {
               </div>
 
               <div className="p-6 overflow-y-auto overscroll-contain">
-                <h3 className="text-2xl font-black text-[#5C28B6] mb-1">{selectedDetails.name}</h3>
+                <h3 className="text-2xl font-black text-[#1A1A1A] mb-1">{selectedDetails.name}</h3>
                 <p className="text-[13px] text-[#FF6022] font-black mb-3">{selectedDetails.duration} · {selectedDetails.extra}</p>
                 <p className="text-[#747474] text-sm leading-relaxed mb-6 font-medium">{selectedDetails.desc}</p>
 

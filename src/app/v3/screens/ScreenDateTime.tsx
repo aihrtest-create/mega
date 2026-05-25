@@ -1,12 +1,13 @@
 import React, { useMemo, useRef } from "react";
 import { motion } from "motion/react";
-import { addDays, format, isSameDay, isWeekend, startOfDay } from "date-fns";
+import { addDays, format, isSameDay, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
 import { useV3 } from "../state";
 import { v3 } from "../theme";
 import { TIME_SLOTS } from "../data";
 import { Stepper, formatPrice } from "../components/UI";
 import { BottomBar } from "../components/BottomBar";
+import { isWeekendOrHoliday2026 } from "../data/holidays";
 
 const DAYS_AHEAD = 60;
 
@@ -86,7 +87,7 @@ export function ScreenDateTime() {
           >
             {days.map((d) => {
               const selected = state.date && isSameDay(state.date, d);
-              const we = isWeekend(d);
+              const we = isWeekendOrHoliday2026(d);
               return (
                 <button
                   key={d.toISOString()}

@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { isWeekend } from "date-fns";
+import { isWeekendOrHoliday2026 } from "../data/holidays";
 import {
   PACKAGES,
   SHOWS,
@@ -111,7 +111,7 @@ export function V3Provider({ children }: { children: React.ReactNode }) {
     [],
   );
 
-  const isWeekendBooking = useMemo(() => (state.date ? isWeekend(state.date) : false), [state.date]);
+  const isWeekendBooking = useMemo(() => (state.date ? isWeekendOrHoliday2026(state.date) : false), [state.date]);
 
   const basePrice = useMemo(() => {
     if (!state.packageId) return 0;

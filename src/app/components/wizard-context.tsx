@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
-import { isWeekend } from "date-fns";
+import { isWeekendOrHoliday2026 } from "../data/holidays";
 import { FOOD_MENU } from "../data/foodMenu";
 import {
   MEGA_MC_PRICE,
@@ -637,7 +637,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
     if (isMega) {
       if (state.packageType) {
-        const effectiveWeekend = state.date ? isWeekend(state.date) : state.isWeekend;
+        const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
         const [weekday, weekend] = MEGA_PACKAGE_PRICES[state.packageType] || [0, 0];
         total += effectiveWeekend ? weekend : weekday;
       }
@@ -674,7 +674,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Cafe zone deposits
-      const effectiveWeekend = state.date ? isWeekend(state.date) : state.isWeekend;
+      const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
       for (const zone of state.cafeZones) {
         if (zone === "cafe_round") total += effectiveWeekend ? 10000 : 5000;
         if (zone === "cafe_small") total += 5000;
@@ -726,7 +726,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
     // Cafe zone deposits (multiple can be selected)
     // Use actual date's weekend status if date is set, otherwise use toggle
-    const effectiveWeekend = state.date ? isWeekend(state.date) : state.isWeekend;
+    const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
     for (const zone of state.cafeZones) {
       if (zone === "cafe_round") total += effectiveWeekend ? 10000 : 5000;
       if (zone === "cafe_small") total += 5000;

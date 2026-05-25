@@ -151,7 +151,6 @@ export function Step7Summary() {
   };
 
   const getQuestPrice = () => {
-    if (isMega) return 0;
     if (!state.questType || state.questType === "none") return 0;
     if (state.packageType === "custom") {
       return state.questType.startsWith("phygital_") ? 12000 : 16000;

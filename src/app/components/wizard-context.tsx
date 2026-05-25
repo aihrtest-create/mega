@@ -209,7 +209,7 @@ export function useWizard() {
   return ctx;
 }
 
-const TOTAL_STEPS = 14;
+const TOTAL_STEPS = 16;
 const MEGA_STEPS_BASE = [1, 2, 3, 4, 8, 9, 12];
 
 function getMegaSteps(packageType: WizardState["packageType"]) {
@@ -226,7 +226,8 @@ function getMegaSteps(packageType: WizardState["packageType"]) {
     // Insert step 14 before 9
     steps.splice(steps.indexOf(9), 0, 14);
   }
-  const summaryIndex = steps.indexOf(12);
+  // Insert step 16 before 9 (Additional Services)
+  steps.splice(steps.indexOf(9), 0, 16);
   return steps;
 }
 
@@ -491,11 +492,6 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (s === 15) {
-        next = 16;
-      }
-
-      // After Additional Services (16) → go to Disco (13) or Adult Location (6)
-      if (s === 16) {
         if (state.packageType === "premium" || state.packageType === "exclusive") {
           next = 13;
         } else {
@@ -522,17 +518,22 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         next = 10;
       }
 
-      // After Cakes (10) → go to Included (11) or Food (9)
+      // After Cakes (10) → go to Included (11) or Additional Services (16)
       if (s === 10) {
         if (state.packageType === "custom" && !hasCustomGifts(state)) {
-          next = 9;
+          next = 16;
         } else {
           next = 11;
         }
       }
 
-      // After Included (11) → go to Food (9)
+      // After Included (11) → go to Additional Services (16)
       if (s === 11) {
+        next = 16;
+      }
+
+      // After Additional Services (16) → go to Food (9)
+      if (s === 16) {
         next = 9;
       }
 
@@ -562,6 +563,10 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       }
       // Going back from Food (9)
       else if (s === 9) {
+        prev = 16;
+      }
+      // Going back from Additional Services (16)
+      else if (s === 16) {
         if (state.packageType === "custom" && !hasCustomGifts(state)) {
           prev = 10;
         } else {
@@ -583,7 +588,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         } else if (state.packageType === "premium") {
           prev = 13;
         } else {
-          prev = 16;
+          prev = 15;
         }
       }
       // Going back from Balloon (14)
@@ -592,13 +597,9 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       }
       // Going back from Disco (13)
       else if (s === 13) {
-        prev = 16;
-      }
-      // Going back from Additional Services (16)
-      else if (s === 16) {
         prev = 15;
       }
-      // Going back from Additional Activities (15) -> MC (8) or Kids Location (5)
+      // Going back from Additional Services (16) (handled above, but keeping as fallback)
       else if (s === 15) {
         if (state.packageType === "basic") {
           prev = 5;
@@ -641,6 +642,17 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         total += effectiveWeekend ? weekend : weekday;
       }
 
+      // Quest addon
+      if (state.questType && state.questType !== "none") {
+        if (state.packageType === "custom") {
+          total += state.questType.startsWith("phygital_") ? 12000 : 16000;
+        } else if (state.questType.startsWith("classic_")) {
+          if (state.packageType === "basic") total += 16000;
+          else if (state.packageType === "premium") total += 16000;
+          else if (state.packageType === "exclusive") total += 9000;
+        }
+      }
+
       if (state.animators.length > 1) {
         total += (state.animators.length - 1) * 8000;
       }
@@ -661,7 +673,31 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         total += state.masterClasses.length * MEGA_MC_PRICE;
       }
 
+      // Cafe zone deposits
+      const effectiveWeekend = state.date ? isWeekend(state.date) : state.isWeekend;
+      for (const zone of state.cafeZones) {
+        if (zone === "cafe_round") total += effectiveWeekend ? 10000 : 5000;
+        if (zone === "cafe_small") total += 5000;
+        if (zone === "cafe_pink") total += effectiveWeekend ? 10000 : 5000;
+        if (zone === "cafe_pink_full") total += effectiveWeekend ? 20000 : 10000;
+      }
+
       total += getMegaFoodTotal(state.megaFood);
+
+      // Additional Activities
+      for (const act of state.additionalActivities) {
+        if (act === "trash-animals") total += 35000;
+        if (act === "trash-box") total += 7000;
+        if (act === "mini-disco") total += 6000;
+        if (act === "challenge-party") total += 10000;
+      }
+
+      // Additional Services
+      for (const srv of state.additionalServices) {
+        if (srv === "photo") total += 7000;
+        if (srv === "aqua") total += 7000;
+      }
+
       return total;
     }
 
@@ -783,7 +819,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     if (isMega) return getMegaSteps(state.packageType);
 
     // Actual navigation order: 1→2→3→4?→5→7?→8?→(15,16 hidden)→13?→14?→6→10→11?→9→12
-    const list = [1, 2, 3, 4, 5, 7, 8, 13, 14, 6, 10, 11, 9, 12];
+    // With step 16 (Additional Services) moved to right before 9 (Food)
+    const list = [1, 2, 3, 4, 5, 7, 8, 13, 14, 6, 10, 11, 16, 9, 12];
     return list.filter((s) => {
       // Skip Animators (Step 4) if not a phygital quest
       if (s === 4 && state.questType && !state.questType.startsWith("phygital_")) return false;

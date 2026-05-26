@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useWizard } from "./wizard-context";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Play, Check, ChevronLeft, ChevronRight, Users, Clock, Zap, Info, Layers, Sliders, Smartphone } from "lucide-react";

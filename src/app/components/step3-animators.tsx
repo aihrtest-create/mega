@@ -112,7 +112,7 @@ export const ANIMATORS: Animator[] = [
 ];
 
 export function Step3Animators() {
-  const { state, updateState } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const [activeCategory, setActiveCategory] = useState<AnimatorCategory>("princesses");
   const [surchargePopup, setSurchargePopup] = useState<string | null>(null);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -314,6 +314,61 @@ export function Step3Animators() {
               <div className="grid grid-cols-2 gap-3">
                 {sectionAnimators.map((anim) => {
                   const isSelected = state.animators.includes(anim.id);
+                  
+                  if (isExp) {
+                    return (
+                      <button
+                        key={anim.id}
+                        onClick={() => toggleAnimator(anim.id)}
+                        className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col text-left ${
+                          isSelected
+                            ? "scale-[1.02]"
+                            : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                        }`}
+                        style={{
+                          borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                          borderWidth: isSelected ? "2px" : "1px",
+                          boxShadow: isSelected 
+                            ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
+                            : undefined
+                        }}
+                      >
+                        <div className="relative aspect-[4/3.5] w-full rounded-[20px] overflow-hidden bg-[#F8F9FA] flex items-center justify-center shrink-0">
+                          <img
+                            src={`${BASE}${anim.image.startsWith('/') ? anim.image.slice(1) : anim.image}`}
+                            alt={anim.name}
+                            className="w-full h-full object-contain object-bottom pt-4 px-2.5 transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+
+                        <div className="p-2 pt-2.5 flex flex-col flex-1 text-center justify-between items-center w-full">
+                          <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight leading-snug line-clamp-2 flex items-center justify-center min-h-[34px] w-full group-hover:text-[#FF6022] transition-colors">
+                            {anim.name}
+                          </h4>
+                          
+                          <div className="flex items-center justify-between w-full mt-2 pt-1.5 border-t border-gray-50 shrink-0">
+                            <span className="text-[11px] text-[#FF6022] font-black">
+                              {state.packageType === "custom" ? (
+                                state.animators.length >= 1 && !isSelected ? "+8 000 ₽" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+8 000 ₽" : "Включён"
+                              ) : (
+                                isSelected ? "Выбран" : "Добавить"
+                              )}
+                            </span>
+                            
+                            <div 
+                              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                                isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
+                              }`}
+                            >
+                              <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  }
+
                   return (
                     <button
                       key={anim.id}

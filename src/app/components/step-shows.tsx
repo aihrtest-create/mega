@@ -114,7 +114,7 @@ export const PREMIUM_SHOWS = [
 export const ALL_SHOWS = [...SHOWS, ...PREMIUM_SHOWS];
 
 export function StepShows() {
-  const { state, updateState, isMega } = useWizard();
+  const { state, updateState, isMega, isExp } = useWizard();
   const isCustom = state.packageType === "custom";
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
   const [surchargeShow, setSurchargeShow] = useState<{
@@ -214,6 +214,79 @@ export function StepShows() {
         <div className="grid grid-cols-2 gap-3 mb-6">
           {SHOWS.map((show) => {
             const isSelected = state.shows.includes(show.id);
+            
+            if (isExp) {
+              return (
+                <motion.div
+                  key={show.id}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toggleShow(show.id)}
+                  className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col ${
+                    isSelected
+                      ? "scale-[1.02]"
+                      : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                  }`}
+                  style={{
+                    borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                    borderWidth: isSelected ? "2px" : "1px",
+                    boxShadow: isSelected 
+                      ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
+                      : undefined
+                  }}
+                >
+                  <div className={`relative aspect-[4/3.1] w-full rounded-[20px] overflow-hidden bg-gradient-to-br ${show.gradient} flex items-center justify-center shrink-0`}>
+                    {(show as any).image ? (
+                      <ImageWithFallback
+                        src={getPublicUrl((show as any).image)}
+                        alt={show.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <span className="text-4xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                        {show.emoji}
+                      </span>
+                    )}
+                    
+                    <button 
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md text-gray-700 flex items-center justify-center z-10 transition-all hover:scale-110 active:scale-95 shadow-sm hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedInfo(show.id);
+                      }}
+                      title="Подробнее"
+                    >
+                      <Info className="w-3.5 h-3.5 text-gray-800" />
+                    </button>
+                  </div>
+
+                  <div className="p-2 pt-2.5 flex flex-col flex-1">
+                    <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors line-clamp-2 leading-snug flex-1">
+                      {getShowName(show)}
+                    </h4>
+
+                    <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 shrink-0">
+                      <span className="text-[11px] text-[#FF6022] font-black">
+                        {state.packageType === "exclusive" &&
+                        (state.shows.length === 0 || state.shows[0] === show.id)
+                          ? getShowSurcharge(show.id) > 0
+                            ? `+${getShowSurcharge(show.id).toLocaleString("ru-RU")} ₽`
+                            : "Входит"
+                          : `${getShowPrice(show.id).toLocaleString("ru-RU")} ₽`}
+                      </span>
+
+                      <div 
+                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                          isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
+                        }`}
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            }
+
             return (
               <motion.div
                 key={show.id}
@@ -295,6 +368,79 @@ export function StepShows() {
         <div className="grid grid-cols-2 gap-3 mb-6">
           {PREMIUM_SHOWS.map((show) => {
             const isSelected = state.shows.includes(show.id);
+            
+            if (isExp) {
+              return (
+                <motion.div
+                  key={show.id}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toggleShow(show.id)}
+                  className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col ${
+                    isSelected
+                      ? "scale-[1.02]"
+                      : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                  }`}
+                  style={{
+                    borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                    borderWidth: isSelected ? "2px" : "1px",
+                    boxShadow: isSelected 
+                      ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
+                      : undefined
+                  }}
+                >
+                  <div className={`relative aspect-[4/3.1] w-full rounded-[20px] overflow-hidden bg-gradient-to-br ${show.gradient} flex items-center justify-center shrink-0`}>
+                    {(show as any).image ? (
+                      <ImageWithFallback
+                        src={getPublicUrl((show as any).image)}
+                        alt={show.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <span className="text-4xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                        {show.emoji}
+                      </span>
+                    )}
+                    
+                    <button 
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/95 backdrop-blur-md text-gray-700 flex items-center justify-center z-10 transition-all hover:scale-110 active:scale-95 shadow-sm hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedInfo(show.id);
+                      }}
+                      title="Подробнее"
+                    >
+                      <Info className="w-3.5 h-3.5 text-gray-800" />
+                    </button>
+                  </div>
+
+                  <div className="p-2 pt-2.5 flex flex-col flex-1">
+                    <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors line-clamp-2 leading-snug flex-1">
+                      {getShowName(show)}
+                    </h4>
+
+                    <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 shrink-0">
+                      <span className="text-[11px] text-[#FF6022] font-black">
+                        {state.packageType === "exclusive" &&
+                        (state.shows.length === 0 || state.shows[0] === show.id)
+                          ? getShowSurcharge(show.id) > 0
+                            ? `+${getShowSurcharge(show.id).toLocaleString("ru-RU")} ₽`
+                            : "Входит"
+                          : `${getShowPrice(show.id).toLocaleString("ru-RU")} ₽`}
+                      </span>
+
+                      <div 
+                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                          isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
+                        }`}
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            }
+
             return (
               <motion.div
                 key={show.id}

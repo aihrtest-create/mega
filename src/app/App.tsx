@@ -5,6 +5,7 @@ import { StepIndicator } from "./components/step-indicator";
 import { Step1Format } from "./components/step1-format";
 import { Step1FormatV2 } from "./components/step1-format-v2";
 import { Step2Quests } from "./components/step2-quests";
+import { Step2Quests as Step2QuestsExperiment } from "./components/step2-quests-experiment";
 import { Step2Location } from "./components/step2-location";
 import { Step3Animators } from "./components/step3-animators";
 import { Step3AdultLocation } from "./components/step3-adult-location";
@@ -162,7 +163,8 @@ function ResumeBanner() {
 
 function WizardContent() {
   const { step, isMega } = useWizard();
-  const useV2 = useMemo(() => new URLSearchParams(window.location.search).has("v2"), []);
+  const useV2 = useMemo(() => !new URLSearchParams(window.location.search).has("nov2"), []);
+  const useExp = useMemo(() => !new URLSearchParams(window.location.search).has("noexp"), []);
 
   useEffect(() => {
     // Scroll intentionally removed from here to prevent abrupt layout jumping
@@ -173,7 +175,7 @@ function WizardContent() {
     switch (step) {
       case 1: return <Step6DateTime key="step1" />;
       case 2: return !isMega && useV2 ? <Step1FormatV2 key="step2v2" /> : <Step1Format key="step2" />;
-      case 3: return <Step2Quests key="step3" />;
+      case 3: return useExp ? <Step2QuestsExperiment key="step3exp" /> : <Step2Quests key="step3" />;
       case 4: return <Step3Animators key="step4" />;
       case 5: return isMega ? null : <Step2Location key="step5" />;
       case 6: return <Step3AdultLocation key="step6" />;

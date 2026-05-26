@@ -252,7 +252,7 @@ const FILLINGS = [
 
 
 export function StepCakes() {
-  const { state, updateState } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const [bottomSheetCake, setBottomSheetCake] = useState<string | null>(null);
 
   const openBottomSheet = (id: string, e?: React.MouseEvent) => {
@@ -299,6 +299,68 @@ export function StepCakes() {
       <div className="grid grid-cols-2 gap-3 mb-6">
         {CAKES.map((mc) => {
           const isSelected = state.cakeChoice === mc.id;
+          
+          if (isExp) {
+            return (
+              <motion.div
+                key={mc.id}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  if (mc.id === "own_cake") {
+                    updateState({ cakeChoice: "own_cake", fillingChoice: null });
+                  } else {
+                    openBottomSheet(mc.id);
+                  }
+                }}
+                className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col ${
+                  isSelected
+                    ? "scale-[1.02]"
+                    : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                }`}
+                style={{
+                  borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                  borderWidth: isSelected ? "2px" : "1px",
+                  boxShadow: isSelected 
+                    ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
+                    : undefined
+                }}
+              >
+                {/* Image container */}
+                <div className="relative aspect-[4/3.1] w-full rounded-[20px] overflow-hidden bg-gray-50 flex items-center justify-center shrink-0">
+                  {mc.id === "own_cake" ? (
+                    <span className="text-5xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500 leading-none">🎂</span>
+                  ) : (
+                    <ImageWithFallback 
+                      src={getPublicUrl((mc as any).image)} 
+                      alt={mc.name} 
+                      className="w-[85%] h-[85%] object-contain object-bottom group-hover:scale-[1.05] transition-all duration-500" 
+                    />
+                  )}
+                </div>
+
+                <div className="p-2 pt-2.5 flex flex-col flex-1">
+                  <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors line-clamp-2 leading-snug flex-1">
+                    {mc.name}
+                  </h4>
+
+                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 shrink-0">
+                    <span className="text-[11px] text-[#FF6022] font-black">
+                      {mc.id === "own_cake" ? "+2 000 ₽" : `${mc.price.replace(" ₽", "")}`}
+                    </span>
+
+                    <div 
+                      className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                        isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
+                      }`}
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div
               key={mc.id}

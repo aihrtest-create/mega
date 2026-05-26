@@ -58,7 +58,7 @@ const PATIROOMS = [
 ];
 
 export function Step2Location() {
-  const { state, updateState } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const [selectedDetails, setSelectedDetails] = useState<typeof PATIROOMS[0] | null>(null);
   const [hoursDrawerRoom, setHoursDrawerRoom] = useState<typeof PATIROOMS[0] | null>(null);
   const isPackage = state.packageType !== "custom";
@@ -132,6 +132,94 @@ export function Step2Location() {
         <div className="grid grid-cols-1 gap-4">
           {PATIROOMS.map((room) => {
             const isSelected = state.patiroom === room.id;
+            
+            if (isExp) {
+              return (
+                <div
+                  key={room.id}
+                  onClick={() => handleSelectRoom(room)}
+                  className={`group relative rounded-[32px] bg-white p-2.5 transition-all duration-300 cursor-pointer border flex flex-col ${
+                    isSelected
+                      ? "scale-[1.01]"
+                      : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                  }`}
+                  style={{
+                    borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                    borderWidth: isSelected ? "2px" : "1px",
+                    boxShadow: isSelected 
+                      ? "0 16px 36px rgba(255,96,34,0.12), 0 0 0 1px rgba(255,96,34,0.05)" 
+                      : undefined
+                  }}
+                >
+                  {/* Image wrapper */}
+                  <div className="relative aspect-[16/10] w-full rounded-[24px] overflow-hidden bg-gray-50 shrink-0 mb-3.5">
+                    <ImageWithFallback
+                      src={getPublicUrl(room.thumbnail)}
+                      alt={room.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    
+                    <button 
+                      className="absolute top-3.5 right-3.5 bg-gradient-to-tr from-[#FF6022] to-[#FF8A00] text-white text-[11px] font-extrabold uppercase tracking-wider px-4 py-2 rounded-xl flex items-center gap-1.5 z-10 transition-all hover:scale-105 active:scale-95 shadow-md shadow-[#FF6022]/30"
+                      onClick={(e) => { e.stopPropagation(); setSelectedDetails(room); }}
+                    >
+                      {room.video ? (
+                        <><PlayCircle className="w-4 h-4 shrink-0" />Видео</>
+                      ) : (
+                        <><Info className="w-4 h-4 shrink-0" />Фото</>
+                      )}
+                    </button>
+
+                    {isSelected && (
+                      <div className="absolute top-3.5 left-3.5 bg-[#FF6022] text-white rounded-full p-1.5 shadow-md shadow-[#FF6022]/20">
+                        <Check className="w-4 h-4 stroke-[3px]" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Body Wrapper */}
+                  <div className="px-2 pb-2 flex items-end justify-between w-full">
+                    <div>
+                      <h4 className="text-lg font-black text-[#1A1A1A] leading-tight group-hover:text-[#FF6022] transition-colors">{room.name}</h4>
+                      
+                      <div className="flex flex-wrap items-center gap-3 mt-2.5">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100 text-[#747474]">
+                          <Users className="w-3.5 h-3.5 text-[#ABABAB]" />
+                          <span>до {room.seats} мест</span>
+                        </span>
+                        
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-100 text-[#747474]">
+                          <Projector className="w-3.5 h-3.5 text-[#ABABAB]" />
+                          <span>{room.hasProjection ? "Интерактив" : "Стандарт"}</span>
+                        </span>
+                      </div>
+
+                      {isCustom && (
+                        <p className="text-xs text-[#FF6022] font-black mt-3 flex items-center gap-1">
+                          <span>💰</span>
+                          <span>{isSelected ? `${currentHours} ч. = ${(currentHours * 3000).toLocaleString("ru-RU")} ₽` : "3 000 ₽/час"}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectRoom(room);
+                      }}
+                      className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 border transition-all ${
+                        isSelected 
+                          ? "bg-[#FF6022] border-[#FF6022] text-white shadow-md shadow-[#FF6022]/30" 
+                          : "bg-gray-50 border-[#E5E5E5] text-[#C4C4C4] group-hover:bg-gray-100"
+                      }`}
+                    >
+                      <Check className="w-5 h-5 stroke-[3px]" />
+                    </button>
+                  </div>
+                </div>
+              );
+            }
+
             return (
               <div
                 key={room.id}

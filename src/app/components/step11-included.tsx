@@ -71,7 +71,7 @@ const ALL_EXTRAS = [
 ];
 
 export function Step11Included() {
-  const { state } = useWizard();
+  const { state, isExp } = useWizard();
 
   const isCustom = state.packageType === "custom";
   const customGifts = isCustom ? getCustomGifts(state) : [];
@@ -125,6 +125,38 @@ export function Step11Included() {
 
       <div className="grid grid-cols-2 gap-3 mb-6">
         {displayExtras.map((item, index) => {
+          if (isExp) {
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative rounded-[28px] bg-white p-2 border border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col"
+              >
+                <div className={`relative aspect-[4/3.1] w-full rounded-[20px] overflow-hidden bg-gradient-to-br ${item.gradient} flex items-center justify-center shrink-0`}>
+                  <span className="text-4xl filter drop-shadow-md group-hover:scale-110 transition-transform duration-500">
+                    {item.emoji}
+                  </span>
+                </div>
+
+                <div className="p-2 pt-3 flex flex-col flex-1 text-center justify-between items-center">
+                  <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight leading-snug line-clamp-2 flex items-center justify-center min-h-[34px] w-full">
+                    {typeof item.name === "string" && item.name.includes("2 часа") ? (
+                      <>Фотограф <span className="text-[#FF6022] ml-1">2 часа</span></>
+                    ) : (
+                      item.name
+                    )}
+                  </h4>
+                  <div className="mt-2.5 inline-flex items-center gap-1 bg-[#FF6022]/10 px-2.5 py-1 rounded-full shadow-sm">
+                    <Check className="w-3 h-3 text-[#FF6022] stroke-[3px]" />
+                    <span className="text-[10px] font-extrabold text-[#FF6022] uppercase tracking-wider">Включено</span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div
               key={item.id}

@@ -133,6 +133,7 @@ export interface WizardState {
 interface WizardContextType {
   parkId: ParkId;
   isMega: boolean;
+  isExp: boolean;
   step: number;
   totalSteps: number;
   visibleSteps: number[];
@@ -838,10 +839,12 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     });
   }, [isMega, state.questType, state.packageType]);
 
+  const isExp = React.useMemo(() => !new URLSearchParams(window.location.search).has("noexp"), []);
+
   return (
     <WizardContext.Provider
       value={{
-        parkId, isMega,
+        parkId, isMega, isExp,
         step, totalSteps: TOTAL_STEPS, visibleSteps, state, setStep,
         nextStep, prevStep, updateState, totalPrice, submitted, setSubmitted,
         leadId, submitToAPI, clearCache, resetWizard,

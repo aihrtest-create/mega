@@ -34,7 +34,7 @@ const SERVICES = [
 ];
 
 export function StepAdditionalServices() {
-  const { state, updateState } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
 
   const selectedDetails = SERVICES.find(s => s.id === selectedInfo);
@@ -73,6 +73,111 @@ export function StepAdditionalServices() {
       <div className="flex flex-col gap-[28px] mb-8">
         {SERVICES.map((service, i) => {
           const isSelected = state.additionalServices.includes(service.id);
+          
+          if (isExp) {
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+              >
+                <div
+                  className={`group relative rounded-[32px] bg-white p-2.5 transition-all duration-300 cursor-pointer border ${
+                    isSelected 
+                      ? "scale-[1.02] shadow-2xl" 
+                      : "border-black/[0.04] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
+                  }`}
+                  style={{ 
+                    borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                    borderWidth: isSelected ? "2.5px" : "1px",
+                    boxShadow: isSelected 
+                      ? `0 20px 40px -10px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)` 
+                      : undefined 
+                  }}
+                  onClick={() => toggleService(service.id)}
+                >
+                  {/* Image container (Dodo Style) */}
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-[24px] overflow-hidden bg-gray-50">
+                    <img
+                      src={getPublicUrl(service.image)}
+                      alt={service.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    
+                    {/* Elegant overlay elements on image */}
+                    <div className="absolute top-3 left-3 z-10 bg-[#FF6022] text-white text-[9px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm border border-white/10">
+                      ⭐ Популярно
+                    </div>
+
+                    {/* Top right info pill (Yandex Market Style) */}
+                    <button 
+                      className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 backdrop-blur-md text-gray-700 flex items-center justify-center z-10 transition-all hover:scale-110 active:scale-95 shadow-md hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedInfo(service.id);
+                      }}
+                      title="Подробнее"
+                    >
+                      <Info className="w-4 h-4 text-gray-800" />
+                    </button>
+                  </div>
+
+                  {/* Content details strictly BELOW the image (Dodo / Yandex.Market) */}
+                  <div className="p-4 pt-3 flex flex-col">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <span className="text-xl leading-none">{service.id === 'photo' ? '📸' : '🎨'}</span>
+                      <h4 className="text-[17px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors">{service.name}</h4>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                      <div className="flex items-center gap-1 bg-gray-100 rounded-lg px-2.5 py-1">
+                        <Clock className="w-3.5 h-3.5 text-gray-500" />
+                        <span className="text-[10px] text-gray-700 font-bold">{service.duration}</span>
+                      </div>
+                      <div className="flex items-center gap-1 bg-gray-100 rounded-lg px-2.5 py-1">
+                        <span className="text-[10px] text-gray-700 font-bold">{service.extra}</span>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-full h-px bg-gray-100 mb-3.5" />
+
+                    {/* Price & Selection CTA Panel (Dodo style) */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] text-gray-400 font-semibold leading-none mb-0.5">Стоимость:</span>
+                        <span className="text-base font-black text-[#FF6022] leading-none">
+                          {service.price.toLocaleString("ru-RU")} ₽
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleService(service.id);
+                        }}
+                        className={`px-5 py-2.5 rounded-[16px] text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 shadow-sm ${
+                          isSelected
+                            ? "bg-[#22C55E] text-white shadow-[#22C55E]/20"
+                            : "bg-[#FF6022]/10 text-[#FF6022] hover:bg-[#FF6022]/20 shadow-none"
+                        }`}
+                      >
+                        {isSelected ? (
+                          <>
+                            <Check className="w-3.5 h-3.5" /> Выбрано
+                          </>
+                        ) : (
+                          "Выбрать"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div
               key={service.id}

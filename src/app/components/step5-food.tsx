@@ -25,7 +25,7 @@ const KIDS_SET_ITEMS = [
 ];
 
 export function Step5Food() {
-  const { state, updateState, isMega } = useWizard();
+  const { state, updateState, isMega, isExp } = useWizard();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   if (isMega) {
@@ -76,92 +76,205 @@ export function Step5Food() {
           <h3 className="text-[#1A1A1A] font-semibold">Готовое решение</h3>
         </div>
 
-        <motion.div
-          animate={{
-             backgroundColor: state.includeFood ? "#FFF5F2" : "#FFFFFF",
-             boxShadow: state.includeFood ? "0 10px 30px -10px rgba(255, 96, 34, 0.2)" : "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
-             borderColor: state.includeFood ? "#FF6022" : "#E5E5E5"
-          }}
-          className="w-full rounded-3xl overflow-hidden border-2 transition-all flex flex-col relative cursor-pointer"
-          onClick={() => updateState({ includeFood: !state.includeFood })}
-        >
-           {/* Top Image Section */}
-           <div 
-              className="relative h-56 bg-white group m-1 rounded-[24px] overflow-hidden" 
-           >
+        {isExp ? (
+          <motion.div
+            onClick={() => updateState({ includeFood: !state.includeFood })}
+            className={`group relative rounded-[32px] bg-white p-2.5 transition-all duration-300 cursor-pointer border flex flex-col ${
+              state.includeFood
+                ? "scale-[1.01]"
+                : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+            }`}
+            style={{
+              borderColor: state.includeFood ? "#FF6022" : "rgba(0,0,0,0.04)",
+              borderWidth: state.includeFood ? "2px" : "1px",
+              boxShadow: state.includeFood 
+                ? "0 16px 36px rgba(255,96,34,0.12), 0 0 0 1px rgba(255,96,34,0.05)" 
+                : undefined
+            }}
+          >
+            {/* Top Image Section */}
+            <div className="relative h-56 w-full rounded-[24px] overflow-hidden bg-white shrink-0 mb-3">
               <ImageWithFallback
                 src={getPublicUrl("/images/food/kids_set.webp")}
                 alt="Набор детской еды"
-                className="w-full h-full object-cover mix-blend-multiply group-hover:scale-[1.02] transition-transform duration-500"
+                className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Badge for Included Packages */}
               {!isPaidSet && state.includeFood && (
-                <div className="absolute top-3 left-4 z-10">
+                <div className="absolute top-3 left-3 z-10">
                   <span
-                    className="inline-flex items-center gap-2 text-white text-[12px] font-extrabold px-5 py-2.5 rounded-2xl uppercase tracking-wider"
+                    className="inline-flex items-center gap-1.5 text-white text-[10px] font-black px-3.5 py-2 rounded-xl uppercase tracking-wider"
                     style={{
                       background: "#6C4AED",
-                      boxShadow: "0 4px 16px rgba(108, 74, 237, 0.45)",
-                      transform: "rotate(-2deg)",
-                      display: "inline-flex",
+                      boxShadow: "0 4px 12px rgba(108, 74, 237, 0.35)",
                     }}
                   >
-                    <Check className="w-4 h-4" /> Включено в пакет
+                    <Check className="w-3.5 h-3.5 stroke-[3px]" /> Включено в пакет
                   </span>
                 </div>
               )}
 
               {state.includeFood && (
-                <div className="absolute top-4 right-4 bg-[#FF6022] rounded-full p-1.5 shadow-md z-10 transition-transform scale-in">
-                  <Check className="w-5 h-5 text-white" />
+                <div className="absolute top-3 right-3 bg-[#FF6022] rounded-full p-1.5 shadow-md z-10">
+                  <Check className="w-4 h-4 text-white stroke-[3px]" />
                 </div>
               )}
-              
-              {/* Info overlap */}
-              <div className="absolute bottom-3 left-4 right-4 z-10 flex items-end justify-between pointer-events-none">
+            </div>
+
+            {/* Info Body */}
+            <div className="p-3 pt-1 flex flex-col flex-1 w-full">
+              <div className="flex items-start justify-between gap-4 mb-2.5">
                 <div>
-                  <h4 className="text-white font-bold text-xl leading-tight mb-0.5">Набор детской еды</h4>
-                  {isPaidSet && (
-                    <p className="text-[#FF6022] font-bold text-sm">12 070 ₽</p>
+                  <h4 className="text-lg font-black text-[#1A1A1A] leading-tight">Набор детской еды</h4>
+                  <p className="text-xs text-[#747474] font-semibold mt-1">Готовое комбо-решение для праздника</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-lg font-black text-[#FF6022]">
+                    {isPaidSet ? "12 070 ₽" : "Включено"}
+                  </p>
+                  {!isPaidSet && (
+                    <span className="text-[9px] text-[#A3A3A3] font-bold uppercase tracking-wider block mt-0.5">Входит в пакет</span>
                   )}
                 </div>
-                <div
-                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors pointer-events-auto shadow-sm ${
-                    state.includeFood
-                      ? "bg-[#FF6022] text-white shadow-[#FF6022]/40"
-                      : "bg-white text-[#1A1A1A]"
-                  }`}
-                  onClick={(e) => {
-                     e.stopPropagation();
-                     updateState({ includeFood: !state.includeFood });
-                  }}
-                >
-                  {state.includeFood ? "Выбрано" : "Добавить"}
+              </div>
+
+              {/* Composition Section */}
+              <div className="border-t border-gray-100 pt-3 mt-1.5">
+                <p className="text-[11px] font-extrabold text-[#FF6022] uppercase tracking-wider mb-2.5">Состав (на 8-10 детей):</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {KIDS_SET_ITEMS.map((item, idx) => (
+                    <span
+                      key={idx}
+                      className={`text-xs font-semibold px-3 py-1.5 rounded-xl border flex items-center gap-1 shadow-sm transition-all ${
+                        state.includeFood
+                          ? "bg-white border-[#FF6022]/15 text-[#1A1A1A]"
+                          : "bg-gray-50/60 border-gray-100 text-[#747474]"
+                      }`}
+                    >
+                      <span className="opacity-90">{item.emoji}</span> 
+                      <span>{item.name}</span>
+                      <span className={`ml-1 font-black ${state.includeFood ? "text-[#FF6022]" : "text-[#A3A3A3]"}`}>
+                        x{item.quantity}
+                      </span>
+                    </span>
+                  ))}
                 </div>
               </div>
-           </div>
 
-           {/* Bottom Composition Section */}
-           <div className="p-4 px-5 bg-transparent border-t border-black/5">
-             <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-semibold text-[#FF6022] uppercase tracking-wider">Состав (на 8-10 детей):</p>
+              {/* Action Button */}
+              <div className="mt-5">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateState({ includeFood: !state.includeFood });
+                  }}
+                  className={`w-full py-3.5 rounded-2xl text-sm font-black transition-all active:scale-[0.99] shadow-sm flex items-center justify-center gap-2 ${
+                    state.includeFood
+                      ? "bg-[#FF6022] text-white hover:bg-[#E55015] shadow-[#FF6022]/20"
+                      : "bg-[#F5F5F5] hover:bg-[#E5E5E5] text-[#1A1A1A]"
+                  }`}
+                >
+                  {state.includeFood ? (
+                    <>
+                      <Check className="w-4 h-4 stroke-[3px]" /> Выбрано комбо
+                    </>
+                  ) : (
+                    "Добавить комбо-набор"
+                  )}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            animate={{
+               backgroundColor: state.includeFood ? "#FFF5F2" : "#FFFFFF",
+               boxShadow: state.includeFood ? "0 10px 30px -10px rgba(255, 96, 34, 0.2)" : "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
+               borderColor: state.includeFood ? "#FF6022" : "#E5E5E5"
+            }}
+            className="w-full rounded-3xl overflow-hidden border-2 transition-all flex flex-col relative cursor-pointer"
+            onClick={() => updateState({ includeFood: !state.includeFood })}
+          >
+             {/* Top Image Section */}
+             <div 
+                className="relative h-56 bg-white group m-1 rounded-[24px] overflow-hidden" 
+             >
+                <ImageWithFallback
+                  src={getPublicUrl("/images/food/kids_set.webp")}
+                  alt="Набор детской еды"
+                  className="w-full h-full object-cover mix-blend-multiply group-hover:scale-[1.02] transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                
+                {/* Badge for Included Packages */}
+                {!isPaidSet && state.includeFood && (
+                  <div className="absolute top-3 left-4 z-10">
+                    <span
+                      className="inline-flex items-center gap-2 text-white text-[12px] font-extrabold px-5 py-2.5 rounded-2xl uppercase tracking-wider"
+                      style={{
+                        background: "#6C4AED",
+                        boxShadow: "0 4px 16px rgba(108, 74, 237, 0.45)",
+                        transform: "rotate(-2deg)",
+                        display: "inline-flex",
+                      }}
+                    >
+                      <Check className="w-4 h-4" /> Включено в пакет
+                    </span>
+                  </div>
+                )}
+
+                {state.includeFood && (
+                  <div className="absolute top-4 right-4 bg-[#FF6022] rounded-full p-1.5 shadow-md z-10 transition-transform scale-in">
+                    <Check className="w-5 h-5 text-white" />
+                  </div>
+                )}
+                
+                {/* Info overlap */}
+                <div className="absolute bottom-3 left-4 right-4 z-10 flex items-end justify-between pointer-events-none">
+                  <div>
+                    <h4 className="text-white font-bold text-xl leading-tight mb-0.5">Набор детской еды</h4>
+                    {isPaidSet && (
+                      <p className="text-[#FF6022] font-bold text-sm">12 070 ₽</p>
+                    )}
+                  </div>
+                  <div
+                    className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-colors pointer-events-auto shadow-sm ${
+                      state.includeFood
+                        ? "bg-[#FF6022] text-white shadow-[#FF6022]/40"
+                        : "bg-white text-[#1A1A1A]"
+                    }`}
+                    onClick={(e) => {
+                       e.stopPropagation();
+                       updateState({ includeFood: !state.includeFood });
+                    }}
+                  >
+                    {state.includeFood ? "Выбрано" : "Добавить"}
+                  </div>
+                </div>
              </div>
-             <div className="flex flex-wrap gap-2 relative z-0">
-               {KIDS_SET_ITEMS.map((item, idx) => (
-                 <span
-                   key={idx}
-                   className={`text-xs font-medium px-3 py-1.5 rounded-full border flex items-center gap-1 shadow-sm transition-colors ${state.includeFood ? "bg-white border-[#FF6022]/20 text-[#1A1A1A]" : "bg-[#F8F9FA] border-[#E5E5E5] text-[#747474]"}`}
-                 >
-                   <span className={state.includeFood ? "opacity-100" : "opacity-70"}>{item.emoji}</span> 
-                   <span>{item.name}</span>
-                   <span className={state.includeFood ? "text-[#747474] ml-1 font-bold" : "text-[#A3A3A3] ml-1"}>x{item.quantity}</span>
-                 </span>
-               ))}
+
+             {/* Bottom Composition Section */}
+             <div className="p-4 px-5 bg-transparent border-t border-black/5">
+               <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs font-semibold text-[#FF6022] uppercase tracking-wider">Состав (на 8-10 детей):</p>
+               </div>
+               <div className="flex flex-wrap gap-2 relative z-0">
+                 {KIDS_SET_ITEMS.map((item, idx) => (
+                   <span
+                     key={idx}
+                     className={`text-xs font-medium px-3 py-1.5 rounded-full border flex items-center gap-1 shadow-sm transition-colors ${state.includeFood ? "bg-white border-[#FF6022]/20 text-[#1A1A1A]" : "bg-[#F8F9FA] border-[#E5E5E5] text-[#747474]"}`}
+                   >
+                     <span className={state.includeFood ? "opacity-100" : "opacity-70"}>{item.emoji}</span> 
+                     <span>{item.name}</span>
+                     <span className={state.includeFood ? "text-[#747474] ml-1 font-bold" : "text-[#A3A3A3] ml-1"}>x{item.quantity}</span>
+                   </span>
+                 ))}
+               </div>
              </div>
-           </div>
-        </motion.div>
+          </motion.div>
+        )}
         
         {/* Helper Note for Premium/Exclusive subtraction */}
         {!isPaidSet && !state.includeFood && (
@@ -337,7 +450,7 @@ const getDrinkEmoji = (name: string) => {
 };
 
 function MegaFoodStep() {
-  const { state, updateState } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const total = getMegaFoodTotal(state.megaFood);
 
   const updateMegaQty = (id: string, delta: number) => {
@@ -427,7 +540,120 @@ function MegaFoodStep() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {category.items.map((item) => {
                     const qty = state.megaFood[item.id] || 0;
+                    const isSelected = qty > 0;
                     
+                    if (isExp) {
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            if (qty === 0) {
+                              setMegaQty(item.id, 1);
+                            } else {
+                              setMegaQty(item.id, 0);
+                            }
+                          }}
+                          className={`group relative flex flex-col justify-between rounded-[32px] bg-white p-2.5 transition-all duration-300 cursor-pointer border ${
+                            isSelected
+                              ? "scale-[1.01]"
+                              : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                          }`}
+                          style={{
+                            borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                            borderWidth: isSelected ? "2px" : "1px",
+                            boxShadow: isSelected 
+                              ? "0 16px 36px rgba(255,96,34,0.12), 0 0 0 1px rgba(255,96,34,0.05)" 
+                              : undefined
+                          }}
+                        >
+                          <div>
+                            {item.image && (
+                              <div className="relative w-full h-56 rounded-[24px] bg-[#F8F9FA] overflow-hidden flex items-center justify-center mb-4 transition-colors duration-300 shrink-0">
+                                <img
+                                  src={getPublicUrl(item.image)}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover filter drop-shadow-md group-hover:scale-105 transition-transform duration-500 ease-out"
+                                />
+                                {isSelected && (
+                                  <div className="absolute top-3 right-3 bg-[#FF6022] text-white rounded-full p-1.5 shadow-md shadow-[#FF6022]/20">
+                                    <Check className="w-4 h-4 stroke-[3px]" />
+                                  </div>
+                                )}
+                              </div>
+                            )}
+
+                            <div className="px-2 pt-1">
+                              <div className="flex items-start justify-between gap-3 mb-1">
+                                <h4 className="text-lg font-black text-[#1A1A1A] leading-tight group-hover:text-[#FF6022] transition-colors">{item.name}</h4>
+                                <p className="text-lg font-black text-[#FF6022] shrink-0">
+                                  {item.price.toLocaleString("ru-RU")} ₽
+                                </p>
+                              </div>
+                              {item.subtitle && (
+                                <p className="text-xs text-[#747474] font-semibold mt-1 mb-3">{item.subtitle}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          {item.details.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-3 mb-5 px-2">
+                              {item.details.map((detail) => (
+                                <span
+                                  key={detail}
+                                  className={`inline-flex items-center gap-1 text-[11px] font-bold px-3 py-1.5 rounded-full border shadow-sm transition-all ${
+                                    isSelected 
+                                      ? "bg-white border-[#FF6022]/15 text-[#1A1A1A]" 
+                                      : "bg-gray-50/60 border-gray-100 text-[#747474]"
+                                  }`}
+                                >
+                                  <span>{getDetailEmoji(detail)}</span>
+                                  <span className="leading-none">{detail}</span>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="mt-auto px-2 pb-2.5">
+                            {qty === 0 ? (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setMegaQty(item.id, 1);
+                                }}
+                                className="w-full py-3.5 rounded-2xl bg-white hover:bg-[#FF6022] text-[#FF6022] hover:text-white border border-[#FF6022]/20 hover:border-[#FF6022] text-sm font-black transition-all duration-200 shadow-sm active:scale-[0.98]"
+                              >
+                                Добавить в заказ
+                              </button>
+                            ) : (
+                              <div 
+                                className="flex items-center justify-between bg-white rounded-2xl p-1.5 border border-[#FF6022]/20 shadow-sm"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); updateMegaQty(item.id, -1); }}
+                                  className="w-9 h-9 rounded-xl bg-gray-50 hover:bg-gray-100 flex items-center justify-center text-[#1A1A1A] font-bold transition-colors active:scale-90"
+                                >
+                                  <Minus className="w-4 h-4 stroke-[3px]" />
+                                </button>
+                                <span className="text-sm font-black text-[#1A1A1A] select-none">
+                                  {qty} {qty === 1 ? "сет" : qty < 5 ? "сета" : "сетов"}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); updateMegaQty(item.id, 1); }}
+                                  className="w-9 h-9 rounded-xl bg-[#FF6022] hover:bg-[#E05018] flex items-center justify-center text-white font-bold transition-colors shadow-sm active:scale-90"
+                                >
+                                  <Plus className="w-4 h-4 stroke-[3px]" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
+
                     // Curated backgrounds for cafe styles
                     const bgStyle = category.id === "udc"
                       ? (qty > 0 ? "bg-gradient-to-br from-[#FFFBF8] to-[#FFF3EB] border-[#FF6022] shadow-lg shadow-[#FF6022]/5" : "bg-gradient-to-br from-[#FFFDFB] to-[#FFF9F5] border-[#FFE3CD] hover:border-[#FFD0B0]")

@@ -343,7 +343,7 @@ export function Step1Format() {
       {/* ─── Horizontal Scroll Cards ─── */}
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-6 px-5 pt-5"
+        className="flex items-start gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-6 px-5 pt-5"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -365,7 +365,7 @@ export function Step1Format() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: isDisabled ? 0.45 : 1, y: 0 }}
               transition={{ delay: i * 0.07 }}
-              className="snap-start shrink-0 relative pr-1 flex flex-col animate-gpu"
+              className="snap-start shrink-0 relative pr-1 animate-gpu"
               style={{ width: "85%" }}
             >
               {/* Duration Badge (Top Right Rotated) */}
@@ -382,7 +382,7 @@ export function Step1Format() {
 
               <div
                 onClick={() => !isDisabled && handleSelect(pkg.id)}
-                className={`bg-white rounded-[24px] w-full flex-1 relative transition-all duration-300 cursor-pointer overflow-hidden flex flex-col justify-between ${
+                className={`bg-white rounded-[24px] w-full relative transition-all duration-300 cursor-pointer overflow-hidden ${
                   isDisabled ? "pointer-events-none" : "hover:shadow-md"
                 }`}
                 style={{
@@ -401,7 +401,7 @@ export function Step1Format() {
                   }}
                 />
 
-                <div className="flex flex-col px-[24px] pt-[28px] pb-[28px] relative z-0 flex-1 justify-between">
+                <div className="flex flex-col px-[24px] pt-[28px] pb-[28px] relative z-0">
                   <div>
                     {/* Header */}
                     <div className="mb-[24px] pr-[100px]">
@@ -436,17 +436,8 @@ export function Step1Format() {
                       </div>
                     )}
 
-                    {/* Custom package badge placeholder to keep same layout height */}
-                    {isCustom && (
-                      <div className="mb-[28px] ml-[-4px] opacity-0 pointer-events-none select-none">
-                        <div className="bg-[#5b21cc] rounded-[13px] inline-flex items-center justify-center px-[20px] py-[6px]">
-                          <span className="font-semibold text-[15px]">Spacer</span>
-                        </div>
-                      </div>
-                    )}
-
                     {/* Price */}
-                    <div className="flex flex-col items-center gap-[2px] mb-[20px] justify-end min-h-[64px]">
+                    <div className="flex flex-col items-center gap-[2px] mb-[20px]">
                       {isCustom ? (
                         <p className="text-[#ff6022] text-[20px] font-black leading-none my-[10px]">
                           Своя цена

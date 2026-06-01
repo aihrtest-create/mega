@@ -222,7 +222,7 @@ export default function InvitationVariants() {
       btnYes: "Мы придем",
       btnNo: "Не сможем(",
       btnCalendar: "Добавить в календарь",
-      btnMap: "Открыть карту"
+      btnMap: "Адрес"
     },
     en: {
       inviteLabel: "YOU'VE RECEIVED AN INVITATION!",
@@ -232,7 +232,7 @@ export default function InvitationVariants() {
       btnYes: "We will come",
       btnNo: "Can't make it",
       btnCalendar: "Add to calendar",
-      btnMap: "Open map"
+      btnMap: "Address"
     },
     ar: {
       inviteLabel: "لقد تلقيت دعوة خاصة!",
@@ -242,7 +242,7 @@ export default function InvitationVariants() {
       btnYes: "سنحضر بكل سرور",
       btnNo: "لا أستطيع الحضور",
       btnCalendar: "إضافة إلى التقويم",
-      btnMap: "فتح الخريطة"
+      btnMap: "العنوان"
     }
   }[customLanguage];
 

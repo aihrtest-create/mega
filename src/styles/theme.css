@@ -335,13 +335,76 @@
   animation: float 4s ease-in-out infinite;
 }
 
-@keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+@keyframes dynamic-shake {
+  0% { transform: rotate(0deg) scale(1); }
+  15% { transform: rotate(-4deg) scale(1.04) translate3d(-3px, -2px, 0); }
+  30% { transform: rotate(3deg) scale(1.04) translate3d(3px, 2px, 0); }
+  45% { transform: rotate(-3deg) scale(1.04) translate3d(-2px, 1px, 0); }
+  60% { transform: rotate(2deg) scale(1.04) translate3d(2px, -1px, 0); }
+  75% { transform: rotate(-1deg) scale(1.04) translate3d(-1px, -1px, 0); }
+  90% { transform: rotate(1deg) scale(1.04) translate3d(1px, 0, 0); }
+  100% { transform: rotate(0deg) scale(1); }
 }
 .animate-shake {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: dynamic-shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Responsive layout optimizations for small viewports (e.g. iPhone SE / iPhone 5) */
+@media (max-height: 610px), (max-width: 340px) {
+  .invitation-card {
+    padding: 1.25rem 1rem 0.85rem 1rem !important;
+    max-width: 290px !important;
+    border-radius: 1.25rem !important;
+  }
+  
+  .invitation-card .invitation-emoji {
+    top: -52px !important;
+    font-size: 80px !important;
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  .invitation-card .mt-14 {
+    margin-top: 1.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .invitation-card h2 {
+    font-size: 16px !important;
+  }
+  
+  .invitation-card .gilroy-brand {
+    font-size: 18px !important;
+  }
+  
+  .invitation-card .pt-5 {
+    padding-top: 0.65rem !important;
+  }
+  
+  .invitation-card .mb-6 {
+    margin-bottom: 0.65rem !important;
+  }
+  
+  .invitation-card .gilroy-text {
+    font-size: 16px !important;
+  }
+  
+  .invitation-card #rsvp-actions {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .invitation-card #rsvp-actions .bubble-btn {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  .invitation-card #card-footer-actions {
+    padding-top: 0.5rem !important;
+  }
+  
+  .invitation-card #card-footer-actions button {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
 }
 

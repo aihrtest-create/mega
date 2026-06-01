@@ -124,7 +124,7 @@ const translations = {
     calendarTitle: "День Рождения в Hello Park",
     calendarDesc: "Празднуем День Рождения! Ждем вас!",
     addToCalendar: "Календарь",
-    openMap: "Карта",
+    openMap: "Адрес",
     tapEnvelopeLabel: "Вам прислали приглашение!",
     creatorLink: "Создать своё приглашение",
     gatheringLabel: "Сбор гостей",
@@ -167,7 +167,7 @@ const translations = {
     calendarTitle: "Birthday Party at Hello Park",
     calendarDesc: "Celebrating birthday! See you there!",
     addToCalendar: "Calendar",
-    openMap: "Map",
+    openMap: "Address",
     tapEnvelopeLabel: "You've received an invitation!",
     creatorLink: "Create Your Own Invitation",
     gatheringLabel: "Gathering",
@@ -210,7 +210,7 @@ const translations = {
     calendarTitle: "حفلة عيد ميلاد في هيلو بارك",
     calendarDesc: "نحتفل بعيد الميلاد! ننتظركم!",
     addToCalendar: "التقويم",
-    openMap: "الخريطة",
+    openMap: "العنوان",
     tapEnvelopeLabel: "لقد تلقيت دعوة خاصة!",
     creatorLink: "أنشئ دعوتك الخاصة",
     gatheringLabel: "تجمع الضيوف",
@@ -480,6 +480,11 @@ export default function InvitationService() {
     setIsEnvelopeShaking(true);
     playOpenSound();
     
+    // Trigger physical haptic vibration for smartphones
+    if (typeof navigator !== "undefined" && navigator.vibrate) {
+      navigator.vibrate([60, 40, 60]);
+    }
+    
     setTimeout(() => {
       setIsEnvelopeOpen(true);
       setIsEnvelopeShaking(false);
@@ -686,7 +691,7 @@ export default function InvitationService() {
             </button>
 
             {/* Overlapping template emoji - fully visible now! Added leading-none and overflow-visible to ensure no browser vertical clipping */}
-            <div className="absolute -top-[70px] left-1/2 -translate-x-1/2 w-36 h-36 animate-float flex items-center justify-center text-[105px] leading-none overflow-visible drop-shadow-xl pointer-events-none z-10 select-none">
+            <div className="absolute -top-[70px] left-1/2 -translate-x-1/2 w-36 h-36 animate-float flex items-center justify-center text-[105px] leading-none overflow-visible drop-shadow-xl pointer-events-none z-10 select-none invitation-emoji">
               {data.emoji || "🎉"}
             </div>
 

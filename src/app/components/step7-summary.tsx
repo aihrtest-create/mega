@@ -463,6 +463,26 @@ export function Step7Summary() {
           />
         )}
 
+        {state.additionalActivities && state.additionalActivities.length > 0 && (
+          <SummaryRow
+            icon={<PartyPopper className="w-4 h-4" />}
+            label="Доп. активности"
+            value={state.additionalActivities.map(act => ADDITIONAL_ACTIVITIES_NAMES[act] || act).join(", ")}
+            priceText={formatPrice(getActivitiesPrice())}
+            stepNumber={15}
+          />
+        )}
+
+        {state.additionalServices && state.additionalServices.length > 0 && (
+          <SummaryRow
+            icon={<Star className="w-4 h-4" />}
+            label="Доп. услуги"
+            value={state.additionalServices.map(srv => ADDITIONAL_SERVICES_NAMES[srv] || srv).join(", ")}
+            priceText={formatPrice(getServicesPrice())}
+            stepNumber={16}
+          />
+        )}
+
         {state.date && (
           <SummaryRow
             icon={<Calendar className="w-4 h-4" />}

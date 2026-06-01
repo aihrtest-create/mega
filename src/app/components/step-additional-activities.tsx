@@ -18,7 +18,7 @@ const ACTIVITIES = [
     duration: "60 мин",
     desc: 'Почувствуйте себя участником «Форт Боярд», угадывая на ощупь, кто же скрывается в коробке — гора впечатлений и адреналина обеспечена!',
     gradient: "from-[#ffecd2] to-[#fcb69f]",
-    image: "/activities/trash_box.webp",
+    image: "/activities/trash_animals.webp",
   },
   {
     id: "trash-box",
@@ -45,7 +45,7 @@ const ACTIVITIES = [
     duration: "60 мин",
     desc: 'Для тех, кто не боится вызовов: необычные испытания на скорость и смелость, а также отличное настроение',
     gradient: "from-[#d4fc79] to-[#96e6a1]",
-    image: "/activities/mini_disco.webp",
+    image: "/activities/challenge_party.webp",
   },
 ];
 

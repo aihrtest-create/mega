@@ -169,7 +169,7 @@ const initialState: WizardState = {
   masterClasses: [],
   includeFood: false,
   customFood: {},
-  megaOwnCatering: false,
+  megaOwnCatering: true,
   megaFood: {},
   cakeChoice: null,
   fillingChoice: null,
@@ -226,6 +226,10 @@ function getMegaSteps(packageType: WizardState["packageType"]) {
   if (packageType === "exclusive") {
     // Insert step 14 before 9
     steps.splice(steps.indexOf(9), 0, 14);
+  }
+  if (packageType === "custom") {
+    // Insert step 15 before 9 (Additional Activities)
+    steps.splice(steps.indexOf(9), 0, 15);
   }
   // Insert step 16 before 9 (Additional Services)
   steps.splice(steps.indexOf(9), 0, 16);
@@ -819,9 +823,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
   const visibleSteps = React.useMemo(() => {
     if (isMega) return getMegaSteps(state.packageType);
 
-    // Actual navigation order: 1→2→3→4?→5→7?→8?→(15,16 hidden)→13?→14?→6→10→11?→9→12
-    // With step 16 (Additional Services) moved to right before 9 (Food)
-    const list = [1, 2, 3, 4, 5, 7, 8, 13, 14, 6, 10, 11, 16, 9, 12];
+    // Actual navigation order: 1→2→3→4?→5→7?→8?→15→13?→14?→6→10→11?→16→9→12
+    const list = [1, 2, 3, 4, 5, 7, 8, 15, 13, 14, 6, 10, 11, 16, 9, 12];
     return list.filter((s) => {
       // Skip Animators (Step 4) if not a phygital quest
       if (s === 4 && state.questType && !state.questType.startsWith("phygital_")) return false;

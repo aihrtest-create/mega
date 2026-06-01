@@ -456,11 +456,22 @@ function MegaFoodStep() {
   const updateMegaQty = (id: string, delta: number) => {
     const current = state.megaFood[id] || 0;
     const next = Math.max(0, current + delta);
-    updateState({ megaFood: { ...state.megaFood, [id]: next } });
+    const newFood = { ...state.megaFood, [id]: next };
+    const hasFood = Object.values(newFood).some(v => v > 0);
+    updateState({
+      megaFood: newFood,
+      megaOwnCatering: hasFood ? false : state.megaOwnCatering
+    });
   };
 
   const setMegaQty = (id: string, qty: number) => {
-    updateState({ megaFood: { ...state.megaFood, [id]: Math.max(0, qty) } });
+    const next = Math.max(0, qty);
+    const newFood = { ...state.megaFood, [id]: next };
+    const hasFood = Object.values(newFood).some(v => v > 0);
+    updateState({
+      megaFood: newFood,
+      megaOwnCatering: hasFood ? false : state.megaOwnCatering
+    });
   };
 
   return (
@@ -484,7 +495,13 @@ function MegaFoodStep() {
       {/* Свой кейтеринг */}
       <button
         type="button"
-        onClick={() => updateState({ megaOwnCatering: !state.megaOwnCatering })}
+        onClick={() => {
+          const nextOwnCatering = !state.megaOwnCatering;
+          updateState({
+            megaOwnCatering: nextOwnCatering,
+            megaFood: nextOwnCatering ? {} : state.megaFood
+          });
+        }}
         className={`w-full text-left rounded-[32px] border-2 p-6 mb-8 transition-all duration-300 relative overflow-hidden group ${
           state.megaOwnCatering
             ? "bg-gradient-to-br from-[#FFF5F2] to-[#FFF0EC] border-[#FF6022] shadow-xl shadow-[#FF6022]/10"

@@ -25,6 +25,9 @@ import { FloatingPrice } from "./components/floating-price";
 import { AnimatePresence, motion } from "motion/react";
 import HParkLogo from "../imports/HParkLogo";
 import { AlertTriangle, RotateCcw, PlayCircle, RefreshCw } from "lucide-react";
+import InvitationService from "./components/invitation-service";
+import InvitationVariants from "./components/invitation-variants";
+
 
 // ──────────────────────────────────────────────
 // Error Boundary — prevents white screen crashes
@@ -225,6 +228,23 @@ export default function App() {
 
   if (isPresentation) {
     return <Presentation />;
+  }
+
+  const isInviteVariants = window.location.pathname.includes('/invite-variants') || 
+                           window.location.hash.includes('/invite-variants') || 
+                           window.location.search.includes('view=variants');
+
+  if (isInviteVariants) {
+    return <InvitationVariants />;
+  }
+
+  const isInvite = window.location.pathname.includes('/invite') || 
+                   window.location.hash.includes('/invite') || 
+                   window.location.search.includes('invite=') || 
+                   window.location.search.includes('view=');
+
+  if (isInvite) {
+    return <InvitationService />;
   }
 
   return (

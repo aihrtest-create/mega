@@ -30,7 +30,7 @@ export function FloatingPrice() {
     );
   const isOptionalStep = isMegaOptionalStep || (isCustom
     ? step !== 1 && step !== 2 && step !== 12
-    : step === 6 || step === 10 || step === 16);
+    : step === 6 || step === 10 || step === 15 || step === 16);
 
   // ─── Mandatory validation ───
   const canProceed = (() => {
@@ -66,6 +66,7 @@ export function FloatingPrice() {
     if (step === 9) return isMega ? state.megaOwnCatering || Object.values(state.megaFood).some(v => v > 0) : state.includeFood || Object.values(state.customFood).some(v => v > 0);
     if (step === 10) return !!state.cakeChoice;
     if (step === 11) return true; // gifts step — always "selected" (just display)
+    if (step === 15) return (state.additionalActivities || []).length > 0;
     if (step === 16) return (state.additionalServices || []).length > 0;
     return false;
   })();

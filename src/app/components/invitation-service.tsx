@@ -53,7 +53,7 @@ const helloParks: ParkInfo[] = [
     id: "mega_khimki",
     nameRu: "Hello Park ТРЦ МЕГА Химки",
     nameEn: "Hello Park Mega Khimki",
-    nameAr: "هيلو بارك ميجا خيمكي",
+    nameAr: "هلو بارك ميجا خيمكي",
     addressRu: "Московская обл., г. Химки, микрорайон ИКЕА, к2, ТРЦ МЕГА Химки",
     addressEn: "Moscow region, Khimki, IKEA microdistrict, bld. 2, Mega Khimki Mall",
     addressAr: "منطقة موسكو، خيمكي، حي إيكيا، مبنى 2، مول ميجا خيمكي",
@@ -63,7 +63,7 @@ const helloParks: ParkInfo[] = [
     id: "mega_teply_stan",
     nameRu: "Hello Park ТРЦ МЕГА Теплый Стан",
     nameEn: "Hello Park Mega Teply Stan",
-    nameAr: "هيلو بارك ميجا تيبلي ستان",
+    nameAr: "هلو بارك ميجا تيبلي ستان",
     addressRu: "г. Москва, п. Сосенское, Калужское ш., 21-й км, ТРЦ МЕГА Теплый Стан",
     addressEn: "Moscow, Sosenskoye, Kaluzhskoye sh., 21st km, Mega Teply Stan Mall",
     addressAr: "موسكو، سوسنسكوي، طريق كالوجسكويه، الكيلومتر 21، مول ميجا تيبلي ستان",
@@ -73,7 +73,7 @@ const helloParks: ParkInfo[] = [
     id: "mega_belaya_dacha",
     nameRu: "Hello Park ТРЦ МЕГА Белая Дача",
     nameEn: "Hello Park Mega Belaya Dacha",
-    nameAr: "هيلو بارك ميجا بيلايا دатشا",
+    nameAr: "هلو بارك ميجا بيلايا دатشا",
     addressRu: "Московская обл., г. Котельники, 1-й Покровский пр-д, 5, ТРЦ МЕГА Белая Дача",
     addressEn: "Moscow region, Kotelniki, 1st Pokrovsky pr-d, 5, Mega Belaya Dacha Mall",
     addressAr: "منطقة موسكو، كوتيلنيكي، ممر بوكروفسكي الأول، 5، مول ميجا بيلايا داتشا",
@@ -83,7 +83,7 @@ const helloParks: ParkInfo[] = [
     id: "mega_dybenko",
     nameRu: "Hello Park ТРЦ МЕГА Дыбенко",
     nameEn: "Hello Park Mega Dybenko",
-    nameAr: "هيلو بارك ميجا ديبينكو",
+    nameAr: "هلو بارك ميجا ديبينكو",
     addressRu: "Ленинградская обл., Всеволожский р-н, Мурманское ш., 12-й км, ТРЦ МЕГА Дыбенко",
     addressEn: "Leningrad region, Vsevolozhsky district, Murmanskoye sh., 12th km, Mega Dybenko Mall",
     addressAr: "منطقة لينينغراد، فسيفولوزسكي، طريق مورمانسكويه، الكيلومتر 12، مول ميجا ديبينكو",
@@ -93,7 +93,7 @@ const helloParks: ParkInfo[] = [
     id: "oman",
     nameRu: "Hello Park Oman",
     nameEn: "Hello Park Oman",
-    nameAr: "هيلو بارك عمان",
+    nameAr: "هلو بارك عمان",
     addressRu: "Active Oman, Маскат, Оман",
     addressEn: "Active Oman, Muscat, Oman",
     addressAr: "أكتيف عمان، مسقط، عمان",
@@ -193,7 +193,7 @@ const translations = {
   },
   ar: {
     title: "صانع الدعوات",
-    subtitle: "أنشئ دعوة تفاعلية لحفلة هيلو بارك",
+    subtitle: "أنشئ دعوة تفاعلية لحفلة هلو بارك",
     selectLang: "لغة الدعوة",
     childName: "اسم الطفل",
     childNamePlaceholder: "مثال: أحمد",
@@ -208,7 +208,7 @@ const translations = {
     copied: "تم النسخ! 📋",
     shareWa: "واتساب",
     shareTg: "تليجرام",
-    openEnvelope: "اضغط на المغلف لفتحه",
+    openEnvelope: "اضغط على المغلف لفتحه",
     backToEnvelope: "إغلاق في المغلف",
     guestWillSee: "معاينة الدعوة:",
     rsvpTitle: "هل ستتمكن من الحضور؟",
@@ -216,8 +216,8 @@ const translations = {
     rsvpNo: "لا أستطيع الحضور",
     rsvpYesToast: "نراكم هناك! 🎉",
     rsvpNoToast: "يؤسفنا ذلك، سنفتقدك! 🥺",
-    locationPreset: "هيلو بارك، ميجا مول",
-    calendarTitle: "حفلة عيد ميلاد في هيلو بارك",
+    locationPreset: "هلو بارك، ميجا مول",
+    calendarTitle: "حفلة عيد ميلاد في هلو بارك",
     calendarDesc: "نحتفل بعيد الميلاد! ننتظركم!",
     addToCalendar: "التقويم",
     openMap: "العنوان",
@@ -284,7 +284,7 @@ const getShareMessage = (name: string, lang: Language, link: string) => {
     return `${name} invites you to their Birthday Party at Hello Park! Open the magical envelope: ${link}`;
   }
   if (lang === "ar") {
-    return `${name} يدعوكم لحفل عيد ميلاده في هيلو بارك! افتح المغلف السحري: ${link}`;
+    return `${name} يدعوكم لحفل عيد ميلاده في هلو بارك! افتح المغلف السحري: ${link}`;
   }
   return `${name} приглашает вас на свой День Рождения в Hello Park! Открой волшебный конверт: ${link}`;
 };
@@ -596,7 +596,7 @@ export default function InvitationService() {
         return (
           <h2 className="gilroy-text" dir="rtl">
             {data.name} يدعوكم لحفل عيد ميلاده في منتزه المستقبل <br />
-            <span className="gilroy-brand">هيلو بارك</span>
+            <span className="gilroy-brand">هلو بارك</span>
           </h2>
         );
       }

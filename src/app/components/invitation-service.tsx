@@ -88,6 +88,16 @@ const helloParks: ParkInfo[] = [
     addressEn: "Leningrad region, Vsevolozhsky district, Murmanskoye sh., 12th km, Mega Dybenko Mall",
     addressAr: "منطقة لينينغراد، فسيفولوزسكي، طريق مورمانسكويه، الكيلومتر 12، مول ميجا ديبينكو",
     mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Dybenko"
+  },
+  {
+    id: "oman",
+    nameRu: "Hello Park Oman",
+    nameEn: "Hello Park Oman",
+    nameAr: "هيلو بارك عمان",
+    addressRu: "Active Oman, Маскат, Оман",
+    addressEn: "Active Oman, Muscat, Oman",
+    addressAr: "أكتيف عمان، مسقط، عمان",
+    mapUrl: "https://www.google.com/maps/place/Active+Oman+Center+%D8%A3%D9%83%D8%AA%D9%8A%D9%81+%D8%B9%D9%85%D8%A7%D9%86/@23.5931061,58.4015099,17z/data=!3m1!4b1!4m6!3m5!1s0x3e91fee142475e77:0xfb6cc14e13d9cf25!8m2!3d23.5931061!4d58.4015099!16s%2Fg%2F11w7sn7_c4"
   }
 ];
 
@@ -284,14 +294,28 @@ const getShareMessage = (name: string, lang: Language, link: string) => {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function InvitationService() {
   // Configurator form state
-  const [formData, setFormData] = useState<InvitationData>({
-    lang: "ru",
-    template: "neon",
-    name: "",
-    date: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0],
-    gatheringTime: "15:00",
-    location: "mega_khimki",
-    emoji: "🎉"
+  const [formData, setFormData] = useState<InvitationData>(() => {
+    let initialLang: Language = "ru";
+    try {
+      if (typeof window !== "undefined") {
+        const savedLang = localStorage.getItem("hello_park_invitation_lang");
+        if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar")) {
+          initialLang = savedLang as Language;
+        }
+      }
+    } catch (e) {
+      console.error("Local storage error:", e);
+    }
+
+    return {
+      lang: initialLang,
+      template: "neon",
+      name: "",
+      date: new Date(Date.now() + 86400000 * 7).toISOString().split('T')[0],
+      gatheringTime: "15:00",
+      location: initialLang === "ar" ? "oman" : "mega_khimki",
+      emoji: "🎉"
+    };
   });
 
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -311,15 +335,6 @@ export default function InvitationService() {
 
   // Load language from cache or detect URL parameter
   useEffect(() => {
-    try {
-      const savedLang = localStorage.getItem("hello_park_invitation_lang");
-      if (savedLang && (savedLang === "ru" || savedLang === "en" || savedLang === "ar")) {
-        setFormData(prev => ({ ...prev, lang: savedLang as Language }));
-      }
-    } catch (e) {
-      console.error("Local storage error:", e);
-    }
-
     const searchParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
     const inviteKey = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
@@ -333,7 +348,11 @@ export default function InvitationService() {
   }, []);
 
   const handleLangChange = (lang: Language) => {
-    setFormData(prev => ({ ...prev, lang }));
+    setFormData(prev => ({ 
+      ...prev, 
+      lang,
+      location: lang === "ar" ? "oman" : (prev.location === "oman" ? "mega_khimki" : prev.location)
+    }));
     try {
       localStorage.setItem("hello_park_invitation_lang", lang);
     } catch (e) {

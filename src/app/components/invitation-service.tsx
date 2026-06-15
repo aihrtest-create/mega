@@ -97,7 +97,7 @@ const helloParks: ParkInfo[] = [
     addressRu: "Active Oman, Маскат, Оман",
     addressEn: "Active Oman, Muscat, Oman",
     addressAr: "أكتيف عمان، مسقط، عمان",
-    mapUrl: "https://www.google.com/maps/place/Active+Oman+Center+%D8%A3%D9%83%D8%AA%D9%8A%D9%81+%D8%B9%D9%85%D8%A7%D9%86/@23.5931061,58.4015099,17z/data=!3m1!4b1!4m6!3m5!1s0x3e91fee142475e77:0xfb6cc14e13d9cf25!8m2!3d23.5931061!4d58.4015099!16s%2Fg%2F11w7sn7_c4"
+    mapUrl: "https://www.google.com/maps/place/Active+Oman+Center+%D8%A3%D9%83%D8%AA%D9%8A%D9%81+%D8%B9%D9%85%D8%A7%D9%86+%D8%B3%D9%86%D8%AA%D8%B1%E2%80%AD/@23.5837078,58.3211374,892m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e8e01005d35b3b5:0xd13ff9bc88749617!8m2!3d23.5837078!4d58.3211374!16s%2Fg%2F11x7cs6565!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D"
   }
 ];
 

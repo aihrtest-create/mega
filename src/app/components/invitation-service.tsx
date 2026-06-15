@@ -15,7 +15,8 @@ import {
   Heart,
   ArrowRight,
   MapPin,
-  X
+  X,
+  Users
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -130,6 +131,11 @@ const translations = {
     rsvpNo: "Не сможем",
     rsvpYesToast: "До встречи! 🎉",
     rsvpNoToast: "Жаль, будем скучать! 🥺",
+    rsvpFormTitle: "Ваше имя / семья",
+    rsvpNamePlaceholder: "Например: Семья Ивановых",
+    rsvpKids: "Детей",
+    rsvpAdults: "Взрослых",
+    rsvpConfirm: "Подтвердить",
     locationPreset: "Hello Park, ТРЦ МЕГА",
     calendarTitle: "День Рождения в Hello Park",
     calendarDesc: "Празднуем День Рождения! Ждем вас!",
@@ -173,6 +179,11 @@ const translations = {
     rsvpNo: "Can't make it",
     rsvpYesToast: "See you there! 🎉",
     rsvpNoToast: "Sorry, we will miss you! 🥺",
+    rsvpFormTitle: "Your name / family name",
+    rsvpNamePlaceholder: "e.g. The Smiths",
+    rsvpKids: "Kids",
+    rsvpAdults: "Adults",
+    rsvpConfirm: "Confirm RSVP",
     locationPreset: "Hello Park, Mega Mall",
     calendarTitle: "Birthday Party at Hello Park",
     calendarDesc: "Celebrating birthday! See you there!",
@@ -216,6 +227,11 @@ const translations = {
     rsvpNo: "لا أستطيع الحضور",
     rsvpYesToast: "نراكم هناك! 🎉",
     rsvpNoToast: "يؤسفنا ذلك، سنفتقدك! 🥺",
+    rsvpFormTitle: "اسمك / اسم العائلة",
+    rsvpNamePlaceholder: "مثال: عائلة أحمد",
+    rsvpKids: "أطفال",
+    rsvpAdults: "بالغين",
+    rsvpConfirm: "تأكيد الحضور",
     locationPreset: "هلو بارك، ميجا مول",
     calendarTitle: "حفلة عيد ميلاد في هلو بارك",
     calendarDesc: "نحتفل بعيد الميلاد! ننتظركم!",
@@ -326,8 +342,11 @@ export default function InvitationService() {
   const [guestInvite, setGuestInvite] = useState<InvitationData | null>(null);
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(false);
   const [isEnvelopeShaking, setIsEnvelopeShaking] = useState<boolean>(false);
-  const [rsvpState, setRsvpState] = useState<"none" | "yes" | "no">("none");
+  const [rsvpState, setRsvpState] = useState<"none" | "form" | "yes" | "no">("none");
   const [rsvpToast, setRsvpToast] = useState<string>("");
+  const [guestName, setGuestName] = useState<string>("");
+  const [kidsCount, setKidsCount] = useState<number>(1);
+  const [adultsCount, setAdultsCount] = useState<number>(1);
 
   // Interactive Card Overlay States (Location Info / Calendar Picker Plashka)
   const [showLocationPopup, setShowLocationPopup] = useState<boolean>(false);
@@ -429,7 +448,12 @@ export default function InvitationService() {
   };
 
   // RSVP Selection
-  const handleRsvp = (status: "yes" | "no") => {
+  const handleRsvp = async (status: "form" | "yes" | "no") => {
+    if (status === "form") {
+      setRsvpState("form");
+      return;
+    }
+    
     setRsvpState(status);
     const locale = guestInvite ? guestInvite.lang : formData.lang;
     const msg = status === "yes" ? translations[locale].rsvpYesToast : translations[locale].rsvpNoToast;
@@ -441,6 +465,29 @@ export default function InvitationService() {
         spread: 75,
         origin: { y: 0.65 }
       });
+    }
+
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || window.location.hash.substring(window.location.hash.indexOf('?')));
+      const event_id = searchParams.get("invite") || hashParams.get("invite") || searchParams.get("view") || hashParams.get("view");
+      
+      if (event_id) {
+        const apiBaseUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:3002' : '';
+        await fetch(`${apiBaseUrl}/api/rsvps`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event_id,
+            guest_name: status === "no" ? "Отклонено гостем" : guestName,
+            kids_count: status === "no" ? 0 : kidsCount,
+            adults_count: status === "no" ? 0 : adultsCount,
+            status
+          })
+        });
+      }
+    } catch (e) {
+      console.error("Failed to save RSVP:", e);
     }
 
     setTimeout(() => {
@@ -746,35 +793,104 @@ export default function InvitationService() {
             </div>
 
             {/* RSVP Container */}
-            <div className="w-full" id="rsvp-actions">
-              {rsvpState === "none" ? (
-                <div className="flex gap-2 w-full mb-4">
-                  <button 
-                    onClick={() => handleRsvp("yes")}
-                    className="bubble-btn flex-1 bg-white text-emerald-500 font-black py-3.5 rounded-xl border border-slate-100 shadow-md text-xs uppercase hover:bg-slate-50 transition-colors"
+            <div className="w-full relative" id="rsvp-actions">
+              <AnimatePresence mode="wait">
+                {rsvpState === "none" && (
+                  <motion.div 
+                    key="none"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex gap-2 w-full mb-4"
                   >
-                    {t.rsvpYes}
-                  </button>
-                  <button 
-                    onClick={() => handleRsvp("no")}
-                    className="bubble-btn flex-1 bg-slate-50 text-rose-400 font-black py-3.5 rounded-xl shadow-md text-xs uppercase hover:bg-slate-100/70 transition-colors"
+                    <button 
+                      onClick={() => handleRsvp("form")}
+                      className="bubble-btn flex-1 bg-white text-emerald-500 font-black py-3.5 rounded-xl border border-slate-100 shadow-md text-xs uppercase hover:bg-slate-50 transition-colors"
+                    >
+                      {t.rsvpYes}
+                    </button>
+                    <button 
+                      onClick={() => handleRsvp("no")}
+                      className="bubble-btn flex-1 bg-slate-50 text-rose-400 font-black py-3.5 rounded-xl shadow-md text-xs uppercase hover:bg-slate-100/70 transition-colors"
+                    >
+                      {t.rsvpNo}
+                    </button>
+                  </motion.div>
+                )}
+
+                {rsvpState === "form" && (
+                  <motion.div 
+                    key="form"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-4 text-left shadow-inner flex flex-col gap-3"
                   >
-                    {t.rsvpNo}
-                  </button>
-                </div>
-              ) : (
-                <div className="w-full py-2 mb-4 text-center">
-                  <p className="gilroy-text text-[#FF5C1A] text-lg sm:text-xl font-bold">
-                    {rsvpState === "yes" ? t.rsvpYesToast : t.rsvpNoToast}
-                  </p>
-                  <button
-                    onClick={() => setRsvpState("none")}
-                    className="mt-2 text-[10px] text-slate-400 underline font-medium hover:text-slate-600 transition-colors"
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        {t.rsvpFormTitle}
+                      </label>
+                      <input 
+                        type="text" 
+                        value={guestName}
+                        onChange={(e) => setGuestName(e.target.value)}
+                        placeholder={t.rsvpNamePlaceholder}
+                        className="w-full py-2 px-3 rounded-lg bg-white border border-slate-200 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 font-semibold outline-none text-xs"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-center">
+                          {t.rsvpKids}
+                        </label>
+                        <div className="flex items-center justify-between bg-white border border-slate-200 rounded-lg overflow-hidden">
+                          <button onClick={() => setKidsCount(Math.max(0, kidsCount - 1))} className="px-3 py-1.5 text-slate-400 hover:bg-slate-50 font-black text-lg">-</button>
+                          <span className="font-black text-slate-700">{kidsCount}</span>
+                          <button onClick={() => setKidsCount(kidsCount + 1)} className="px-3 py-1.5 text-slate-400 hover:bg-slate-50 font-black text-lg">+</button>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 text-center">
+                          {t.rsvpAdults}
+                        </label>
+                        <div className="flex items-center justify-between bg-white border border-slate-200 rounded-lg overflow-hidden">
+                          <button onClick={() => setAdultsCount(Math.max(0, adultsCount - 1))} className="px-3 py-1.5 text-slate-400 hover:bg-slate-50 font-black text-lg">-</button>
+                          <span className="font-black text-slate-700">{adultsCount}</span>
+                          <button onClick={() => setAdultsCount(adultsCount + 1)} className="px-3 py-1.5 text-slate-400 hover:bg-slate-50 font-black text-lg">+</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={() => handleRsvp("yes")}
+                      disabled={!guestName}
+                      className={`w-full mt-1 py-3 rounded-xl font-bold text-xs uppercase transition-all shadow-md ${guestName ? "bg-emerald-500 text-white hover:bg-emerald-600" : "bg-slate-200 text-slate-400"}`}
+                    >
+                      {t.rsvpConfirm}
+                    </button>
+                  </motion.div>
+                )}
+
+                {(rsvpState === "yes" || rsvpState === "no") && (
+                  <motion.div 
+                    key="result"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="w-full py-2 mb-4 text-center"
                   >
-                    {locale === "en" ? "Change response" : locale === "ar" ? "تغيير الإجابة" : "Изменить выбор"}
-                  </button>
-                </div>
-              )}
+                    <p className={`gilroy-text text-lg sm:text-xl font-bold ${rsvpState === "yes" ? "text-emerald-500" : "text-rose-400"}`}>
+                      {rsvpState === "yes" ? t.rsvpYesToast : t.rsvpNoToast}
+                    </p>
+                    <button
+                      onClick={() => setRsvpState("none")}
+                      className="mt-2 text-[10px] text-slate-400 underline font-medium hover:text-slate-600 transition-colors"
+                    >
+                      {locale === "en" ? "Change response" : locale === "ar" ? "تغيير الإجابة" : "Изменить выбор"}
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Actions: Calendar & Map popup trigger */}
@@ -964,6 +1080,37 @@ export default function InvitationService() {
                 </div>
               </div>
 
+              {/* DASHBOARD LINK (New) */}
+              <div className="flex flex-col gap-2 bg-orange-50 border border-orange-200 p-3 rounded-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
+                <h4 className="text-[10px] uppercase font-black text-orange-600 tracking-wider flex items-center gap-1.5">
+                  <Users className="w-3.5 h-3.5" />
+                  {formData.lang === 'en' ? 'Your Secret Dashboard' : formData.lang === 'ar' ? 'لوحة التحكم السرية الخاصة بك' : 'Ваш секретный дашборд'}
+                </h4>
+                <p className="text-[10px] text-orange-800/80 font-medium leading-tight mb-1">
+                  {formData.lang === 'en' ? 'Save this link to see who is coming to the party!' : formData.lang === 'ar' ? 'احفظ هذا الرابط لترى من سيحضر الحفلة!' : 'Сохраните эту ссылку, чтобы видеть список гостей (кто придет и кто отказался).'}
+                </p>
+                <div className="flex items-center gap-2 bg-white border border-orange-200/50 rounded-lg py-1.5 px-2">
+                  <span className="text-[10px] font-bold text-slate-500 select-all truncate flex-1 text-left">
+                    {generatedLink.replace('invite', 'invite-dashboard').replace('?invite=', '?id=')}
+                  </span>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedLink.replace('invite', 'invite-dashboard').replace('?invite=', '?id='));
+                      confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
+                    }}
+                    className="p-1.5 rounded bg-orange-100 text-orange-600 hover:bg-orange-200 transition-colors"
+                  >
+                    <Copy className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="w-full h-px bg-slate-100 my-1" />
+
+              <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
+                {formData.lang === 'en' ? 'Guest Link (Send to friends)' : formData.lang === 'ar' ? 'رابط الضيف (أرسله للأصدقاء)' : 'Ссылка для отправки гостям'}
+              </h4>
               <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl py-2 px-2.5">
                 <span className="text-[10px] font-bold text-slate-500 select-all truncate flex-1 text-left">
                   {generatedLink}

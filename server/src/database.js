@@ -53,6 +53,18 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
   CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
   CREATE INDEX IF NOT EXISTS idx_events_lead ON lead_events(lead_id);
+
+  CREATE TABLE IF NOT EXISTS rsvps (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_id TEXT NOT NULL,
+    guest_name TEXT NOT NULL,
+    kids_count INTEGER DEFAULT 0,
+    adults_count INTEGER DEFAULT 0,
+    status TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_rsvps_event_id ON rsvps(event_id);
 `);
 
 // Prepared statements for performance
@@ -119,6 +131,26 @@ const statements = {
 
   getStats: db.prepare(`
     SELECT status, COUNT(*) as count FROM leads GROUP BY status
+  `),
+
+  createRsvp: db.prepare(`
+    INSERT INTO rsvps (event_id, guest_name, kids_count, adults_count, status)
+    VALUES (?, ?, ?, ?, ?)
+  `),
+
+  getRsvpsByEvent: db.prepare(`
+    SELECT * FROM rsvps WHERE event_id = ? ORDER BY created_at DESC
+  `),
+
+  getRsvpStatsByEvent: db.prepare(`
+    SELECT 
+      COUNT(*) as total_responses,
+      SUM(CASE WHEN status = 'yes' THEN 1 ELSE 0 END) as total_coming,
+      SUM(CASE WHEN status = 'no' THEN 1 ELSE 0 END) as total_not_coming,
+      SUM(CASE WHEN status = 'yes' THEN kids_count ELSE 0 END) as total_kids,
+      SUM(CASE WHEN status = 'yes' THEN adults_count ELSE 0 END) as total_adults
+    FROM rsvps 
+    WHERE event_id = ?
   `),
 };
 

@@ -27,6 +27,7 @@ import HParkLogo from "../imports/HParkLogo";
 import { AlertTriangle, RotateCcw, PlayCircle, RefreshCw } from "lucide-react";
 import InvitationService from "./components/invitation-service";
 import InvitationVariants from "./components/invitation-variants";
+import InvitationDashboard from "./components/invitation-dashboard";
 
 
 // ──────────────────────────────────────────────
@@ -236,6 +237,14 @@ export default function App() {
 
   if (isInviteVariants) {
     return <InvitationVariants />;
+  }
+
+  const isDashboard = window.location.pathname.includes('/invite-dashboard') || 
+                      window.location.hash.includes('/invite-dashboard') ||
+                      window.location.search.includes('view=dashboard');
+
+  if (isDashboard) {
+    return <InvitationDashboard />;
   }
 
   const isInvite = window.location.pathname.includes('/invite') || 

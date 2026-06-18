@@ -18,26 +18,43 @@ let html = fs.readFileSync(indexPath, 'utf8');
 
 // 1. Создание invite.html (копия index.html по умолчанию для русского языка)
 const inviteRuPath = path.join(distDir, 'invite.html');
-fs.writeFileSync(inviteRuPath, html, 'utf8');
+let htmlInviteRu = html
+  .replace(
+    '<title>Hello Park — Конструктор Дня Рождения 🎉</title>',
+    '<title>Hello Park — Приглашение на День Рождения 🎉</title>'
+  )
+  .replace(
+    'content="Hello Park — Конструктор Дня Рождения"',
+    'content="Вам прислали приглашение! Откройте конверт ✉️"'
+  )
+  .replace(
+    'content="Соберите идеальный День Рождения в интерактивном парке будущего Hello Park!"',
+    'content="Присоединяйтесь к празднованию Дня Рождения в интерактивном парке будущего Hello Park!"'
+  )
+  .replace(
+    '</head>',
+    '  <meta property="og:image" content="/mega/images/og_ru.png" />\n      <meta name="twitter:image" content="/mega/images/og_ru.png" />\n    </head>'
+  );
+fs.writeFileSync(inviteRuPath, htmlInviteRu, 'utf8');
 console.log('✅ Успешно создан dist/invite.html (Русская локализация)');
 
 // 2. Создание invite-en.html (Английская локализация)
 let htmlEn = html
   .replace(
-    '<title>Hello Park — Приглашение на День Рождения 🎉</title>',
+    '<title>Hello Park — Конструктор Дня Рождения 🎉</title>',
     '<title>Hello Park — Birthday Party Invitation 🎉</title>'
   )
   .replace(
-    'content="Вам прислали приглашение! Откройте конверт ✉️"',
+    'content="Hello Park — Конструктор Дня Рождения"',
     'content="You have received an invitation! Open the envelope ✉️"'
   )
   .replace(
-    'content="Присоединяйтесь к празднованию Дня Рождения в интерактивном парке будущего Hello Park!"',
+    'content="Соберите идеальный День Рождения в интерактивном парке будущего Hello Park!"',
     'content="Join the Birthday celebration at the interactive park of the future Hello Park!"'
   )
-  .replaceAll(
-    'content="/mega/images/og_ru.png"',
-    'content="/mega/images/og_en.png"'
+  .replace(
+    '</head>',
+    '  <meta property="og:image" content="/mega/images/og_en.png" />\n      <meta name="twitter:image" content="/mega/images/og_en.png" />\n    </head>'
   );
 
 const inviteEnPath = path.join(distDir, 'invite-en.html');
@@ -47,20 +64,20 @@ console.log('✅ Успешно создан dist/invite-en.html (Английс
 // 3. Создание invite-ar.html (Арабская локализация)
 let htmlAr = html
   .replace(
-    '<title>Hello Park — Приглашение на День Рождения 🎉</title>',
+    '<title>Hello Park — Конструктор Дня Рождения 🎉</title>',
     '<title>هلو بارك — دعوة لحضور عيد ميلاد 🎉</title>'
   )
   .replace(
-    'content="Вам прислали приглашение! Откройте конверт ✉️"',
+    'content="Hello Park — Конструктор Дня Рождения"',
     'content="لقد تلقيت دعوة! افتح المغلف ✉️"'
   )
   .replace(
-    'content="Присоединяйтесь к празднованию Дня Рождения в интерактивном парке будущего Hello Park!"',
+    'content="Соберите идеальный День Рождения в интерактивном парке будущего Hello Park!"',
     'content="انضم إلى الاحتفال بعيد الميلاد في حديقة المستقبل التفاعلية هلو بارك!"'
   )
-  .replaceAll(
-    'content="/mega/images/og_ru.png"',
-    'content="/mega/images/og_ar.png"'
+  .replace(
+    '</head>',
+    '  <meta property="og:image" content="/mega/images/og_ar.png" />\n      <meta name="twitter:image" content="/mega/images/og_ar.png" />\n    </head>'
   );
 
 const inviteArPath = path.join(distDir, 'invite-ar.html');

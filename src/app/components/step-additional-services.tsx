@@ -34,7 +34,7 @@ const SERVICES = [
 ];
 
 export function StepAdditionalServices() {
-  const { state, updateState, isExp } = useWizard();
+  const { state, updateState, isExp, isMega } = useWizard();
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
 
   const selectedDetails = SERVICES.find(s => s.id === selectedInfo);
@@ -73,6 +73,7 @@ export function StepAdditionalServices() {
       <div className="flex flex-col gap-[28px] mb-8">
         {SERVICES.map((service, i) => {
           const isSelected = state.additionalServices.includes(service.id);
+          const serviceName = isMega ? service.name.replace("Hello ", "") : service.name;
           
           if (isExp) {
             return (
@@ -127,7 +128,7 @@ export function StepAdditionalServices() {
                   <div className="p-4 pt-3 flex flex-col">
                     <div className="flex items-center gap-1.5 mb-1">
                       <span className="text-xl leading-none">{service.id === 'photo' ? '📸' : '🎨'}</span>
-                      <h4 className="text-[17px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors">{service.name}</h4>
+                      <h4 className="text-[17px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors">{serviceName}</h4>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-1.5 mb-4">
@@ -220,7 +221,7 @@ export function StepAdditionalServices() {
                   <div className="flex-1 min-w-0 pr-3">
                     <div className="flex items-center gap-1.5 mb-1.5">
                       <span className="text-xl leading-none">{service.id === 'photo' ? '📸' : '🎨'}</span>
-                      <h4 className="text-[15px] font-bold text-[#1A1A1A] truncate">{service.name}</h4>
+                      <h4 className="text-[15px] font-bold text-[#1A1A1A] truncate">{serviceName}</h4>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 mt-1">
@@ -304,7 +305,7 @@ export function StepAdditionalServices() {
               </div>
 
               <div className="p-6 overflow-y-auto overscroll-contain">
-                <h3 className="text-2xl font-black text-[#1A1A1A] mb-1">{selectedDetails.name}</h3>
+                <h3 className="text-2xl font-black text-[#1A1A1A] mb-1">{isMega ? selectedDetails.name.replace("Hello ", "") : selectedDetails.name}</h3>
                 <p className="text-[13px] text-[#FF6022] font-black mb-3">{selectedDetails.duration} · {selectedDetails.extra}</p>
                 <p className="text-[#747474] text-sm leading-relaxed mb-6 font-medium">{selectedDetails.desc}</p>
 

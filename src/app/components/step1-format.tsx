@@ -99,7 +99,7 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 2,5 часа",
-      "Анимация или квест — 60 мин.",
+      "Фиджитал квест или приключение — 45 мин.",
       "Мини-дискотека — 10 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
@@ -122,7 +122,7 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 2,5 часа",
-      "Анимация или квест — 60 мин.",
+      "Фиджитал квест или приключение — на выбор",
       "Мастер-класс на выбор — 30 мин.",
       "Треш-коробка или дискотека — 25 мин.",
       "Оформление: шары + сервировка",
@@ -148,7 +148,7 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 3 часа",
-      "Анимация или квест — 60 мин.",
+      "Фиджитал квест или приключение — на выбор",
       "Шоу-программа на выбор — 30 мин.",
       "Мастер-класс на выбор — 30 мин.",
       "Треш-коробка или дискотека — 25 мин.",
@@ -205,10 +205,11 @@ export function Step1Format() {
 
     const includeFood = !isMega && (id === "premium" || id === "exclusive");
     const megaRoom = isMega && id !== "custom" ? MEGA_ROOM_DETAILS[id] : null;
-    updateState({ 
-      packageType: id, 
+    updateState({
+      packageType: id,
       includeFood,
-      questType: null,
+      // Mega Basic always includes the no-quest "Фиджитал-игра" format by default
+      questType: isMega && id === "basic" ? "animator" : null,
       patiroom: megaRoom ? "mega_room" : null,
       patiroomDetails: megaRoom?.label || null,
       patiroomHours: megaRoom?.hours || 3,

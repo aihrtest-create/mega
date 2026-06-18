@@ -21,7 +21,7 @@ interface Animator {
   image: string;
 }
 
-const SECTION_CATEGORIES: { id: AnimatorCategory; label: string; emoji: string }[] = [
+export const SECTION_CATEGORIES: { id: AnimatorCategory; label: string; emoji: string }[] = [
   { id: "princesses", label: "Принцессы", emoji: "👑" },
   { id: "superheroes", label: "Супергерои", emoji: "🦸" },
   { id: "villains", label: "Антигерои", emoji: "🖤" },
@@ -32,7 +32,7 @@ const SECTION_CATEGORIES: { id: AnimatorCategory; label: string; emoji: string }
 
 export const ANIMATORS: Animator[] = [
   // 👑 Принцессы
-  { id: "elsa", name: "Эльза", category: "princesses", image: "/animators/cropped/elsa.webp" },
+  { id: "elsa", name: "Эльза", category: "princesses", image: "/animators/cropped/elsa_extended_trans.png" },
   { id: "anna", name: "Анна", category: "princesses", image: "/animators/cropped/anna.webp" },
   { id: "ariel", name: "Ариэль", category: "princesses", image: "/animators/cropped/ariel.webp" },
   { id: "rapunzel", name: "Рапунцель", category: "princesses", image: "/animators/cropped/rapunzel.webp" },
@@ -247,6 +247,23 @@ export function Step3Animators() {
         </div>
       )}
 
+      {state.questType === "animator" && (
+        <div className="bg-gradient-to-r from-pink-50 to-orange-50 border border-pink-200 rounded-2xl p-4 mb-4 mx-4 relative overflow-hidden">
+          <div className="relative z-10">
+            <h3 className="text-[#FF6022] font-bold text-sm mb-1">
+              Фиджитал приключение с героем
+            </h3>
+            <p className="text-xs text-[#5A5A5A] leading-relaxed">
+              Выбранный герой проведёт 45 минут весёлой игры с интерактивными
+              инсталляциями — без сюжета, активности на усмотрение аниматора.
+            </p>
+          </div>
+          <div className="absolute -bottom-2 -right-2 text-6xl opacity-20 transform rotate-12">
+            🎈
+          </div>
+        </div>
+      )}
+
       {/* Selection info */}
       <div className="flex items-center justify-between mb-3 px-5">
         <span className="text-sm text-[#747474]">
@@ -315,99 +332,54 @@ export function Step3Animators() {
                 {sectionAnimators.map((anim) => {
                   const isSelected = state.animators.includes(anim.id);
                   
-                  if (isExp) {
-                    return (
-                      <button
-                        key={anim.id}
-                        onClick={() => toggleAnimator(anim.id)}
-                        className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col text-left ${
-                          isSelected
-                            ? "scale-[1.02]"
-                            : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
-                        }`}
-                        style={{
-                          borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
-                          borderWidth: isSelected ? "2px" : "1px",
-                          boxShadow: isSelected 
-                            ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
-                            : undefined
-                        }}
-                      >
-                        <div className="relative aspect-[4/3.5] w-full rounded-[20px] overflow-hidden bg-[#F8F9FA] flex items-center justify-center shrink-0">
-                          <img
-                            src={`${BASE}${anim.image.startsWith('/') ? anim.image.slice(1) : anim.image}`}
-                            alt={anim.name}
-                            className="w-full h-full object-contain object-bottom pt-4 px-2.5 transition-transform duration-500 group-hover:scale-105"
-                            loading="lazy"
-                          />
-                        </div>
-
-                        <div className="p-2 pt-2.5 flex flex-col flex-1 text-center justify-between items-center w-full">
-                          <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight leading-snug line-clamp-2 flex items-center justify-center min-h-[34px] w-full group-hover:text-[#FF6022] transition-colors">
-                            {anim.name}
-                          </h4>
-                          
-                          <div className="flex items-center justify-between w-full mt-2 pt-1.5 border-t border-gray-50 shrink-0">
-                            <span className="text-[11px] text-[#FF6022] font-black">
-                              {state.packageType === "custom" ? (
-                                state.animators.length >= 1 && !isSelected ? "+8 000 ₽" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+8 000 ₽" : "Включён"
-                              ) : (
-                                isSelected ? "Выбран" : "Добавить"
-                              )}
-                            </span>
-                            
-                            <div 
-                              className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                                isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
-                              }`}
-                            >
-                              <Check className="w-3.5 h-3.5 stroke-[3px]" />
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  }
-
                   return (
                     <button
                       key={anim.id}
                       onClick={() => toggleAnimator(anim.id)}
-                      className={`relative aspect-[4/5] rounded-[24px] overflow-hidden transition-all cursor-pointer group text-left ${
+                      className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col text-left ${
                         isSelected
-                          ? "ring-2 ring-[#FF6022] shadow-xl scale-[1.01]"
-                          : "ring-1 ring-[#E5E5E5] shadow-sm hover:shadow-md"
+                          ? "scale-[1.02]"
+                          : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
                       }`}
+                      style={{
+                        borderColor: isSelected ? "#FF6022" : "rgba(0,0,0,0.04)",
+                        borderWidth: isSelected ? "2px" : "1px",
+                        boxShadow: isSelected 
+                          ? "0 16px 36px rgba(255,96,34,0.15), 0 0 0 1px rgba(255,96,34,0.1)" 
+                          : undefined
+                      }}
                     >
-                      {/* Background and Image */}
-                      <div className="absolute inset-0 bg-white flex items-center justify-center">
+                      <div className="relative aspect-[4/3.5] w-full rounded-[20px] overflow-hidden bg-white border border-[#F0F0F0] flex items-center justify-center shrink-0">
                         <img
                           src={`${BASE}${anim.image.startsWith('/') ? anim.image.slice(1) : anim.image}`}
                           alt={anim.name}
-                          className="w-full h-full object-contain object-bottom pt-5 px-3 pb-[70px] transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full object-contain object-bottom pt-4 px-2.5 transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
                         />
                       </div>
 
-                      {/* Checkmark */}
-                      <div className="absolute top-2.5 right-2.5 z-10 pointer-events-none">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
-                            isSelected ? "bg-[#FF6022] border-2 border-white text-white shadow-md shadow-[#FF6022]/40" : "bg-white/40 backdrop-blur-md border border-white/60 text-transparent"
-                        }`}>
-                           <Check className="w-4 h-4" />
-                        </div>
-                      </div>
-
-                      {/* Bottom Name Plate */}
-                      <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-white rounded-[18px] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex flex-col justify-center border border-[#F0F0F0] text-center min-h-[50px] pointer-events-none">
-                        <h4 className="text-[14px] font-bold text-[#1A1A1A] leading-tight line-clamp-2">
+                      <div className="p-2 pt-2.5 flex flex-col flex-1 text-center justify-between items-center w-full">
+                        <h4 className="text-[12px] font-black text-[#1A1A1A] tracking-tight leading-snug line-clamp-2 flex items-center justify-center min-h-[34px] w-full group-hover:text-[#FF6022] transition-colors">
                           {anim.name}
                         </h4>
-                        {state.packageType === "custom" && (
-                          <p className="text-[11px] text-[#FF6022] font-extrabold mt-0.5">
-                            {state.animators.length >= 1 && !isSelected ? "+8 000 ₽" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+8 000 ₽" : "Включён"}
-                          </p>
-                        )}
+                        
+                        <div className="flex items-center justify-between w-full mt-2 pt-1.5 border-t border-gray-50 shrink-0">
+                          <span className="text-[11px] text-[#FF6022] font-black">
+                            {state.packageType === "custom" ? (
+                              state.animators.length >= 1 && !isSelected ? "+8 000 ₽" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+8 000 ₽" : "Включён"
+                            ) : (
+                              isSelected ? "Выбран" : "Добавить"
+                            )}
+                          </span>
+                          
+                          <div 
+                            className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                              isSelected ? "bg-[#FF6022] text-white shadow-sm" : "bg-gray-50 text-[#D1D1D1]"
+                            }`}
+                          >
+                            <Check className="w-3.5 h-3.5 stroke-[3px]" />
+                          </div>
+                        </div>
                       </div>
                     </button>
                   );

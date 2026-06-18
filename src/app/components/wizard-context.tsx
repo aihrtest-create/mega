@@ -92,7 +92,7 @@ export interface WizardState {
   packageType: "basic" | "premium" | "exclusive" | "custom" | null;
   isWeekend: boolean;
   // Step 2 — Quests
-  questType: "phygital_voxels" | "phygital_space" | "classic_fort" | "classic_minecraft" | "classic_squid" | "classic_barbie" | "classic_safari" | "classic_harry" | "classic_heroes" | "classic_pirates" | "classic_wednesday" | "classic_bloggers" | "classic_fortnite" | "classic_agents" | "none" | null;
+  questType: "phygital_voxels" | "phygital_space" | "classic_fort" | "classic_minecraft" | "classic_squid" | "classic_barbie" | "classic_safari" | "classic_harry" | "classic_harley" | "classic_heroes" | "classic_pirates" | "classic_wednesday" | "classic_bloggers" | "classic_fortnite" | "classic_agents" | "animator" | "none" | null;
   // Step 3 — Location
   patiroom: string | null;
   patiroomDetails: string | null;
@@ -210,11 +210,15 @@ export function useWizard() {
   return ctx;
 }
 
-const TOTAL_STEPS = 16;
+const TOTAL_STEPS = 17;
 const MEGA_STEPS_BASE = [1, 2, 3, 4, 8, 9, 12];
 
 function getMegaSteps(packageType: WizardState["packageType"]) {
   const steps = [...MEGA_STEPS_BASE];
+  if (packageType === "custom") {
+    // Insert step 17 before 3 (index 2)
+    steps.splice(steps.indexOf(3), 0, 17);
+  }
   if (packageType === "exclusive" || packageType === "custom") {
     // Insert step 7 before 9
     steps.splice(steps.indexOf(9), 0, 7);
@@ -246,6 +250,23 @@ const PACKAGE_PRICES: Record<string, [number, number]> = {
 const PHYGITAL_QUEST_ADDON = 2000;
 const CLASSIC_QUEST_ADDON = 10000;
 const PATIROOM_HOURLY_RATE = 3000; // Custom mode: 3000₽/hour for any patiroom
+
+// ── Per-child surcharge ──
+// Every package is priced for 8 children. Each additional child costs extra.
+// Does not apply to "custom" (no fixed package base) or when no package is chosen.
+export const INCLUDED_CHILDREN = 8;
+export const EXTRA_CHILD_WEEKDAY = 855;
+export const EXTRA_CHILD_WEEKEND = 1215;
+
+export function getExtraChildrenCount(state: WizardState): number {
+  if (!state.packageType) return 0;
+  if (state.packageType === "custom") return state.childrenCount || 0;
+  return Math.max(0, (state.childrenCount || 0) - INCLUDED_CHILDREN);
+}
+
+export function getExtraChildrenCost(state: WizardState, isWeekend: boolean): number {
+  return getExtraChildrenCount(state) * (isWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY);
+}
 
 // ── Custom mode: gift logic based on selected services ──
 export interface CustomGift {
@@ -476,6 +497,20 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
       let next = s + 1;
       
+      // After Packages (Step 2)
+      if (s === 2) {
+        if (state.packageType === "custom") {
+          next = 17;
+        } else {
+          next = 3;
+        }
+      }
+
+      // After Custom Guests (Step 17) -> go to Quests (3)
+      if (s === 17) {
+        next = 3;
+      }
+      
       // Skip Animators (Step 4) if not a phygital quest
       if (s === 3 && !state.questType?.startsWith("phygital_")) {
         next = 5;
@@ -628,6 +663,18 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       else if (s === 5 && !state.questType?.startsWith("phygital_")) {
         prev = 3;
       }
+      // Going back from Quests (3)
+      else if (s === 3) {
+        if (state.packageType === "custom") {
+          prev = 17;
+        } else {
+          prev = 2;
+        }
+      }
+      // Going back from Custom Guests (17) -> go to Packages (2)
+      else if (s === 17) {
+        prev = 2;
+      }
       
       return Math.max(prev, 1);
     });
@@ -647,8 +694,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         total += effectiveWeekend ? weekend : weekday;
       }
 
-      // Quest addon
-      if (state.questType && state.questType !== "none") {
+      // Quest addon (Фиджитал-игра / "animator" is always included → 0)
+      if (state.questType && state.questType !== "none" && state.questType !== "animator") {
         if (state.packageType === "custom") {
           total += state.questType.startsWith("phygital_") ? 12000 : 16000;
         } else if (state.questType.startsWith("classic_")) {
@@ -703,6 +750,9 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         if (srv === "aqua") total += 7000;
       }
 
+      // Extra children beyond the 8 included in the package
+      total += getExtraChildrenCost(state, effectiveWeekend);
+
       return total;
     }
 
@@ -712,8 +762,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       total += state.isWeekend ? weekend : weekday;
     }
 
-    // Quest addon
-    if (state.questType && state.questType !== "none") {
+    // Quest addon (Фиджитал-игра / "animator" is always included → 0)
+    if (state.questType && state.questType !== "none" && state.questType !== "animator") {
       if (state.packageType === "custom") {
         total += state.questType.startsWith("phygital_") ? 12000 : 16000;
       } else if (state.questType.startsWith("classic_")) {
@@ -817,15 +867,20 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       if (srv === "aqua") total += 7000;
     }
 
+    // Extra children beyond the 8 included in the package
+    total += getExtraChildrenCost(state, effectiveWeekend);
+
     return total;
   })();
 
   const visibleSteps = React.useMemo(() => {
     if (isMega) return getMegaSteps(state.packageType);
 
-    // Actual navigation order: 1→2→3→4?→5→7?→8?→15→13?→14?→6→10→11?→16→9→12
-    const list = [1, 2, 3, 4, 5, 7, 8, 15, 13, 14, 6, 10, 11, 16, 9, 12];
+    // Actual navigation order: 1→2→17?→3→4?→5→7?→8?→15→13?→14?→6→10→11?→16→9→12
+    const list = [1, 2, 17, 3, 4, 5, 7, 8, 15, 13, 14, 6, 10, 11, 16, 9, 12];
     return list.filter((s) => {
+      // Skip Custom Guests (17) if not custom
+      if (s === 17 && state.packageType !== "custom") return false;
       // Skip Animators (Step 4) if not a phygital quest
       if (s === 4 && state.questType && !state.questType.startsWith("phygital_")) return false;
       // Skip Shows(7) if basic or premium

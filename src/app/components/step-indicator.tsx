@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 const STEP_LABEL_MAP: Record<number, string> = {
   1: "Дата",
   2: "Пакет",
-  3: "Квест",
+  3: "Формат",
   4: "Герои",
   5: "Патирум",
   6: "Взрослым",

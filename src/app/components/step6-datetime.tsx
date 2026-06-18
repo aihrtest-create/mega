@@ -225,6 +225,10 @@ export function Step6DateTime() {
             </div>
           </div>
         </div>
+
+        <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed">
+          В пакеты включено 8 детей. Каждый дополнительный — +855 ₽ в будни / +1215 ₽ в выходные.
+        </p>
       </div>
 
     </motion.div>

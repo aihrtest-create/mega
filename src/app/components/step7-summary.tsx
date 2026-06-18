@@ -1,4 +1,11 @@
-import { useWizard } from "./wizard-context";
+import {
+  useWizard,
+  getExtraChildrenCount,
+  getExtraChildrenCost,
+  INCLUDED_CHILDREN,
+  EXTRA_CHILD_WEEKDAY,
+  EXTRA_CHILD_WEEKEND,
+} from "./wizard-context";
 import { FOOD_MENU } from "../data/foodMenu";
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
@@ -33,7 +40,7 @@ import {
   findMegaFoodItem,
   getMegaFoodTotal,
 } from "../data/megaConfig";
-import { SHOWS } from "./step-shows";
+import { ALL_SHOWS } from "./step-shows";
 
 const PACKAGE_NAMES: Record<string, string> = {
   basic: "Базовый",
@@ -51,12 +58,14 @@ const QUEST_NAMES: Record<string, string> = {
   classic_barbie: "Барби",
   classic_safari: "Сафари",
   classic_harry: "Гарри Поттер",
+  classic_harley: "Харли Квин",
   classic_heroes: "Миссия Супергероев",
   classic_pirates: "Пиратский",
   classic_wednesday: "Уэнсдей",
   classic_bloggers: "Блогеры",
   classic_fortnite: "Фортнайт",
   classic_agents: "Суперагенты",
+  animator: "Фиджитал приключение",
   none: "Без квеста",
 };
 
@@ -68,8 +77,10 @@ const MC_NAMES: Record<string, string> = {
   birthday_card: "Открытка имениннику",
   sand_picture: "Песочная картина",
   gingerbread: "Роспись пряников",
-  slime: "Слайм / Табо-лапки",
+  slime: "Создание слайма",
   jewelry: "Трендовые украшения",
+  pinwheel: "Игрушка-ветерок",
+  twisting: "Твистинг",
 };
 
 const CAKE_NAMES: Record<string, string> = {
@@ -94,9 +105,18 @@ const ADDITIONAL_ACTIVITIES_NAMES: Record<string, string> = {
 };
 
 const ADDITIONAL_SERVICES_NAMES: Record<string, string> = {
-  "photo": "Hello Фотограф",
-  "aqua": "Hello Аквагрим"
+  "photo": "Фотограф",
+  "aqua": "Аквагрим"
 };
+
+// Russian pluralization for "ребёнок / ребёнка / детей"
+function childrenWord(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return "ребёнок";
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "ребёнка";
+  return "детей";
+}
 
 
 export function Step7Summary() {
@@ -140,6 +160,17 @@ export function Step7Summary() {
 
   const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
 
+  // Per-child surcharge (beyond the 8 included in every package)
+  const hasPackageBase = !!state.packageType && state.packageType !== "custom";
+  const extraChildren = getExtraChildrenCount(state);
+  const extraChildrenCost = getExtraChildrenCost(state, effectiveWeekend);
+  const perChildRate = effectiveWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY;
+  const guestsValue = `${state.childrenCount} ${childrenWord(state.childrenCount)}${
+    hasPackageBase
+      ? ` (${INCLUDED_CHILDREN} в пакете${extraChildren > 0 ? ` + ${extraChildren} доп.` : ""})`
+      : ""
+  }, ${state.adultsCount} взрослых`;
+
   const getPackagePrice = () => {
     if (isMega && state.packageType) {
       const [weekday, weekend] = MEGA_PACKAGE_PRICES[state.packageType] || [0, 0];
@@ -152,7 +183,7 @@ export function Step7Summary() {
   };
 
   const getQuestPrice = () => {
-    if (!state.questType || state.questType === "none") return 0;
+    if (!state.questType || state.questType === "none" || state.questType === "animator") return 0;
     if (state.packageType === "custom") {
       return state.questType.startsWith("phygital_") ? 12000 : 16000;
     } else if (state.questType.startsWith("classic_")) {
@@ -193,10 +224,10 @@ export function Step7Summary() {
     let p = 0;
     const getPrice = (id: string) => {
       if (isMega && MEGA_SHOW_PRICES[id]) return MEGA_SHOW_PRICES[id];
-      return SHOWS.find(s => s.id === id)?.price || 0;
+      return ALL_SHOWS.find(s => s.id === id)?.price || 0;
     };
     const getSurcharge = (id: string) => {
-      return SHOWS.find(s => s.id === id)?.surcharge || 0;
+      return ALL_SHOWS.find(s => s.id === id)?.surcharge || 0;
     };
 
     if (state.packageType === "custom" || state.packageType === "basic" || state.packageType === "premium") {
@@ -277,7 +308,7 @@ export function Step7Summary() {
 
   const formatPrice = (p: number) => p === 0 ? "Включено" : `${p.toLocaleString("ru-RU")} ₽`;
   const formatPackagePrice = (p: number) => state.packageType === "custom" ? "" : formatPrice(p);
-  const getShowLabel = (id: string) => isMega ? (MEGA_SHOW_NAMES[id] || SHOWS.find(s => s.id === id)?.name || id) : (SHOWS.find(s => s.id === id)?.name || id);
+  const getShowLabel = (id: string) => isMega ? (MEGA_SHOW_NAMES[id] || ALL_SHOWS.find(s => s.id === id)?.name || id) : (ALL_SHOWS.find(s => s.id === id)?.name || id);
   const getMegaFoodSummary = () => {
     const parts = [];
     if (state.megaOwnCatering) parts.push("Свой кейтеринг");
@@ -349,7 +380,7 @@ export function Step7Summary() {
         {state.questType && state.questType !== "none" && (
           <SummaryRow
             icon={<Gamepad2 className="w-4 h-4" />}
-            label="Квест"
+            label={state.questType === "animator" ? "Программа" : "Квест"}
             value={QUEST_NAMES[state.questType] || state.questType}
             priceText={formatPrice(getQuestPrice())}
             stepNumber={3}
@@ -477,7 +508,10 @@ export function Step7Summary() {
           <SummaryRow
             icon={<Star className="w-4 h-4" />}
             label="Доп. услуги"
-            value={state.additionalServices.map(srv => ADDITIONAL_SERVICES_NAMES[srv] || srv).join(", ")}
+            value={state.additionalServices.map(srv => {
+              const baseName = ADDITIONAL_SERVICES_NAMES[srv] || srv;
+              return isMega ? baseName : `Hello ${baseName}`;
+            }).join(", ")}
             priceText={formatPrice(getServicesPrice())}
             stepNumber={16}
           />
@@ -496,9 +530,23 @@ export function Step7Summary() {
         <SummaryRow
           icon={<UsersIcon className="w-4 h-4" />}
           label="Гости"
-          value={`${state.childrenCount} детей, ${state.adultsCount} взрослых`}
-          isLast
+          value={guestsValue}
+          stepNumber={1}
+          isLast={extraChildren === 0}
         />
+
+        {extraChildren > 0 && (
+          <SummaryRow
+            icon={<UsersIcon className="w-4 h-4" />}
+            label={state.packageType === "custom" ? "Детские билеты" : "Доплата за гостей"}
+            value={state.packageType === "custom" 
+              ? `${extraChildren} ${childrenWord(extraChildren)} × ${perChildRate.toLocaleString("ru-RU")} ₽`
+              : `${extraChildren} ${childrenWord(extraChildren)} сверх ${INCLUDED_CHILDREN} × ${perChildRate.toLocaleString("ru-RU")} ₽`}
+            priceText={formatPrice(extraChildrenCost)}
+            stepNumber={1}
+            isLast
+          />
+        )}
       </div>
 
       {/* Total */}

@@ -21,6 +21,7 @@ import { StepDisco } from "./components/step-disco";
 import { StepBalloon } from "./components/step-balloon";
 import { StepAdditionalActivities } from "./components/step-additional-activities";
 import { StepAdditionalServices } from "./components/step-additional-services";
+import { StepCustomGuests } from "./components/step-custom-guests";
 import { FloatingPrice } from "./components/floating-price";
 import { AnimatePresence, motion } from "motion/react";
 import HParkLogo from "../imports/HParkLogo";
@@ -28,6 +29,7 @@ import { AlertTriangle, RotateCcw, PlayCircle, RefreshCw } from "lucide-react";
 import InvitationService from "./components/invitation-service";
 import InvitationVariants from "./components/invitation-variants";
 import InvitationDashboard from "./components/invitation-dashboard";
+import FormatLab from "./components/format-lab";
 
 
 // ──────────────────────────────────────────────
@@ -193,6 +195,7 @@ function WizardContent() {
       case 14: return <StepBalloon key="step14" />;
       case 15: return <StepAdditionalActivities key="step15" />;
       case 16: return <StepAdditionalServices key="step16" />;
+      case 17: return <StepCustomGuests key="step17" />;
       default: return null;
     }
   };
@@ -229,6 +232,13 @@ export default function App() {
 
   if (isPresentation) {
     return <Presentation />;
+  }
+
+  // Design lab: compare layouts for the "Квест vs Приключение" choice
+  const isFormatLab = window.location.pathname.includes('/format-lab') ||
+                      window.location.search.includes('view=format-lab');
+  if (isFormatLab) {
+    return <FormatLab />;
   }
 
   const isInviteVariants = window.location.pathname.includes('/invite-variants') || 

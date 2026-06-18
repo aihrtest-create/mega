@@ -15,10 +15,16 @@ export const MEGA_ROOM_DETAILS: Record<string, { label: string; hours: number }>
 export const MEGA_MC_PRICE = 15000;
 
 export const MEGA_SHOW_PRICES: Record<string, number> = {
-  soap: 16000,
-  paper: 15000,
+  soap: 15000,
+  paper: 16000,
   tesla: 15000,
   professor: 18000,
+  neon_soap: 16000,
+  neon_paper: 18000,
+  ribbon: 18000,
+  animals: 35000,
+  illusionist: 30000,
+  cryo: 20000,
 };
 
 export const MEGA_SHOW_NAMES: Record<string, string> = {
@@ -26,6 +32,12 @@ export const MEGA_SHOW_NAMES: Record<string, string> = {
   paper: "Бумажное шоу",
   tesla: "Научное шоу",
   professor: "Шоу неоновых подушек",
+  neon_soap: "Шоу неоновых мыльных пузырей",
+  neon_paper: "Неоновое бумажное шоу",
+  ribbon: "Ленточное шоу",
+  animals: "Фокус программа с животными",
+  illusionist: "Фокусник-иллюзионист",
+  cryo: "Крио-шоу с мороженым",
 };
 
 export interface MegaFoodItem {

@@ -22,9 +22,9 @@ const MASTER_CLASSES = [
 ];
 
 export function Step4MasterClasses() {
-  const { state, updateState, isMega, isExp } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const isCustom = state.packageType === "custom";
-  const mcPrice = isMega ? MEGA_MC_PRICE : 15000;
+  const mcPrice = MEGA_MC_PRICE;
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
   const [surchargeMC, setSurchargeMC] = useState<string | null>(null);
 

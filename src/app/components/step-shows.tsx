@@ -15,7 +15,7 @@ export const SHOWS = [
   {
     id: "soap",
     name: "Шоу мыльных пузырей",
-    price: 14000,
+    price: 15000,
     surcharge: 0,
     emoji: "🫧",
     desc: "Самое популярное, незабываемое красочное шоу, вызывающее незабываемые впечатления у детей и взрослых! В ходе шоу гостей ожидает: • гусеница из пузырей • разноцветная радуга • погружение в гигнатский мыльный пузырь • целый рой из пузырей разного размера",
@@ -25,7 +25,7 @@ export const SHOWS = [
   {
     id: "paper",
     name: "Бумажное шоу",
-    price: 15000,
+    price: 16000,
     surcharge: 0,
     emoji: "🎊",
     desc: "Невероятное шоу, которое превращает обычные танцы в безудержное веселье с огромным количеством бумаги. В ходе шоу гостей ожидает: • популярная музыка, воздушные пушки, целое море белой бумаги • интересные конкурсы и танцевальные баттлы • безудержное веселье • увлекательные игры",
@@ -45,7 +45,7 @@ export const SHOWS = [
   {
     id: "professor",
     name: "Чокнутый профессор",
-    price: 14000,
+    price: 18000,
     surcharge: 0,
     emoji: "🧪",
     desc: "Яркая и безопасная битва подушками, светящимися в темноте! В ходе шоу гостей ожидает: • неоновая дискотека с ультрафиолетовым освещением • сотни мягких светящихся подушек • веселые командные игры и эстафеты • незабываемые впечатления для детей и взрослых",
@@ -114,7 +114,7 @@ export const PREMIUM_SHOWS = [
 export const ALL_SHOWS = [...SHOWS, ...PREMIUM_SHOWS];
 
 export function StepShows() {
-  const { state, updateState, isMega, isExp } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const isCustom = state.packageType === "custom";
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
   const [surchargeShow, setSurchargeShow] = useState<{
@@ -123,15 +123,13 @@ export function StepShows() {
     isSecondShow?: boolean;
   } | null>(null);
 
-  const getShowPrice = (showId: string) => {
-    if (isMega && MEGA_SHOW_PRICES[showId]) return MEGA_SHOW_PRICES[showId];
-    return ALL_SHOWS.find((s) => s.id === showId)?.price || 0;
-  };
+  const getShowPrice = (showId: string) =>
+    MEGA_SHOW_PRICES[showId] || ALL_SHOWS.find((s) => s.id === showId)?.price || 0;
   const getShowSurcharge = (showId: string) => {
     return ALL_SHOWS.find((s) => s.id === showId)?.surcharge || 0;
   };
   const getShowName = (show: (typeof SHOWS)[number]) =>
-    isMega ? MEGA_SHOW_NAMES[show.id] || show.name : show.name;
+    MEGA_SHOW_NAMES[show.id] || show.name;
 
   const toggleShow = (id: string, e?: React.MouseEvent) => {
     if (e) {

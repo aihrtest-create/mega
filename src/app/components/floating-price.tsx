@@ -4,7 +4,7 @@ import { ShoppingBag, Send, ArrowLeft, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export function FloatingPrice() {
-  const { totalPrice, step, totalSteps, visibleSteps, state, nextStep, prevStep, submitted, setSubmitted, submitToAPI, clearCache, setStep, resetWizard, isMega } = useWizard();
+  const { totalPrice, step, totalSteps, visibleSteps, state, nextStep, prevStep, submitted, setSubmitted, submitToAPI, clearCache, setStep, resetWizard } = useWizard();
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isShaking, setIsShaking] = useState(false);
@@ -23,11 +23,9 @@ export function FloatingPrice() {
   // Custom mode: everything except date(1), package(2), and contact(12) is optional
   const isCustom = state.packageType === "custom";
   const isMegaOptionalStep =
-    isMega && (
-      step === 9 ||
-      (step === 8 && state.packageType === "basic") ||
-      (step === 7 && state.packageType !== "exclusive")
-    );
+    step === 9 ||
+    (step === 8 && state.packageType === "basic") ||
+    (step === 7 && state.packageType !== "exclusive");
   const isOptionalStep = isMegaOptionalStep || (isCustom
     ? step !== 1 && step !== 2 && step !== 12
     : step === 6 || step === 10 || step === 15 || step === 16);
@@ -40,12 +38,12 @@ export function FloatingPrice() {
       case 1: return !!state.date && !!state.time;
       case 2: return !!state.packageType;
       case 3: return !!state.questType;
-      case 4: return isMega ? (state.animators || []).length > 0 : true;
+      case 4: return (state.animators || []).length > 0;
       case 5: return state.packageType === "custom" ? true : !!state.patiroom;
-      case 7: return isMega && state.packageType !== "exclusive" ? true : (state.shows || []).length > 0;
-      case 8: return isMega && state.packageType === "basic" ? true : (state.masterClasses || []).length > 0;
-      case 13: return isMega ? !!state.discoChoice : true;
-      case 14: return isMega ? !!state.balloonChoice : true;
+      case 7: return state.packageType !== "exclusive" ? true : (state.shows || []).length > 0;
+      case 8: return state.packageType === "basic" ? true : (state.masterClasses || []).length > 0;
+      case 13: return !!state.discoChoice;
+      case 14: return !!state.balloonChoice;
       case 12: {
         const phoneDigits = state.contactPhone ? state.contactPhone.replace(/\D/g, "") : "";
         return !!state.contactName && phoneDigits.length === 11;
@@ -63,8 +61,7 @@ export function FloatingPrice() {
     if (step === 6) return (state.cafeZones || []).length > 0;
     if (step === 7) return (state.shows || []).length > 0;
     if (step === 8) return (state.masterClasses || []).length > 0;
-    if (step === 9) return isMega ? state.megaOwnCatering || Object.values(state.megaFood).some(v => v > 0) : state.includeFood || Object.values(state.customFood).some(v => v > 0);
-    if (step === 10) return !!state.cakeChoice;
+    if (step === 9) return state.megaOwnCatering || Object.values(state.megaFood).some(v => v > 0);
     if (step === 11) return true; // gifts step — always "selected" (just display)
     if (step === 15) return (state.additionalActivities || []).length > 0;
     if (step === 16) return (state.additionalServices || []).length > 0;

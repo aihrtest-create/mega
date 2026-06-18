@@ -13,7 +13,7 @@ const getPublicUrl = (path: string) => {
 const SERVICES = [
   {
     id: "photo",
-    name: "Hello Фотограф",
+    name: "Фотограф",
     price: 7000,
     duration: "60 мин",
     extra: "40–50 фото",
@@ -23,7 +23,7 @@ const SERVICES = [
   },
   {
     id: "aqua",
-    name: "Hello Аквагрим",
+    name: "Аквагрим",
     price: 7000,
     duration: "60 мин",
     extra: "10 человек",
@@ -34,7 +34,7 @@ const SERVICES = [
 ];
 
 export function StepAdditionalServices() {
-  const { state, updateState, isExp, isMega } = useWizard();
+  const { state, updateState, isExp } = useWizard();
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
 
   const selectedDetails = SERVICES.find(s => s.id === selectedInfo);
@@ -73,7 +73,7 @@ export function StepAdditionalServices() {
       <div className="flex flex-col gap-[28px] mb-8">
         {SERVICES.map((service, i) => {
           const isSelected = state.additionalServices.includes(service.id);
-          const serviceName = isMega ? service.name.replace("Hello ", "") : service.name;
+          const serviceName = service.name;
           
           if (isExp) {
             return (
@@ -305,7 +305,7 @@ export function StepAdditionalServices() {
               </div>
 
               <div className="p-6 overflow-y-auto overscroll-contain">
-                <h3 className="text-2xl font-black text-[#1A1A1A] mb-1">{isMega ? selectedDetails.name.replace("Hello ", "") : selectedDetails.name}</h3>
+                <h3 className="text-2xl font-black text-[#1A1A1A] mb-1">{selectedDetails.name}</h3>
                 <p className="text-[13px] text-[#FF6022] font-black mb-3">{selectedDetails.duration} · {selectedDetails.extra}</p>
                 <p className="text-[#747474] text-sm leading-relaxed mb-6 font-medium">{selectedDetails.desc}</p>
 

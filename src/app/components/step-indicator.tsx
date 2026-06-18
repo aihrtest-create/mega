@@ -12,7 +12,7 @@ const STEP_LABEL_MAP: Record<number, string> = {
   6: "Взрослым",
   7: "Шоу",
   8: "МК",
-  9: "Питание",
+  9: "Еда",
   10: "Торты",
   11: "Бонусы",
   12: "Заявка",
@@ -20,6 +20,7 @@ const STEP_LABEL_MAP: Record<number, string> = {
   14: "Финал",
   15: "Активности",
   16: "Доп услуги",
+  17: "Гости",
 };
 
 export function StepIndicator() {

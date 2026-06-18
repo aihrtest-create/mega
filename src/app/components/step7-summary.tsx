@@ -6,7 +6,6 @@ import {
   EXTRA_CHILD_WEEKDAY,
   EXTRA_CHILD_WEEKEND,
 } from "./wizard-context";
-import { FOOD_MENU } from "../data/foodMenu";
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import {
@@ -30,7 +29,6 @@ import {
 import { format } from "date-fns";
 import { isWeekendOrHoliday2026 } from "../data/holidays";
 import { ru } from "date-fns/locale";
-import { CAKES } from "./step-cakes";
 import { ANIMATORS } from "./step3-animators";
 import {
   MEGA_MC_PRICE,
@@ -53,18 +51,9 @@ const QUEST_NAMES: Record<string, string> = {
   phygital_voxels: "Фиджитал: Воксели",
   phygital_space: "Фиджитал: Космос",
   classic_fort: "Форт Боярд",
-  classic_minecraft: "Майнкрафт",
-  classic_squid: "Игра в кальмара",
-  classic_barbie: "Барби",
-  classic_safari: "Сафари",
   classic_harry: "Гарри Поттер",
   classic_harley: "Харли Квин",
-  classic_heroes: "Миссия Супергероев",
-  classic_pirates: "Пиратский",
-  classic_wednesday: "Уэнсдей",
   classic_bloggers: "Блогеры",
-  classic_fortnite: "Фортнайт",
-  classic_agents: "Суперагенты",
   animator: "Фиджитал приключение",
   none: "Без квеста",
 };
@@ -120,7 +109,7 @@ function childrenWord(n: number): string {
 
 
 export function Step7Summary() {
-  const { state, updateState, totalPrice, submitted, resetWizard, isMega } = useWizard();
+  const { state, updateState, totalPrice, submitted, resetWizard } = useWizard();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,14 +161,9 @@ export function Step7Summary() {
   }, ${state.adultsCount} взрослых`;
 
   const getPackagePrice = () => {
-    if (isMega && state.packageType) {
-      const [weekday, weekend] = MEGA_PACKAGE_PRICES[state.packageType] || [0, 0];
-      return effectiveWeekend ? weekend : weekday;
-    }
-    if (state.packageType === "basic") return 24900;
-    if (state.packageType === "premium") return effectiveWeekend ? 57900 : 47900;
-    if (state.packageType === "exclusive") return effectiveWeekend ? 89900 : 79900;
-    return 0;
+    if (!state.packageType) return 0;
+    const [weekday, weekend] = MEGA_PACKAGE_PRICES[state.packageType] || [0, 0];
+    return effectiveWeekend ? weekend : weekday;
   };
 
   const getQuestPrice = () => {
@@ -194,13 +178,7 @@ export function Step7Summary() {
     return 0;
   };
 
-  const getPatiroomPrice = () => {
-    if (isMega) return 0;
-    if (state.packageType === "custom" && state.patiroom) {
-      return state.patiroomHours * 3000;
-    }
-    return 0;
-  };
+  const getPatiroomPrice = () => 0;
 
   const getCafeZonesPrice = () => {
     let p = 0;
@@ -222,32 +200,21 @@ export function Step7Summary() {
 
   const getShowsPrice = () => {
     let p = 0;
-    const getPrice = (id: string) => {
-      if (isMega && MEGA_SHOW_PRICES[id]) return MEGA_SHOW_PRICES[id];
-      return ALL_SHOWS.find(s => s.id === id)?.price || 0;
-    };
-    const getSurcharge = (id: string) => {
-      return ALL_SHOWS.find(s => s.id === id)?.surcharge || 0;
-    };
+    const getPrice = (id: string) => MEGA_SHOW_PRICES[id] || ALL_SHOWS.find(s => s.id === id)?.price || 0;
 
-    if (state.packageType === "custom" || state.packageType === "basic" || state.packageType === "premium") {
-      for (const showId of state.shows) {
-        p += getPrice(showId);
-      }
-    } else if (state.packageType === "exclusive") {
+    if (state.packageType === "exclusive") {
       if (state.shows.length > 0) {
-        for (const showId of state.shows) {
-          p += getPrice(showId);
-        }
-        const firstShowId = state.shows[0];
-        p = p - getPrice(firstShowId) + getSurcharge(firstShowId);
+        for (const showId of state.shows) p += getPrice(showId);
+        p -= getPrice(state.shows[0]);
       }
+    } else {
+      for (const showId of state.shows) p += getPrice(showId);
     }
     return p;
   };
 
   const getMCPrice = () => {
-    const mcPrice = isMega ? MEGA_MC_PRICE : 7500;
+    const mcPrice = MEGA_MC_PRICE;
     if (state.packageType === "basic" || state.packageType === "custom") {
       return state.masterClasses.length * mcPrice;
     } else if (state.packageType === "premium" || state.packageType === "exclusive") {
@@ -256,34 +223,7 @@ export function Step7Summary() {
     return 0;
   };
 
-  const getFoodPrice = () => {
-    if (isMega) return getMegaFoodTotal(state.megaFood);
-    let p = 0;
-    if (state.includeFood && (state.packageType === "basic" || state.packageType === "custom")) {
-      p += 12070;
-    }
-    Object.entries(state.customFood).forEach(([itemId, qty]) => {
-      if (qty > 0) {
-        for (const cat of FOOD_MENU) {
-          const item = cat.items.find((i) => i.id === itemId);
-          if (item) {
-            p += item.price * qty;
-            break;
-          }
-        }
-      }
-    });
-    return p;
-  };
-
-  const getCakePrice = () => {
-    if (isMega) return 0;
-    if (state.cakeChoice) {
-      if (state.cakeChoice === "own_cake") return 2000;
-      return 8400;
-    }
-    return 0;
-  };
+  const getFoodPrice = () => getMegaFoodTotal(state.megaFood);
 
   const getActivitiesPrice = () => {
     let p = 0;
@@ -308,7 +248,7 @@ export function Step7Summary() {
 
   const formatPrice = (p: number) => p === 0 ? "Включено" : `${p.toLocaleString("ru-RU")} ₽`;
   const formatPackagePrice = (p: number) => state.packageType === "custom" ? "" : formatPrice(p);
-  const getShowLabel = (id: string) => isMega ? (MEGA_SHOW_NAMES[id] || ALL_SHOWS.find(s => s.id === id)?.name || id) : (ALL_SHOWS.find(s => s.id === id)?.name || id);
+  const getShowLabel = (id: string) => MEGA_SHOW_NAMES[id] || ALL_SHOWS.find(s => s.id === id)?.name || id;
   const getMegaFoodSummary = () => {
     const parts = [];
     if (state.megaOwnCatering) parts.push("Свой кейтеринг");
@@ -390,10 +330,10 @@ export function Step7Summary() {
         {state.patiroomDetails && (
           <SummaryRow
             icon={<MapPin className="w-4 h-4" />}
-            label={isMega ? "Фиджитал Патирум" : "Патирум"}
+            label="Фиджитал Патирум"
             value={state.patiroomDetails}
             priceText={formatPrice(getPatiroomPrice())}
-            stepNumber={isMega ? undefined : 5}
+            stepNumber={undefined}
           />
         )}
 
@@ -469,28 +409,13 @@ export function Step7Summary() {
           />
         )}
 
-        {((isMega && (state.megaOwnCatering || Object.values(state.megaFood).some(qty => qty > 0))) || (!isMega && (state.includeFood || Object.values(state.customFood).some(qty => qty > 0)))) && (
+        {(state.megaOwnCatering || Object.values(state.megaFood).some(qty => qty > 0)) && (
           <SummaryRow
             icon={<UtensilsCrossed className="w-4 h-4" />}
-            label="Питание"
-            value={
-              isMega ? getMegaFoodSummary() : [
-                state.includeFood ? "Набор детской еды" : null,
-                Object.values(state.customFood).some(qty => qty > 0) ? "Доп. меню" : null
-              ].filter(Boolean).join(" + ")
-            }
+            label="Еда"
+            value={getMegaFoodSummary()}
             priceText={formatPrice(getFoodPrice())}
             stepNumber={9}
-          />
-        )}
-
-        {!isMega && state.cakeChoice && state.cakeChoice !== "none" && (
-          <SummaryRow
-            icon={<Cake className="w-4 h-4" />}
-            label="Торт"
-            value={`${CAKES.find(c => c.id === state.cakeChoice)?.name || CAKE_NAMES[state.cakeChoice] || state.cakeChoice}${state.fillingChoice ? " · " + (FILLING_NAMES[state.fillingChoice] || state.fillingChoice) : ""}${state.cakeChoice === 'own_cake' ? " (+2 000 ₽)" : " (8 400 ₽ · 2 кг)"}`}
-            priceText={formatPrice(getCakePrice())}
-            stepNumber={10}
           />
         )}
 
@@ -510,7 +435,7 @@ export function Step7Summary() {
             label="Доп. услуги"
             value={state.additionalServices.map(srv => {
               const baseName = ADDITIONAL_SERVICES_NAMES[srv] || srv;
-              return isMega ? baseName : `Hello ${baseName}`;
+              return baseName;
             }).join(", ")}
             priceText={formatPrice(getServicesPrice())}
             stepNumber={16}

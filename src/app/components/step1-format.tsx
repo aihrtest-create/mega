@@ -171,8 +171,8 @@ function formatPrice(price: number) {
 }
 
 export function Step1Format() {
-  const { state, updateState, isMega } = useWizard();
-  const packages = isMega ? MEGA_PACKAGES : PACKAGES;
+  const { state, updateState } = useWizard();
+  const packages = MEGA_PACKAGES;
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -203,27 +203,19 @@ export function Step1Format() {
   const handleSelect = (id: typeof PACKAGES[number]["id"] | "custom") => {
     if (state.packageType === id) return;
 
-    const includeFood = !isMega && (id === "premium" || id === "exclusive");
-    const megaRoom = isMega && id !== "custom" ? MEGA_ROOM_DETAILS[id] : null;
+    const megaRoom = id !== "custom" ? MEGA_ROOM_DETAILS[id] : null;
     updateState({
       packageType: id,
-      includeFood,
-      // Mega Basic always includes the no-quest "Фиджитал-игра" format by default
-      questType: isMega && id === "basic" ? "animator" : null,
+      questType: id === "basic" ? "animator" : null,
       patiroom: megaRoom ? "mega_room" : null,
       patiroomDetails: megaRoom?.label || null,
       patiroomHours: megaRoom?.hours || 3,
       cafeZones: [],
       animators: [],
-      premiumCostume: null,
       shows: [],
       masterClasses: [],
-      customFood: {},
       megaOwnCatering: false,
       megaFood: {},
-      cakeChoice: null,
-      fillingChoice: null,
-      cakeCustomText: "",
       hasReachedSummary: false,
       discoChoice: null,
       balloonChoice: null
@@ -303,26 +295,11 @@ export function Step1Format() {
           Выберите пакет
         </h1>
         <p className="text-base font-bold text-[#747474] leading-relaxed">
-          {isMega ? "День рождения в Hello Park МЕГА" : "День рождения в Hello Park"}
+          {"День рождения в Hello Park МЕГА"}
         </p>
       </div>
 
-      {/* Weekend note */}
       <AnimatePresence>
-        {state.isWeekend && !isMega && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mb-4 overflow-hidden px-4"
-          >
-            <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-              <p className="text-amber-700 text-xs">
-                🌟 Пакет «Hello Fun» доступен только по будням.
-              </p>
-            </div>
-          </motion.div>
-        )}
       </AnimatePresence>
 
       {/* Dots indicator */}

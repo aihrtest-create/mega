@@ -202,11 +202,16 @@ export function FloatingPrice() {
   };
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 z-50 max-w-lg mx-auto">
-      <div
-        className="rounded-full bg-white/65 backdrop-blur-[40px] saturate-[180%] border-[1.5px] border-white/85 p-[6px] flex flex-col gap-2"
-        style={{boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.95)'}}
-      >
+    <div 
+      className="fixed left-3 right-3 z-50 max-w-lg mx-auto"
+      style={{ bottom: 'calc(12px + env(safe-area-inset-bottom))' }}
+    >
+      <div className="relative p-[6px] flex flex-col gap-2 w-full">
+        {/* Safari fix: isolate backdrop-filter into a separate absolute layer to prevent touch target offset bug */}
+        <div 
+          className="absolute inset-0 rounded-[40px] bg-white/65 backdrop-blur-[40px] saturate-[180%] border-[1.5px] border-white/85 pointer-events-none"
+          style={{boxShadow: '0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.95)', zIndex: -1}}
+        />
 
         {/* ─── Validation Toast ─── */}
         <AnimatePresence>

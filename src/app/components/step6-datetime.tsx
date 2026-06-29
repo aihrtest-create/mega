@@ -18,7 +18,6 @@ import { ru } from "date-fns/locale";
 import { isWeekendOrHoliday2026 } from "../data/holidays";
 
 const TIME_SLOTS = [
-  "10:00",
   "11:00",
   "12:00",
   "13:00",
@@ -26,7 +25,6 @@ const TIME_SLOTS = [
   "15:00",
   "16:00",
   "17:00",
-  "18:00",
 ];
 
 const WEEKDAY_NAMES = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
@@ -227,7 +225,7 @@ export function Step6DateTime() {
         </div>
 
         <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed">
-          В пакеты включено 8 детей. Каждый дополнительный — +855 ₽ в будни / +1215 ₽ в выходные.
+          В пакеты включено 8 детей. Для более 8 детей условия проговариваются индивидуально с менеджером
         </p>
       </div>
 

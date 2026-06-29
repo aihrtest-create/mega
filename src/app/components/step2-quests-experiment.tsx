@@ -276,7 +276,7 @@ function QuestPopup({
             <div className="bg-gradient-to-r from-[#5b21cc] to-[#7b3fe4] rounded-[24px] p-5 relative overflow-hidden flex shadow-lg">
               <div className="relative z-10 w-[60%] sm:w-[65%]">
                 <p className="text-white text-sm sm:text-base leading-relaxed">
-                  <strong className="font-extrabold">Фиджитал квест</strong> — это инновационный формат дня рождения с масштабными интерактивными инсталляциями! Дети отправятся в увлекательное цифровое приключение, а их главным проводником станет наш маскот <strong className="text-[#FFB74D] font-black">Лис Рокки</strong>.
+                  <strong className="font-extrabold">Фиджитал квест</strong> — это инновационный формат дня рождения с масштабными интерактивными инсталляциями! Дети отправятся в увлекательное приключение с Героем, а их главным проводником станет наш маскот <strong className="text-[#FFB74D] font-black">Лис Рокки</strong>.
                 </p>
               </div>
               <div className="absolute right-0 bottom-0 w-[42%] sm:w-[35%] h-[100%] pointer-events-none">
@@ -482,7 +482,7 @@ export function Step2Quests() {
 
   const handleClassicSelect = (id: ClassicId) => {
     if (state.questType === id) { updateState({ questType: null }); return; }
-    const amount = state.packageType === "exclusive" ? 9000 : 16000;
+    const amount = (state.packageType === "exclusive" || state.packageType === "premium") ? 9000 : 16000;
     if (isCustom) { updateState({ questType: id }); return; }
     setSurchargePopup({ questId: id, amount });
   };
@@ -514,8 +514,8 @@ export function Step2Quests() {
             <span className="text-4xl drop-shadow-md hover:scale-110 transition-transform cursor-pointer">🎉</span>
             Развлечения
           </h2>
-          <p className="text-base font-bold text-[#747474] leading-relaxed">
-            {showFormatSwitcher ? "Квест с сюжетом или приключение с героем" : "Выберите квест для праздника"}
+          <p className="text-sm font-bold text-[#747474] mt-2 px-6 max-w-sm mx-auto">
+            {showFormatSwitcher ? "Квест с сюжетом или Герой" : "Выберите квест для праздника"}
           </p>
         </div>
 
@@ -532,7 +532,7 @@ export function Step2Quests() {
               onClick={handleAdventureClick}
               className={`relative z-10 flex-1 py-2.5 text-sm font-bold transition-colors ${formatMode === "adventure" ? "text-[#FF6022]" : "text-[#747474]"}`}
             >
-              🎈 Приключение
+              🎈 Герой
             </button>
             <button
               onClick={handleQuestClick}
@@ -553,9 +553,9 @@ export function Step2Quests() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="text-xs text-[#4CAF50] font-black text-center mb-4">
-                Приключение с любимым героем и играми в парке
-              </div>
+              <p className="text-sm font-semibold text-[#1A1A1A] mb-3">
+                Выберите любимого героя, с которым дети могут играть в парке
+              </p>
 
               {/* Category tabs */}
               <div
@@ -651,7 +651,7 @@ export function Step2Quests() {
                     Фиджитал квесты
                   </div>
                   {isBasic && <p className="text-xs text-[#5b21cc] font-bold text-center">Квест с сюжетом входит в пакет Премиум</p>}
-                  {isPremiumOrExclusive && <p className="text-xs text-[#747474] font-bold text-center">К фиджитал квесту можно выбрать любого аниматора</p>}
+                  {isPremiumOrExclusive && <p className="text-xs text-[#747474] font-bold text-center mt-1">К фиджитал квесту можно выбрать любого героя на следующем шаге</p>}
                 </div>
 
                 <div className="flex flex-col gap-7">

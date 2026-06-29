@@ -14,6 +14,19 @@ export const MEGA_ROOM_DETAILS: Record<string, { label: string; hours: number }>
 
 export const MEGA_MC_PRICE = 15000;
 
+export const PREMIUM_MASTER_CLASSES = [
+  { id: "mc_soap", name: "Мыловарение", emoji: "🧼", price: 15000, excPrice: 10000, desc: "Создание ароматного мыла.", gradient: "from-[#fccb90] to-[#d57eeb]" },
+  { id: "mc_tshirts", name: "Роспись футболок", emoji: "👕", price: 15000, excPrice: 10000, desc: "Создание уникального дизайна футболки.", gradient: "from-[#a18cd1] to-[#fbc2eb]" },
+  { id: "mc_dreamcatcher", name: "Ловец снов", emoji: "🕸️", price: 15000, excPrice: 10000, desc: "Плетение настоящего ловца снов.", gradient: "from-[#ff9a9e] to-[#fecfef]" },
+  { id: "mc_culinary", name: "Кулинарный мастер-класс", emoji: "👩‍🍳", price: 15000, excPrice: 10000, desc: "Приготовление вкусных блюд под руководством шефа.", gradient: "from-[#f6d365] to-[#fda085]" },
+  { id: "mc_florarium", name: "Флорариум", emoji: "🪴", price: 15000, excPrice: 10000, desc: "Создание мини-сада в стеклянной колбе.", gradient: "from-[#84fab0] to-[#8fd3f4]" },
+  { id: "mc_ebru", name: "Эбру", emoji: "🎨", price: 15000, excPrice: 10000, desc: "Рисование на воде с переносом на бумагу.", gradient: "from-[#a1c4fd] to-[#c2e9fb]" },
+  { id: "mc_icecream", name: "Приготовление мороженого", emoji: "🍦", price: 15000, excPrice: 10000, desc: "Изготовление настоящего домашнего мороженого.", gradient: "from-[#ffecd2] to-[#fcb69f]" },
+  { id: "mc_chocolate", name: "Шоколадные конфеты", emoji: "🍫", price: 15000, excPrice: 10000, desc: "Мастер-класс по приготовлению шоколадных конфет.", gradient: "from-[#d4fc79] to-[#96e6a1]" },
+  { id: "mc_aquarium", name: "Аквариум с живой рыбкой", emoji: "🐠", price: 24000, excPrice: 18000, desc: "Создание собственного маленького аквариума.", gradient: "from-[#e6b980] to-[#eacda3]" },
+  { id: "mc_harry_wand", name: "Палочка Гарри Поттера", emoji: "🪄", price: 15000, excPrice: 10000, desc: "Изготовление волшебной палочки своими руками.", gradient: "from-[#cfd9df] to-[#e2ebf0]" }
+];
+
 export const MEGA_SHOW_PRICES: Record<string, number> = {
   soap: 15000,
   paper: 16000,
@@ -35,7 +48,7 @@ export const MEGA_SHOW_NAMES: Record<string, string> = {
   neon_soap: "Шоу неоновых мыльных пузырей",
   neon_paper: "Неоновое бумажное шоу",
   ribbon: "Ленточное шоу",
-  animals: "Фокус программа с животными",
+
   illusionist: "Фокусник-иллюзионист",
   cryo: "Крио-шоу с мороженым",
 };

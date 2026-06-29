@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { isWeekendOrHoliday2026 } from "../data/holidays";
 import {
-  MEGA_MC_PRICE,
   MEGA_PACKAGE_PRICES,
+  MEGA_MC_PRICE,
   MEGA_SHOW_PRICES,
+  PREMIUM_MASTER_CLASSES,
   getMegaFoodTotal,
 } from "../data/megaConfig";
 
@@ -223,6 +224,8 @@ function getMegaSteps(packageType: WizardState["packageType"], questType: Wizard
 export const INCLUDED_CHILDREN = 8;
 export const EXTRA_CHILD_WEEKDAY = 855;
 export const EXTRA_CHILD_WEEKEND = 1215;
+export const CUSTOM_CHILD_WEEKDAY = 1250;
+export const CUSTOM_CHILD_WEEKEND = 1650;
 
 export function getExtraChildrenCount(state: WizardState): number {
   if (!state.packageType) return 0;
@@ -231,6 +234,9 @@ export function getExtraChildrenCount(state: WizardState): number {
 }
 
 export function getExtraChildrenCost(state: WizardState, isWeekend: boolean): number {
+  if (state.packageType === "custom") {
+    return getExtraChildrenCount(state) * (isWeekend ? CUSTOM_CHILD_WEEKEND : CUSTOM_CHILD_WEEKDAY);
+  }
   return getExtraChildrenCount(state) * (isWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY);
 }
 
@@ -478,7 +484,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         total += state.questType.startsWith("phygital_") ? 12000 : 16000;
       } else if (state.questType.startsWith("classic_")) {
         if (state.packageType === "basic") total += 16000;
-        else if (state.packageType === "premium") total += 16000;
+        else if (state.packageType === "premium") total += 9000;
         else if (state.packageType === "exclusive") total += 9000;
       }
     }
@@ -496,10 +502,21 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       for (const show of state.shows) total += MEGA_SHOW_PRICES[show] || 0;
     }
 
+    // Separate MCs into regular and premium
+    const regularMcs = state.masterClasses.filter(id => !PREMIUM_MASTER_CLASSES.find(p => p.id === id));
+    const premiumMcs = state.masterClasses.filter(id => PREMIUM_MASTER_CLASSES.find(p => p.id === id));
+
     if (state.packageType === "premium" || state.packageType === "exclusive") {
-      total += Math.max(0, state.masterClasses.length - 1) * MEGA_MC_PRICE;
+      total += Math.max(0, regularMcs.length - 1) * MEGA_MC_PRICE;
     } else {
-      total += state.masterClasses.length * MEGA_MC_PRICE;
+      total += regularMcs.length * MEGA_MC_PRICE;
+    }
+
+    for (const mcId of premiumMcs) {
+      const pmc = PREMIUM_MASTER_CLASSES.find(p => p.id === mcId);
+      if (pmc) {
+        total += state.packageType === "exclusive" ? pmc.excPrice : pmc.price;
+      }
     }
 
     for (const zone of state.cafeZones) {
@@ -523,7 +540,9 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       if (srv === "aqua") total += 7000;
     }
 
-    total += getExtraChildrenCost(state, effectiveWeekend);
+    if (state.packageType === "custom") {
+      total += getExtraChildrenCost(state, effectiveWeekend);
+    }
 
     return total;
   })();

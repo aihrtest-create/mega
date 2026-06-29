@@ -30,7 +30,7 @@ export function StepDisco() {
           Выберите активность
         </h1>
         <p className="text-base font-bold text-[#747474] leading-relaxed max-w-[280px] mx-auto">
-          Мини дискотека или треш-коробка <span className="text-[#007AFF]">25 мин</span>
+          Мини дискотека или треш-коробка <span className="text-[#007AFF]">20 мин</span>
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export function StepDisco() {
                 </h4>
 
                 <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 shrink-0">
-                  <span className="text-[10px] text-gray-400 font-semibold">25 минут</span>
+                  <span className="text-[10px] text-gray-400 font-semibold">20 минут</span>
                   
                   <div 
                     className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${
@@ -110,7 +110,7 @@ export function StepDisco() {
                 </h4>
 
                 <div className="flex items-center justify-between mt-2 pt-1 border-t border-gray-50 shrink-0">
-                  <span className="text-[10px] text-gray-400 font-semibold">25 минут</span>
+                  <span className="text-[10px] text-gray-400 font-semibold">20 минут</span>
                   
                   <div 
                     className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all ${

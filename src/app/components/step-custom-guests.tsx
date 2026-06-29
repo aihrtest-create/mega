@@ -89,7 +89,7 @@ export function StepCustomGuests() {
         </div>
 
         <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed text-center">
-          В тарифе «Соберу сам» каждый детский билет оплачивается отдельно (+855 ₽ в будни / +1215 ₽ в выходные).
+          В тарифе «Соберу сам» каждый детский билет оплачивается отдельно (+1250 ₽ в будни / +1650 ₽ в выходные).
         </p>
 
         {/* CTA Button */}

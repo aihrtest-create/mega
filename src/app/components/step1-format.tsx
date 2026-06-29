@@ -42,10 +42,11 @@ const PACKAGES = [
       "Пати-рум — 3 часа",
       "Квест на выбор — 60 мин.",
       "Мастер-класс на выбор — 30 мин.",
-      "Дискотека или треш-коробка — 25 мин.",
+      "Дискотека или треш-коробка — 20 мин.",
       "Оформление: шары + фонтан",
       "WOW-поздравление Лиса Рокки",
       "Шар-сюрприз",
+      "Подарки всем гостям",
       "Детские обеды",
       "Подарок имениннику",
       "Электронные пригласительные",
@@ -68,7 +69,7 @@ const PACKAGES = [
       "Пати-рум — 4 часа",
       "Квест на выбор — 60 мин.",
       "Мастер-класс на выбор — 30 мин.",
-      "Дискотека или треш-коробка — 25 мин.",
+      "Дискотека или треш-коробка — 20 мин.",
       "Шоу-программа на выбор — 30 мин.",
       "Фотограф — 2 часа",
       "Оформление: шары + 2 фонтана",
@@ -99,8 +100,8 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 2,5 часа",
-      "Фиджитал квест или приключение — 45 мин.",
-      "Мини-дискотека — 10 мин.",
+      "Фиджитал квест или Герой — 40 мин.",
+      "Мини-дискотека — 15 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Вынос тортика аниматором",
@@ -122,9 +123,9 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 2,5 часа",
-      "Фиджитал квест или приключение — на выбор",
+      "Фиджитал квест или Герой — на выбор",
       "Мастер-класс на выбор — 30 мин.",
-      "Треш-коробка или дискотека — 25 мин.",
+      "Треш-коробка или дискотека — 20 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Шар-сюрприз с наполнением",
@@ -148,10 +149,10 @@ const MEGA_PACKAGES = [
     features: [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 3 часа",
-      "Фиджитал квест или приключение — на выбор",
+      "Фиджитал квест или Герой — на выбор",
       "Шоу-программа на выбор — 30 мин.",
       "Мастер-класс на выбор — 30 мин.",
-      "Треш-коробка или дискотека — 25 мин.",
+      "Треш-коробка или дискотека — 20 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Шар-сюрприз или Пиньята",
@@ -234,7 +235,19 @@ export function Step1Format() {
       setActiveIndex(Math.min(Math.max(idx, 0), allCards.length - 1));
     };
     el.addEventListener("scroll", handleScroll, { passive: true });
-    return () => el.removeEventListener("scroll", handleScroll);
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && el.scrollWidth > el.clientWidth) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener("scroll", handleScroll);
+      el.removeEventListener("wheel", handleWheel);
+    };
   }, [allCards.length]);
 
   const scrollToCard = (idx: number) => {
@@ -289,34 +302,34 @@ export function Step1Format() {
       className="pb-16 overflow-x-hidden"
     >
       {/* Header */}
-      <div className="text-center mb-6 px-4 pt-2">
+      <div className="text-center mb-4 px-4 pt-2">
         <h1 className="text-3xl font-black text-[#1A1A1A] mb-2 leading-tight flex items-center justify-center gap-3">
           <span className="text-4xl drop-shadow-md hover:scale-110 transition-transform cursor-pointer">🎉</span>
           Выберите пакет
         </h1>
-        <p className="text-base font-bold text-[#747474] leading-relaxed">
+        <p className="text-base font-bold text-[#747474] leading-relaxed mb-4">
           {"День рождения в Hello Park МЕГА"}
         </p>
+
+        {/* Dots indicator moved higher up */}
+        <div className="flex justify-center gap-1.5">
+          {allCards.map((pkg, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              className="transition-all duration-300 rounded-full"
+              style={{
+                width: i === activeIndex ? 24 : 8,
+                height: 8,
+                backgroundColor: i === activeIndex ? pkg.borderColor : "#D5D5D5",
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <AnimatePresence>
       </AnimatePresence>
-
-      {/* Dots indicator */}
-      <div className="flex justify-center gap-1.5 mb-5 px-4">
-        {allCards.map((pkg, i) => (
-          <button
-            key={i}
-            onClick={() => scrollToCard(i)}
-            className="transition-all duration-300 rounded-full"
-            style={{
-              width: i === activeIndex ? 24 : 8,
-              height: 8,
-              backgroundColor: i === activeIndex ? pkg.borderColor : "#D5D5D5",
-            }}
-          />
-        ))}
-      </div>
 
       {/* ─── Horizontal Scroll Cards ─── */}
       <div

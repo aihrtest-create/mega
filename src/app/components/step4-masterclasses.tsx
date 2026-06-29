@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Check, Palette, Info, X } from "lucide-react";
 import { useState } from "react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { MEGA_MC_PRICE } from "../data/megaConfig";
+import { MEGA_MC_PRICE, PREMIUM_MASTER_CLASSES } from "../data/megaConfig";
 
 const getPublicUrl = (path: string) => {
   if (!path) return path;
@@ -53,7 +53,7 @@ export function Step4MasterClasses() {
     }
   };
 
-  const selectedClassDetails = MASTER_CLASSES.find(mc => mc.id === selectedInfo);
+  const selectedClassDetails = MASTER_CLASSES.find(mc => mc.id === selectedInfo) || PREMIUM_MASTER_CLASSES.find(mc => mc.id === selectedInfo);
 
   return (
     <>
@@ -199,6 +199,103 @@ export function Step4MasterClasses() {
                  <h4 className="text-[13px] font-bold text-[#1A1A1A] leading-tight line-clamp-2">{mc.name}</h4>
                  <p className="text-[11px] text-[#FF6022] font-extrabold mt-0.5">
                    {(state.packageType === "premium" || state.packageType === "exclusive") && (state.masterClasses.length === 0 || state.masterClasses[0] === mc.id) ? "Включено" : `${mcPrice.toLocaleString("ru-RU")} ₽`}
+                 </p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Premium Master Classes */}
+      <div className="flex items-center gap-2 mb-4 mt-8">
+        <Palette className="w-5 h-5 text-[#FF6022]" />
+        <h3 className="text-[#1A1A1A]">Дополнительные мастер-классы</h3>
+      </div>
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        {PREMIUM_MASTER_CLASSES.map((mc) => {
+          const isSelected = state.masterClasses.includes(mc.id);
+          const price = state.packageType === "exclusive" ? mc.excPrice : mc.price;
+          
+          if (isExp) {
+            return (
+              <motion.div
+                key={mc.id}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => toggleMC(mc.id)}
+                className={`group relative rounded-[28px] bg-white p-2 transition-all duration-300 cursor-pointer border flex flex-col ${
+                  isSelected
+                    ? "scale-[1.02]"
+                    : "border-black/[0.04] shadow-[0_6px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)]"
+                }`}
+              >
+                <div className={`relative aspect-square w-full rounded-[20px] mb-3 overflow-hidden bg-gradient-to-br ${mc.gradient} flex flex-col items-center justify-center p-4 text-center`}>
+                  <div className="text-4xl filter drop-shadow-md pb-2 group-hover:scale-110 transition-transform duration-500">
+                    {mc.emoji}
+                  </div>
+                  <div className="absolute top-2 right-2 z-10 flex gap-1">
+                    <button onClick={(e) => { e.stopPropagation(); setSelectedInfo(mc.id); }} className="w-7 h-7 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center text-[#1A1A1A] hover:bg-white transition-colors">
+                      <Info className="w-4 h-4" />
+                    </button>
+                    {isSelected && (
+                      <div className="w-7 h-7 rounded-full bg-[#FF6022] flex items-center justify-center text-white shadow-sm">
+                        <Check className="w-4 h-4" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="px-2 pb-2 flex-1 flex flex-col">
+                  <h4 className="text-[14px] font-bold text-[#1A1A1A] leading-tight mb-2 line-clamp-2">
+                    {mc.name}
+                  </h4>
+                  <div className="mt-auto flex items-center justify-between">
+                    <p className="text-[13px] font-black text-[#FF6022]">
+                      +{price.toLocaleString("ru-RU")} ₽
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          }
+
+          return (
+            <motion.div
+              key={mc.id}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => toggleMC(mc.id)}
+              className={`relative aspect-[4/5] sm:h-[280px] rounded-[24px] overflow-hidden transition-all cursor-pointer group ${
+                isSelected
+                  ? "ring-2 ring-[#FF6022] shadow-xl scale-[1.01]"
+                  : "ring-1 ring-[#E5E5E5] shadow-sm"
+              }`}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${mc.gradient} flex items-center justify-center`}>
+                <span className="text-6xl sm:text-7xl filter drop-shadow-md pb-6 group-hover:scale-110 transition-transform duration-500">{mc.emoji}</span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+
+              <div className="absolute top-2 left-2 right-2 flex justify-between items-start z-10">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedInfo(mc.id);
+                  }}
+                  className="bg-gradient-to-tr from-[#FF6022] to-[#FF8A00] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-2 rounded-full flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95 shadow-md shadow-[#FF6022]/40"
+                >
+                  <Info className="w-3.5 h-3.5" />
+                  Подробнее
+                </button>
+
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                    isSelected ? "bg-[#FF6022] border-2 border-white text-white shadow-md shadow-[#FF6022]/40" : "bg-white/40 backdrop-blur-md border border-white/60 text-transparent"
+                }`}>
+                   <Check className="w-4 h-4" />
+                </div>
+              </div>
+
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 bg-white/95 backdrop-blur-xl rounded-[18px] p-2.5 shadow-lg flex flex-col justify-center border border-white/30 text-center min-h-[50px]">
+                 <h4 className="text-[13px] font-bold text-[#1A1A1A] leading-tight line-clamp-2">{mc.name}</h4>
+                 <p className="text-[11px] text-[#FF6022] font-extrabold mt-0.5">
+                   +{price.toLocaleString("ru-RU")} ₽
                  </p>
               </div>
             </motion.div>

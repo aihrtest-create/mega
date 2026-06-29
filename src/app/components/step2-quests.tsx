@@ -308,7 +308,7 @@ function QuestPopup({
             <div className="bg-gradient-to-r from-[#5b21cc] to-[#7b3fe4] rounded-[24px] p-5 sm:p-6 relative overflow-hidden flex shadow-lg">
               <div className="relative z-10 w-[60%] sm:w-[65%]">
                 <p className="text-white text-sm sm:text-base leading-relaxed">
-                  <strong className="font-extrabold">Фиджитал квест</strong> — это инновационный формат дня рождения с масштабными интерактивными инсталляциями! Дети отправятся в увлекательное цифровое приключение, а их главным проводником станет наш маскот <strong className="text-[#FFB74D] font-black">Лис Рокки</strong>.
+                  <strong className="font-extrabold">Фиджитал квест</strong> — это инновационный формат дня рождения с масштабными интерактивными инсталляциями! Дети отправятся в увлекательное приключение с Героем, а их главным проводником станет наш маскот <strong className="text-[#FFB74D] font-black">Лис Рокки</strong>.
                 </p>
               </div>
               <div className="absolute right-0 bottom-0 w-[42%] sm:w-[35%] h-[130%] pointer-events-none">
@@ -441,7 +441,7 @@ export function Step2Quests() {
     if (state.packageType === "basic") {
       setSurchargePopup({ questId: id, amount: 16000 });
     } else if (state.packageType === "premium") {
-      setSurchargePopup({ questId: id, amount: 16000 });
+      setSurchargePopup({ questId: id, amount: 9000 });
     } else if (state.packageType === "exclusive") {
       setSurchargePopup({ questId: id, amount: 9000 });
     } else {

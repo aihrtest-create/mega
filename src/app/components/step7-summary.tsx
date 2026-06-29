@@ -5,6 +5,8 @@ import {
   INCLUDED_CHILDREN,
   EXTRA_CHILD_WEEKDAY,
   EXTRA_CHILD_WEEKEND,
+  CUSTOM_CHILD_WEEKDAY,
+  CUSTOM_CHILD_WEEKEND,
 } from "./wizard-context";
 import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
@@ -54,7 +56,7 @@ const QUEST_NAMES: Record<string, string> = {
   classic_harry: "Гарри Поттер",
   classic_harley: "Харли Квин",
   classic_bloggers: "Блогеры",
-  animator: "Фиджитал приключение",
+  animator: "Герой",
   none: "Без квеста",
 };
 
@@ -87,7 +89,7 @@ const FILLING_NAMES: Record<string, string> = {
 };
 
 const ADDITIONAL_ACTIVITIES_NAMES: Record<string, string> = {
-  "trash-animals": "Трэш-коробка с животными",
+
   "trash-box": "Трэш-коробка",
   "mini-disco": "Мини-диско",
   "challenge-party": "Челлендж-пати"
@@ -95,7 +97,8 @@ const ADDITIONAL_ACTIVITIES_NAMES: Record<string, string> = {
 
 const ADDITIONAL_SERVICES_NAMES: Record<string, string> = {
   "photo": "Фотограф",
-  "aqua": "Аквагрим"
+  "aqua": "Аквагрим",
+  "tattoos": "Детские тату"
 };
 
 // Russian pluralization for "ребёнок / ребёнка / детей"
@@ -153,7 +156,9 @@ export function Step7Summary() {
   const hasPackageBase = !!state.packageType && state.packageType !== "custom";
   const extraChildren = getExtraChildrenCount(state);
   const extraChildrenCost = getExtraChildrenCost(state, effectiveWeekend);
-  const perChildRate = effectiveWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY;
+  const perChildRate = state.packageType === "custom"
+    ? (effectiveWeekend ? CUSTOM_CHILD_WEEKEND : CUSTOM_CHILD_WEEKDAY)
+    : (effectiveWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY);
   const guestsValue = `${state.childrenCount} ${childrenWord(state.childrenCount)}${
     hasPackageBase
       ? ` (${INCLUDED_CHILDREN} в пакете${extraChildren > 0 ? ` + ${extraChildren} доп.` : ""})`
@@ -172,7 +177,7 @@ export function Step7Summary() {
       return state.questType.startsWith("phygital_") ? 12000 : 16000;
     } else if (state.questType.startsWith("classic_")) {
       if (state.packageType === "basic") return 16000;
-      if (state.packageType === "premium") return 16000;
+      if (state.packageType === "premium") return 9000;
       if (state.packageType === "exclusive") return 9000;
     }
     return 0;
@@ -457,16 +462,14 @@ export function Step7Summary() {
           label="Гости"
           value={guestsValue}
           stepNumber={1}
-          isLast={extraChildren === 0}
+          isLast={extraChildren === 0 || state.packageType !== "custom"}
         />
 
-        {extraChildren > 0 && (
+        {extraChildren > 0 && state.packageType === "custom" && (
           <SummaryRow
             icon={<UsersIcon className="w-4 h-4" />}
-            label={state.packageType === "custom" ? "Детские билеты" : "Доплата за гостей"}
-            value={state.packageType === "custom" 
-              ? `${extraChildren} ${childrenWord(extraChildren)} × ${perChildRate.toLocaleString("ru-RU")} ₽`
-              : `${extraChildren} ${childrenWord(extraChildren)} сверх ${INCLUDED_CHILDREN} × ${perChildRate.toLocaleString("ru-RU")} ₽`}
+            label="Детские билеты"
+            value={`${extraChildren} ${childrenWord(extraChildren)} × ${perChildRate.toLocaleString("ru-RU")} ₽`}
             priceText={formatPrice(extraChildrenCost)}
             stepNumber={1}
             isLast

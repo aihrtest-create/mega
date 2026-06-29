@@ -11,15 +11,7 @@ const getPublicUrl = (path: string) => {
 };
 
 const ACTIVITIES = [
-  {
-    id: "trash-animals",
-    name: "Трэш-коробка с животными",
-    price: 35000,
-    duration: "60 мин",
-    desc: 'Почувствуйте себя участником «Форт Боярд», угадывая на ощупь, кто же скрывается в коробке — гора впечатлений и адреналина обеспечена!',
-    gradient: "from-[#ffecd2] to-[#fcb69f]",
-    image: "/activities/trash_animals.webp",
-  },
+
   {
     id: "trash-box",
     name: "Трэш-коробка",

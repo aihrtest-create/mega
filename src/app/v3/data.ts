@@ -32,7 +32,7 @@ export const PACKAGES: PackageInfo[] = [
       "Безлимитные билеты — 8 шт.",
       "Фиджитал Патирум — 2,5 часа",
       "Анимация или квест — 60 мин.",
-      "Мини-дискотека — 10 мин.",
+      "Мини-дискотека — 15 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Вынос тортика аниматором",
@@ -59,7 +59,7 @@ export const PACKAGES: PackageInfo[] = [
       "Фиджитал Патирум — 2,5 часа",
       "Анимация или квест — 60 мин.",
       "Мастер-класс на выбор — 30 мин.",
-      "Треш-коробка или дискотека — 25 мин.",
+      "Треш-коробка или дискотека — 20 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Шар-сюрприз с наполнением",
@@ -74,7 +74,7 @@ export const PACKAGES: PackageInfo[] = [
     includedShow: false,
     includedDisco: "trash_or_disco",
     includedSurprise: "balloon",
-    includedGiftAll: false,
+    includedGiftAll: true,
   },
   {
     id: "exclusive",
@@ -88,7 +88,7 @@ export const PACKAGES: PackageInfo[] = [
       "Анимация или квест — 60 мин.",
       "Шоу-программа на выбор — 30 мин.",
       "Мастер-класс на выбор — 30 мин.",
-      "Треш-коробка или дискотека — 25 мин.",
+      "Треш-коробка или дискотека — 20 мин.",
       "Оформление: шары + сервировка",
       "WOW-поздравление Лиса Рокки",
       "Шар-сюрприз или Пиньята",
@@ -211,7 +211,6 @@ export const SHOWS: ShowItem[] = [
   { id: "neon_soap",    name: "Шоу неоновых мыльных пузырей", basePrice: 16000, exclusiveSurcharge: 4000,  image: "/shows/soap.png"  },
   { id: "neon_paper",   name: "Неоновое бумажное шоу",      basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/paper.png", badge: "top" },
   { id: "ribbon",       name: "Ленточное шоу",              basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/neon.png"  },
-  { id: "animals",      name: "Фокус-программа с животными",basePrice: 35000, exclusiveSurcharge: 25000, image: "/shows/professor.webp" },
   { id: "illusionist",  name: "Фокусник-иллюзионист",       basePrice: 30000, exclusiveSurcharge: 16000, image: "/shows/tesla.webp" },
   { id: "cryo",         name: "Крио-шоу с мороженым",       basePrice: 20000, exclusiveSurcharge: 5000,  image: "/shows/science.png", badge: "hit" },
 ];
@@ -262,7 +261,6 @@ export interface ExtraItem {
 }
 
 export const EXTRAS: ExtraItem[] = [
-  { id: "trash_animals", name: "Трэш-коробка с животными", description: "«Форт Боярд» наугад: угадываем зверя на ощупь", price: 35000, duration: "60 мин", emoji: "🦝" },
   { id: "trash_box",     name: "Трэш-коробка",             description: "Загадочная игра «Угадай, что в ящике»",       price: 7000,  duration: "30 мин", emoji: "📦" },
   { id: "minidisco",     name: "Мини-дискотека",           description: "Зажигательные танцы под любимые треки",       price: 6000,  duration: "30 мин", emoji: "🪩" },
   { id: "challenge",     name: "Челлендж-пати",            description: "Необычные испытания на скорость и смелость",   price: 10000, duration: "60 мин", emoji: "🏆" },

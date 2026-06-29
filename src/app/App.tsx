@@ -25,6 +25,7 @@ import InvitationService from "./components/invitation-service";
 import InvitationVariants from "./components/invitation-variants";
 import InvitationDashboard from "./components/invitation-dashboard";
 import FormatLab from "./components/format-lab";
+import DateTimeLab from "./components/datetime-lab";
 
 
 // ──────────────────────────────────────────────
@@ -224,6 +225,13 @@ export default function App() {
                       window.location.search.includes('view=format-lab');
   if (isFormatLab) {
     return <FormatLab />;
+  }
+
+  // Design lab: date/time screen variants
+  const isDateTimeLab = window.location.pathname.includes('/datetime-lab') ||
+                        window.location.search.includes('view=datetime-lab');
+  if (isDateTimeLab) {
+    return <DateTimeLab />;
   }
 
   const isInviteVariants = window.location.pathname.includes('/invite-variants') || 

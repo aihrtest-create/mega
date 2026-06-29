@@ -13,7 +13,7 @@ const QUESTS = [
   { id: "space", emoji: "🚀", title: "Космическое", subtitle: "Вечеринка на Марсе", img: "/quests/space/02.webp", color: "#3B4DD4" },
 ];
 
-const ADV_BULLETS = ["Любой герой на выбор", "Игра с инсталляциями", "45 минут веселья"];
+const ADV_BULLETS = ["Любой герой на выбор", "Игра с инсталляциями", "40 минут веселья"];
 
 /* ─────────── Shared bits ─────────── */
 
@@ -85,7 +85,7 @@ function Variant1() {
               </div>
               <div className="p-4">
                 <h4 className="text-[17px] font-black text-[#1A1A1A] mb-1">🎈 Фиджитал приключение</h4>
-                <p className="text-xs text-gray-500 leading-relaxed mb-3">Любимый герой 45 минут играет с детьми с интерактивными инсталляциями — без сюжета. Отлично для самых маленьких.</p>
+                <p className="text-xs text-gray-500 leading-relaxed mb-3">Любимый герой 40 минут играет с детьми с интерактивными инсталляциями — без сюжета. Отлично для самых маленьких.</p>
                 <div className="flex flex-wrap gap-1.5">
                   {ADV_BULLETS.map((b) => <span key={b} className="text-[10px] font-bold text-gray-600 bg-gray-100 rounded-lg px-2 py-1">{b}</span>)}
                 </div>
@@ -125,7 +125,7 @@ function Variant2() {
           <div className="w-24 rounded-[18px] overflow-hidden shrink-0"><AdventureThumb /></div>
           <div className="flex-1 min-w-0 py-1 pr-1">
             <div className="font-black text-[16px] text-[#1A1A1A]">🎈 Приключение</div>
-            <div className="text-xs text-gray-500 mb-1.5">45 мин · без сюжета · для малышей</div>
+            <div className="text-xs text-gray-500 mb-1.5">40 мин · без сюжета · для малышей</div>
             <PriceIncluded />
           </div>
           <div className={`self-center w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${mode === "adventure" ? "bg-[#FF6022] text-white" : "bg-gray-100 text-gray-300"}`}><Check className="w-4 h-4 stroke-[3]" /></div>

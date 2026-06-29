@@ -12,6 +12,17 @@ const getPublicUrl = (path: string) => {
 
 const SERVICES = [
   {
+    id: "tattoos",
+    name: "Детские тату",
+    price: 4000,
+    duration: "60 мин",
+    extra: "10 человек",
+    desc: 'Классные детские мини-тату переводилки на руки и лицо. Модно, стильно и безопасно для кожи!',
+    gradient: "from-[#fad0c4] to-[#ffd1ff]",
+    image: "/activities/tattoos.png",
+    imageClass: "object-cover object-[center_18%]",
+  },
+  {
     id: "photo",
     name: "Фотограф",
     price: 7000,
@@ -103,7 +114,7 @@ export function StepAdditionalServices() {
                     <img
                       src={getPublicUrl(service.image)}
                       alt={service.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className={`w-full h-full ${service.imageClass || 'object-cover'} transition-transform duration-700 group-hover:scale-105`}
                     />
                     
                     {/* Elegant overlay elements on image */}
@@ -196,7 +207,7 @@ export function StepAdditionalServices() {
                 <ImageWithFallback
                   src={getPublicUrl(service.image)}
                   alt={service.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className={`w-full h-full ${service.imageClass || 'object-cover'} transition-transform duration-700 group-hover:scale-110`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
 

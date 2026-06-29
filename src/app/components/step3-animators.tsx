@@ -237,7 +237,7 @@ export function Step3Animators() {
               К фиджитал-квесту!
             </h3>
             <p className="text-xs text-[#5A5A5A] leading-relaxed">
-              Вы выбрали приключение с Лисом Рокки. Теперь вы можете добавить
+              Вы выбрали программу с Лисом Рокки. Теперь вы можете добавить
               любимых героев, которые присоединятся к нему на празднике!
             </p>
           </div>
@@ -251,10 +251,10 @@ export function Step3Animators() {
         <div className="bg-gradient-to-r from-pink-50 to-orange-50 border border-pink-200 rounded-2xl p-4 mb-4 mx-4 relative overflow-hidden">
           <div className="relative z-10">
             <h3 className="text-[#FF6022] font-bold text-sm mb-1">
-              Фиджитал приключение с героем
+              Герой
             </h3>
             <p className="text-xs text-[#5A5A5A] leading-relaxed">
-              Выбранный герой проведёт 45 минут весёлой игры с интерактивными
+              Выбранный герой проведёт 40 минут весёлой игры с интерактивными
               инсталляциями — без сюжета, активности на усмотрение аниматора.
             </p>
           </div>

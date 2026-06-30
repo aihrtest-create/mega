@@ -371,11 +371,17 @@ export function Step1Format() {
               {/* Duration Badge (Top Right Rotated) */}
               <div className="absolute right-0 top-[-16px] rotate-[-5deg] z-20 flex items-center justify-center pointer-events-none origin-bottom-right">
                 <div 
-                  className="px-[24px] rounded-[15px] flex items-center justify-center min-w-[110px] shadow-md h-[46px] transition-colors"
-                  style={{ backgroundColor: isCustom ? "#747474" : "#5b21cc" }}
+                  className={`flex items-center justify-center shadow-md transition-colors ${
+                    pkg.id === "premium" 
+                      ? "px-[32px] rounded-[20px] min-w-[130px] h-[58px]" 
+                      : "px-[24px] rounded-[15px] min-w-[110px] h-[46px]"
+                  }`}
+                  style={{ backgroundColor: isCustom ? "#747474" : (pkg.id === "premium" ? "#ff3b30" : "#5b21cc") }}
                 >
-                  <span className="font-black text-white text-[24px] tracking-[-0.5px] leading-none mt-[-2px]">
-                    {pkg.duration}
+                  <span className={`font-black text-white tracking-[-0.5px] leading-none mt-[-2px] ${
+                    pkg.id === "premium" ? "text-[32px]" : "text-[24px]"
+                  }`}>
+                    {pkg.id === "premium" ? "ХИТ" : pkg.duration}
                   </span>
                 </div>
               </div>

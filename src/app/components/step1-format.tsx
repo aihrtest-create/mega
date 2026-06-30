@@ -235,18 +235,9 @@ export function Step1Format() {
       setActiveIndex(Math.min(Math.max(idx, 0), allCards.length - 1));
     };
     el.addEventListener("scroll", handleScroll, { passive: true });
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && el.scrollWidth > el.clientWidth) {
-        e.preventDefault();
-        el.scrollLeft += e.deltaY;
-      }
-    };
-    el.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
       el.removeEventListener("scroll", handleScroll);
-      el.removeEventListener("wheel", handleWheel);
     };
   }, [allCards.length]);
 
@@ -311,20 +302,38 @@ export function Step1Format() {
           {"День рождения в Hello Park МЕГА"}
         </p>
 
-        {/* Dots indicator moved higher up */}
-        <div className="flex justify-center gap-1.5">
-          {allCards.map((pkg, i) => (
-            <button
-              key={i}
-              onClick={() => scrollToCard(i)}
-              className="transition-all duration-300 rounded-full"
-              style={{
-                width: i === activeIndex ? 24 : 8,
-                height: 8,
-                backgroundColor: i === activeIndex ? pkg.borderColor : "#D5D5D5",
-              }}
-            />
-          ))}
+        {/* Navigation controls moved to top */}
+        <div className="flex justify-center items-center gap-4">
+          <button
+            onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
+            disabled={activeIndex === 0}
+            className="w-10 h-10 shrink-0 rounded-full border-[1.5px] border-[#E5E5E5] bg-white flex items-center justify-center transition-all hover:border-[#ABABAB] disabled:opacity-30 disabled:pointer-events-none active:scale-95"
+          >
+            <ChevronLeft className="w-5 h-5 text-[#3A3A3A]" />
+          </button>
+          
+          <div className="flex justify-center gap-1.5">
+            {allCards.map((pkg, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToCard(i)}
+                className="transition-all duration-300 rounded-full shrink-0"
+                style={{
+                  width: i === activeIndex ? 24 : 8,
+                  height: 8,
+                  backgroundColor: i === activeIndex ? pkg.borderColor : "#D5D5D5",
+                }}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollToCard(Math.min(allCards.length - 1, activeIndex + 1))}
+            disabled={activeIndex === allCards.length - 1}
+            className="w-10 h-10 shrink-0 rounded-full border-[1.5px] border-[#E5E5E5] bg-white flex items-center justify-center transition-all hover:border-[#ABABAB] disabled:opacity-30 disabled:pointer-events-none active:scale-95"
+          >
+            <ChevronRight className="w-5 h-5 text-[#3A3A3A]" />
+          </button>
         </div>
       </div>
 
@@ -483,23 +492,7 @@ export function Step1Format() {
         })}
       </div>
 
-      {/* Navigation arrows */}
-      <div className="flex justify-center gap-4 mt-2 px-4">
-        <button
-          onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
-          disabled={activeIndex === 0}
-          className="w-10 h-10 rounded-full border-[1.5px] border-[#E5E5E5] bg-white flex items-center justify-center transition-all hover:border-[#ABABAB] disabled:opacity-30 disabled:pointer-events-none active:scale-95"
-        >
-          <ChevronLeft className="w-5 h-5 text-[#3A3A3A]" />
-        </button>
-        <button
-          onClick={() => scrollToCard(Math.min(allCards.length - 1, activeIndex + 1))}
-          disabled={activeIndex === allCards.length - 1}
-          className="w-10 h-10 rounded-full border-[1.5px] border-[#E5E5E5] bg-white flex items-center justify-center transition-all hover:border-[#ABABAB] disabled:opacity-30 disabled:pointer-events-none active:scale-95"
-        >
-          <ChevronRight className="w-5 h-5 text-[#3A3A3A]" />
-        </button>
-      </div>
+      {/* Navigation arrows moved to the top */}
     </motion.div>
   );
 }

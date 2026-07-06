@@ -538,6 +538,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     for (const srv of state.additionalServices) {
       if (srv === "photo") total += 7000;
       if (srv === "aqua") total += 7000;
+      if (srv === "tattoos") total += 4000;
     }
 
     if (state.packageType === "custom") {

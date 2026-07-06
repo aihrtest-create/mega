@@ -1267,7 +1267,7 @@ export default function InvitationService() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder={activeTranslation.childNamePlaceholder}
-                className="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-left"
+                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
               />
             </div>
 
@@ -1279,7 +1279,7 @@ export default function InvitationService() {
               <select
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-left"
+                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
               >
                 {helloParks.map(park => (
                   <option key={park.id} value={park.id}>
@@ -1296,9 +1296,10 @@ export default function InvitationService() {
               </label>
               <input 
                 type="date"
+                lang={formData.lang === 'ru' ? 'ru-RU' : formData.lang === 'ar' ? 'ar-AE' : 'en-US'}
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-left"
+                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
               />
             </div>
 
@@ -1309,9 +1310,10 @@ export default function InvitationService() {
               </label>
               <input 
                 type="time" 
+                lang={formData.lang === 'ru' ? 'ru-RU' : formData.lang === 'ar' ? 'ar-AE' : 'en-US'}
                 value={formData.gatheringTime}
                 onChange={(e) => setFormData({ ...formData, gatheringTime: e.target.value })}
-                className="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-left"
+                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
               />
             </div>
 

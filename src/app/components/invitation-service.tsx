@@ -1092,11 +1092,11 @@ export default function InvitationService() {
                 </p>
                 <div className="flex items-center gap-2 bg-white border border-orange-200/50 rounded-lg py-1.5 px-2">
                   <span className="text-[10px] font-bold text-slate-500 select-all truncate flex-1 text-left">
-                    {generatedLink.replace('invite', 'invite-dashboard').replace('?invite=', '?id=')}
+                    {generatedLink.replace('?invite=', '?view=dashboard&id=')}
                   </span>
                   <button 
                     onClick={() => {
-                      navigator.clipboard.writeText(generatedLink.replace('invite', 'invite-dashboard').replace('?invite=', '?id='));
+                      navigator.clipboard.writeText(generatedLink.replace('?invite=', '?view=dashboard&id='));
                       confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
                     }}
                     className="p-1.5 rounded bg-orange-100 text-orange-600 hover:bg-orange-200 transition-colors"

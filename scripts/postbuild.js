@@ -84,4 +84,11 @@ const inviteArPath = path.join(distDir, 'invite-ar.html');
 fs.writeFileSync(inviteArPath, htmlAr, 'utf8');
 console.log('✅ Успешно создан dist/invite-ar.html (Арабская локализация)');
 
+// 4. Создание invite-dashboard.html для поддержки старых ссылок (и для того, чтобы работал дашборд)
+fs.writeFileSync(path.join(distDir, 'invite-dashboard.html'), htmlInviteRu, 'utf8');
+fs.writeFileSync(path.join(distDir, 'invite-dashboard-en.html'), htmlEn, 'utf8');
+fs.writeFileSync(path.join(distDir, 'invite-dashboard-ar.html'), htmlAr, 'utf8');
+console.log('✅ Успешно созданы файлы invite-dashboard.html (для обратной совместимости ссылок дашборда)');
+
+
 console.log('🎉 Все локализованные HTML-файлы успешно сгенерированы в dist/!');

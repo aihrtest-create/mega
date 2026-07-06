@@ -16,7 +16,8 @@ import {
   ArrowRight,
   MapPin,
   X,
-  Users
+  Users,
+  Eye
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1065,131 +1066,107 @@ export default function InvitationService() {
             className="flex flex-col gap-4 text-left"
           >
             {/* SUCCESS READY EXPORT BLOCK */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-5 flex flex-col gap-3.5 shadow-xl">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-5 h-5" />
+            <div className="text-center py-6">
+              <div className="inline-block bg-white p-3 rounded-2xl shadow-sm mb-3">
+                <Sparkles className="w-8 h-8 text-yellow-400" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">{activeTranslation.readyTitle}</h3>
+            </div>
+
+            <div className="space-y-4 w-full">
+              {/* BLOCK 1: GUESTS */}
+              <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold shrink-0">1</div>
+                  <div>
+                    <div className="font-bold text-slate-900">{formData.lang === 'en' ? 'For Guests' : formData.lang === 'ar' ? 'للضيوف' : 'Гостям'}</div>
+                    <div className="text-xs text-slate-500">{formData.lang === 'en' ? 'Send this invitation' : formData.lang === 'ar' ? 'أرسل هذه الدعوة' : 'Отправьте это приглашение'}</div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-sm text-slate-900 leading-none">
-                    {activeTranslation.readyTitle}
-                  </h3>
-                  <p className="text-[10px] text-slate-400 mt-1">
-                    {activeTranslation.readyDesc}
-                  </p>
+                
+                <div className="flex bg-slate-50 rounded-xl overflow-hidden border border-slate-100 mb-3" dir="ltr">
+                  <div className="py-3 px-3 text-xs text-slate-500 truncate flex-1">{generatedLink}</div>
+                  <button 
+                    onClick={handleCopyLink}
+                    className="bg-white border-l border-slate-100 px-4 text-blue-500 flex items-center hover:bg-slate-50 transition-colors shrink-0"
+                  >
+                    {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <a 
+                    href={generatedLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-[2] bg-slate-100 text-slate-700 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-slate-200 transition-colors"
+                  >
+                    {formData.lang === 'en' ? 'Open' : formData.lang === 'ar' ? 'فتح' : 'Открыть'}
+                  </a>
+                  <a
+                    href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=${encodeURIComponent(getShareMessage(formData.name, formData.lang, "").replace(/:\s*$/, ""))}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-[#0088cc]/10 text-[#0088cc] rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-1 hover:bg-[#0088cc]/20 transition-colors"
+                  >
+                    <span>✈️ Telegram</span>
+                  </a>
                 </div>
               </div>
 
-              {/* DASHBOARD LINK (New) */}
-              <div className="flex flex-col gap-2 bg-orange-50 border border-orange-200 p-3 rounded-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-orange-500/10 rounded-full blur-xl pointer-events-none" />
-                <h4 className="text-[10px] uppercase font-black text-orange-600 tracking-wider flex items-center gap-1.5">
-                  <Users className="w-3.5 h-3.5" />
-                  {formData.lang === 'en' ? 'Your Secret Dashboard' : formData.lang === 'ar' ? 'لوحة التحكم السرية الخاصة بك' : 'Ваш секретный дашборд'}
-                </h4>
-                <p className="text-[10px] text-orange-800/80 font-medium leading-tight mb-1">
-                  {formData.lang === 'en' ? 'Save this link to see who is coming to the party!' : formData.lang === 'ar' ? 'احفظ هذا الرابط لترى من سيحضر الحفلة!' : 'Сохраните эту ссылку, чтобы видеть список гостей (кто придет и кто отказался).'}
-                </p>
-                <div className="flex items-center gap-2 bg-white border border-orange-200/50 rounded-lg py-1.5 px-2">
-                  <span className="text-[10px] font-bold text-slate-500 select-all truncate flex-1 text-left">
-                    {generatedLink.replace('?invite=', '?view=dashboard&id=')}
-                  </span>
+              {/* BLOCK 2: FOR YOU (RESULTS) */}
+              <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mt-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 font-bold shrink-0">2</div>
+                  <div>
+                    <div className="font-bold text-slate-900">{formData.lang === 'en' ? 'Results' : formData.lang === 'ar' ? 'النتائج' : 'Результаты'}</div>
+                    <div className="text-xs text-slate-500">{formData.lang === 'en' ? 'Where to see guest answers' : formData.lang === 'ar' ? 'أين ترى إجابات الضيوف' : 'Где смотреть ответы гостей'}</div>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2">
+                  <a 
+                    href={generatedLink.replace('?invite=', '?view=dashboard&id=')}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-[3] bg-orange-500 text-white rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2 shadow-sm shadow-orange-500/20 hover:bg-orange-600 transition-colors"
+                  >
+                    {formData.lang === 'en' ? 'Who is coming?' : formData.lang === 'ar' ? 'من سيأتي؟' : 'Кто придет?'}
+                  </a>
                   <button 
                     onClick={() => {
                       navigator.clipboard.writeText(generatedLink.replace('?invite=', '?view=dashboard&id='));
                       confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
                     }}
-                    className="p-1.5 rounded bg-orange-100 text-orange-600 hover:bg-orange-200 transition-colors"
+                    className="flex-1 bg-orange-50 text-orange-600 rounded-xl py-3 text-sm font-bold flex justify-center items-center hover:bg-orange-100 transition-colors"
                   >
-                    <Copy className="w-3 h-3" />
+                    <Copy className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              <div className="w-full h-px bg-slate-100 my-1" />
-
-              <h4 className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
-                {formData.lang === 'en' ? 'Guest Link (Send to friends)' : formData.lang === 'ar' ? 'رابط الضيف (أرسله للأصدقاء)' : 'Ссылка для отправки гостям'}
-              </h4>
-              <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl py-2 px-2.5">
-                <span className="text-[10px] font-bold text-slate-500 select-all truncate flex-1 text-left">
-                  {generatedLink}
-                </span>
-                
-                <button 
-                  onClick={handleCopyLink}
-                  className={`py-1.5 px-3 rounded-lg font-bold text-[10px] flex items-center gap-1 transition-all shrink-0 active:scale-95 ${
-                    isCopied 
-                      ? "bg-emerald-500 text-white" 
-                      : "bg-slate-900 text-white hover:bg-slate-800"
-                  }`}
-                >
-                  {isCopied ? (
-                    <>
-                      <Check className="w-3 h-3 stroke-[3px]" />
-                      {activeTranslation.copied.replace(/📋\s*/, "")}
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3 h-3" />
-                      {activeTranslation.copyLink}
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent(getShareMessage(formData.name, formData.lang, generatedLink))}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="py-2.5 px-3 rounded-xl border border-[#25D366]/20 bg-[#25D366]/[0.05] hover:bg-[#25D366]/[0.1] text-[#128C7E] font-black text-xs flex items-center justify-center gap-1 active:scale-98 transition-all"
-                >
-                  <span>💬 {activeTranslation.shareWa}</span>
-                </a>
-                <a
-                  href={`https://t.me/share/url?url=${encodeURIComponent(generatedLink)}&text=${encodeURIComponent(getShareMessage(formData.name, formData.lang, "").replace(/:\s*$/, ""))}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="py-2.5 px-3 rounded-xl border border-[#0088cc]/20 bg-[#0088cc]/[0.05] hover:bg-[#0088cc]/[0.1] text-[#0088cc] font-black text-xs flex items-center justify-center gap-1 active:scale-98 transition-all"
-                >
-                  <span>✈️ {activeTranslation.shareTg}</span>
-                </a>
-              </div>
+              {/* PREVIEW BLOCK */}
+              <button 
+                onClick={() => {
+                  const hash = generatedLink.split("invite=")[1];
+                  const decoded = decodeData(hash);
+                  if (decoded) {
+                    setGuestInvite(decoded);
+                    setIsEnvelopeOpen(false);
+                  }
+                }}
+                className="w-full bg-white text-slate-900 border border-slate-200 rounded-3xl py-4 shadow-sm font-bold text-sm flex justify-center items-center gap-2 hover:bg-slate-50 transition-colors"
+              >
+                <Eye className="w-5 h-5 text-slate-400" />
+                {formData.lang === 'en' ? 'View Preview' : formData.lang === 'ar' ? 'عرض معاينة' : 'Посмотреть превью'}
+              </button>
+              
+              <button 
+                onClick={() => setGeneratedLink("")}
+                className="w-full bg-transparent text-slate-500 py-4 text-xs font-semibold flex items-center justify-center gap-2 hover:text-slate-700 transition-colors"
+              >
+                <ArrowRight className="w-4 h-4 rotate-180" /> {activeTranslation.backToConfig || "Назад к созданию"}
+              </button>
             </div>
-
-            {/* DEMO PREVIEW WINDOW */}
-            <div className="p-4 bg-white border border-slate-200 rounded-3xl flex flex-col items-center text-center shadow-lg">
-              <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">
-                {activeTranslation.guestWillSee}
-              </span>
-
-              <div className="flex justify-center mt-3 w-full">
-                <button 
-                  onClick={() => {
-                    const hash = generatedLink.split("invite=")[1];
-                    const decoded = decodeData(hash);
-                    if (decoded) {
-                      setGuestInvite(decoded);
-                      setIsEnvelopeOpen(false);
-                    }
-                  }}
-                  className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
-                >
-                  <Share2 className="w-4 h-4 animate-bounce" />
-                  {activeTranslation.demoBtn}
-                </button>
-              </div>
-            </div>
-
-            {/* BACK TO CREATOR BUTTON */}
-            <button
-              onClick={() => setGeneratedLink("")}
-              className="w-full py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold border border-slate-200 shadow-sm flex items-center justify-center gap-2 active:scale-98 transition-all text-xs sm:text-sm mt-2"
-            >
-              <ArrowRight className="w-4 h-4 rotate-180" />
-              {activeTranslation.backToConfig || "Назад к созданию"}
-            </button>
           </motion.div>
         </main>
       </div>

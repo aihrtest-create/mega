@@ -825,7 +825,7 @@ export default function InvitationService() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-4 text-left shadow-inner flex flex-col gap-3"
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 mb-4 text-start shadow-inner flex flex-col gap-3"
                   >
                     <div>
                       <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
@@ -921,7 +921,7 @@ export default function InvitationService() {
                   exit={{ opacity: 0, y: 100 }}
                   className="absolute inset-x-0 bottom-0 top-[35%] bg-white/95 backdrop-blur border-t border-slate-200 p-5 flex flex-col justify-between z-30 rounded-t-3xl rounded-b-[1.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)]"
                 >
-                  <div className="flex flex-col text-left h-full">
+                  <div className="flex flex-col text-start h-full">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
                       <div className="flex items-center gap-1.5 font-black text-slate-900 text-xs sm:text-sm uppercase tracking-wider">
                         <MapPin className="w-4 h-4 text-[#FF6022]" />
@@ -968,7 +968,7 @@ export default function InvitationService() {
                   exit={{ opacity: 0, y: 100 }}
                   className="absolute inset-x-0 bottom-0 top-[40%] bg-white/95 backdrop-blur border-t border-slate-200 p-5 flex flex-col justify-between z-30 rounded-t-3xl rounded-b-[1.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)]"
                 >
-                  <div className="flex flex-col text-left h-full">
+                  <div className="flex flex-col text-start h-full">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
                       <div className="flex items-center gap-1.5 font-black text-slate-900 text-xs sm:text-sm uppercase tracking-wider">
                         <span>📅</span>
@@ -1063,7 +1063,7 @@ export default function InvitationService() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col gap-4 text-left"
+            className="flex flex-col gap-4 text-start"
           >
             {/* SUCCESS READY EXPORT BLOCK */}
             <div className="text-center py-6">
@@ -1164,7 +1164,7 @@ export default function InvitationService() {
                 onClick={() => setGeneratedLink("")}
                 className="w-full bg-transparent text-slate-500 py-4 text-xs font-semibold flex items-center justify-center gap-2 hover:text-slate-700 transition-colors"
               >
-                <ArrowRight className="w-4 h-4 rotate-180" /> {activeTranslation.backToConfig || "Назад к созданию"}
+                <ArrowRight className={`w-4 h-4 ${formData.lang === 'ar' ? '' : 'rotate-180'}`} /> {activeTranslation.backToConfig || "Назад к созданию"}
               </button>
             </div>
           </motion.div>
@@ -1194,7 +1194,7 @@ export default function InvitationService() {
 
       {/* Main viewport */}
       <main className="flex-1 w-full max-w-md mx-auto px-4 py-6 flex flex-col justify-start">
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl flex flex-col gap-5 text-left">
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl flex flex-col gap-5 text-start">
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
               <Sparkles className="w-5.5 h-5.5 text-orange-500" />

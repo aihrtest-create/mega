@@ -92,6 +92,16 @@ const helloParks: ParkInfo[] = [
     mapUrl: "https://maps.google.com/?q=Hello+Park+MEGA+Dybenko"
   },
   {
+    id: "avenue_north",
+    nameRu: "Hello Park ТЦ Авеню-Север",
+    nameEn: "Hello Park Avenue-Sever",
+    nameAr: "هلو بارك أفينيو سيفير",
+    addressRu: "Москва, Коровинское шоссе, дом 2, ТЦ Авеню-Север, 3 этаж.",
+    addressEn: "Moscow, Korovinskoye shosse, 2, Avenue-Sever Mall, 3rd floor.",
+    addressAr: "موسكو، كوروفينسكوي شوسيه، 2، مول أفينيو سيفير، الطابق 3",
+    mapUrl: "https://yandex.com.tr/maps/-/CTqSYKP3"
+  },
+  {
     id: "oman",
     nameRu: "Hello Park Oman",
     nameEn: "Hello Park Oman",

@@ -1273,10 +1273,11 @@ export default function InvitationService() {
               </label>
               <input 
                 type="date"
+                dir="ltr"
                 lang={formData.lang === 'ru' ? 'ru-RU' : formData.lang === 'ar' ? 'ar-AE' : 'en-US'}
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
+                className={`w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm box-border min-w-0 ${formData.lang === 'ar' ? 'text-right' : 'text-left'}`}
               />
             </div>
 
@@ -1287,10 +1288,11 @@ export default function InvitationService() {
               </label>
               <input 
                 type="time" 
+                dir="ltr"
                 lang={formData.lang === 'ru' ? 'ru-RU' : formData.lang === 'ar' ? 'ar-AE' : 'en-US'}
                 value={formData.gatheringTime}
                 onChange={(e) => setFormData({ ...formData, gatheringTime: e.target.value })}
-                className="w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm text-start"
+                className={`w-full max-w-full block py-2.5 px-3.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-[#FF6022] focus:ring-1 focus:ring-[#FF6022] font-semibold outline-none text-xs sm:text-sm box-border min-w-0 ${formData.lang === 'ar' ? 'text-right' : 'text-left'}`}
               />
             </div>
 

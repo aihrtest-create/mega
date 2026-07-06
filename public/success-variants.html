@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Варианты дизайна успешного создания</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { background-color: #F3F4F6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .variant-container { max-width: 500px; margin: 0 auto; background: white; min-height: 800px; border-radius: 40px; border: 8px solid #E5E7EB; overflow: hidden; position: relative; }
+  </style>
+</head>
+<body class="p-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Варианты дизайна страницы "Готово"</h1>
+      <p class="text-gray-500">Посмотрите 3 варианта и скажите, какой вам нравится больше (или что скомбинировать).</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Вариант 1: Мягкий и милый (Soft & Playful) -->
+      <div>
+        <h2 class="text-xl font-bold text-center mb-4">Вариант 1: Мягкий и милый</h2>
+        <p class="text-sm text-gray-500 text-center mb-4">Плавные линии, пастельные тона, акцент на эмоции. Большие круглые кнопки.</p>
+        <div class="variant-container bg-pink-50/30 flex flex-col items-center pt-12 px-6">
+          <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="party-popper" class="w-10 h-10 text-pink-500"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-1 text-center">Ура! Готово!</h3>
+          <p class="text-gray-500 text-center text-sm mb-8">Ваше приглашение создано и готово к отправке.</p>
+
+          <!-- Блок для гостей -->
+          <div class="w-full bg-white rounded-3xl p-5 shadow-sm border border-pink-100 mb-4">
+            <div class="text-xs font-bold text-pink-400 uppercase tracking-wider mb-2 text-center">Отправить гостям</div>
+            <div class="flex items-center gap-2 bg-gray-50 rounded-2xl p-2 mb-3 border border-gray-100">
+              <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0">
+                <i data-lucide="link" class="w-4 h-4 text-gray-400"></i>
+              </div>
+              <div class="text-xs text-gray-500 truncate flex-1 font-medium">hello-park.ru/inv...</div>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 bg-pink-500 text-white rounded-2xl py-3 text-sm font-semibold flex items-center justify-center gap-2">
+                <i data-lucide="copy" class="w-4 h-4"></i> Скопировать
+              </button>
+              <button class="flex-1 bg-pink-50 text-pink-600 rounded-2xl py-3 text-sm font-semibold flex items-center justify-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4"></i> Открыть
+              </button>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button class="flex-1 bg-[#25D366]/10 text-[#25D366] rounded-2xl py-2 text-xs font-bold flex items-center justify-center gap-1">
+                WhatsApp
+              </button>
+              <button class="flex-1 bg-[#0088cc]/10 text-[#0088cc] rounded-2xl py-2 text-xs font-bold flex items-center justify-center gap-1">
+                Telegram
+              </button>
+            </div>
+          </div>
+
+          <!-- Блок результатов -->
+          <div class="w-full bg-orange-50 rounded-3xl p-5 shadow-sm border border-orange-100 mb-4">
+            <div class="text-xs font-bold text-orange-400 uppercase tracking-wider mb-2 text-center">Где смотреть ответы?</div>
+            <p class="text-xs text-orange-800/60 text-center mb-3">Здесь вы увидите, кто придет на праздник.</p>
+            <div class="flex gap-2">
+              <button class="flex-1 bg-orange-400 text-white rounded-2xl py-3 text-sm font-semibold flex items-center justify-center gap-2">
+                <i data-lucide="list-checks" class="w-4 h-4"></i> Мой дашборд
+              </button>
+              <button class="w-12 bg-white text-orange-400 rounded-2xl py-3 flex items-center justify-center shadow-sm">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="mt-4 text-gray-400 text-sm font-medium flex items-center justify-center gap-2">
+            <i data-lucide="eye" class="w-4 h-4"></i> Посмотреть превью
+          </button>
+        </div>
+      </div>
+
+      <!-- Вариант 2: Чистый и минималистичный (Clean & Modern) -->
+      <div>
+        <h2 class="text-xl font-bold text-center mb-4">Вариант 2: Карточки</h2>
+        <p class="text-sm text-gray-500 text-center mb-4">Структурировано, аккуратно, фокус на двух главных действиях. Больше пространства.</p>
+        <div class="variant-container bg-white flex flex-col p-6">
+          <div class="flex items-center gap-3 mb-8 mt-4">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+              <i data-lucide="check" class="w-5 h-5 text-green-600"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 leading-tight">Приглашение создано</h3>
+              <p class="text-sm text-gray-500">Следующий шаг — отправить его.</p>
+            </div>
+          </div>
+
+          <!-- Для гостей -->
+          <div class="border-2 border-gray-100 rounded-2xl p-4 mb-4 relative">
+            <div class="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-gray-400">ДЛЯ ГОСТЕЙ</div>
+            <div class="mt-2 text-sm text-gray-800 font-medium mb-3">Ссылка на приглашение</div>
+            <div class="flex gap-2 mb-3">
+              <button class="flex-1 bg-gray-900 text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2">
+                <i data-lucide="copy" class="w-4 h-4"></i> Скопировать
+              </button>
+              <button class="flex-1 bg-gray-100 text-gray-700 rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4"></i> Открыть
+              </button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="border border-gray-200 text-gray-600 rounded-xl py-2 text-sm flex items-center justify-center gap-2">
+                WhatsApp
+              </button>
+              <button class="border border-gray-200 text-gray-600 rounded-xl py-2 text-sm flex items-center justify-center gap-2">
+                Telegram
+              </button>
+            </div>
+          </div>
+
+          <!-- Для мамы -->
+          <div class="border-2 border-orange-100 bg-orange-50/30 rounded-2xl p-4 mb-6 relative">
+            <div class="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-orange-500">ДЛЯ ВАС</div>
+            <div class="mt-2 text-sm text-gray-800 font-medium mb-1">Дашборд с ответами</div>
+            <p class="text-xs text-gray-500 mb-3">Кто придет и сколько гостей.</p>
+            <div class="flex gap-2">
+              <button class="flex-1 bg-orange-500 text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4"></i> Открыть дашборд
+              </button>
+              <button class="bg-white border border-orange-200 text-orange-500 rounded-xl px-4 flex items-center justify-center">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-auto pt-4 border-t border-gray-100">
+            <button class="w-full text-gray-500 text-sm font-medium flex items-center justify-center gap-2 py-2">
+              <i data-lucide="eye" class="w-4 h-4"></i> Посмотреть как выглядит приглашение
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вариант 3: Простой списочный (Simple List) -->
+      <div>
+        <h2 class="text-xl font-bold text-center mb-4">Вариант 3: Как в мессенджере</h2>
+        <p class="text-sm text-gray-500 text-center mb-4">Максимально просто. Крупные блоки как сообщения с понятными кнопками.</p>
+        <div class="variant-container bg-gray-50 flex flex-col p-4">
+          
+          <div class="text-center py-6">
+            <div class="inline-block bg-white p-3 rounded-2xl shadow-sm mb-3">
+              <i data-lucide="sparkles" class="w-8 h-8 text-yellow-400"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Всё готово!</h3>
+          </div>
+
+          <div class="space-y-4">
+            
+            <!-- Блок Гостей -->
+            <div class="bg-white p-4 rounded-3xl shadow-sm">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-500">1</div>
+                <div>
+                  <div class="font-bold text-gray-900">Гостям</div>
+                  <div class="text-xs text-gray-500">Отправьте это приглашение</div>
+                </div>
+              </div>
+              <div class="flex bg-gray-50 rounded-xl overflow-hidden border border-gray-100 mb-3">
+                <div class="py-3 px-3 text-xs text-gray-500 truncate flex-1">.../invite-en.html?id=1</div>
+                <button class="bg-white border-l border-gray-100 px-4 text-blue-500 flex items-center">
+                  <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+              </div>
+              <div class="flex gap-2">
+                <button class="flex-1 bg-gray-100 text-gray-700 rounded-xl py-2 text-sm font-medium">Открыть</button>
+                <button class="flex-1 bg-green-100 text-green-700 rounded-xl py-2 text-sm font-medium">WhatsApp</button>
+              </div>
+            </div>
+
+            <!-- Блок Дашборда -->
+            <div class="bg-white p-4 rounded-3xl shadow-sm">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-500">2</div>
+                <div>
+                  <div class="font-bold text-gray-900">Вам</div>
+                  <div class="text-xs text-gray-500">Где смотреть ответы гостей</div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button class="flex-[2] bg-orange-500 text-white rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2">
+                  Открыть дашборд
+                </button>
+                <button class="flex-1 bg-orange-50 text-orange-600 rounded-xl py-3 text-sm font-bold flex justify-center items-center gap-2">
+                  <i data-lucide="copy" class="w-4 h-4"></i> Скопир.
+                </button>
+              </div>
+            </div>
+
+            <!-- Превью -->
+            <button class="w-full bg-white text-gray-900 border border-gray-200 rounded-3xl py-4 shadow-sm font-bold flex justify-center items-center gap-2">
+              <i data-lucide="eye" class="w-5 h-5 text-gray-400"></i>
+              Посмотреть превью
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -209,7 +209,7 @@ function getMegaSteps(packageType: WizardState["packageType"], questType: Wizard
     // Insert step 14 before 9
     steps.splice(steps.indexOf(9), 0, 14);
   }
-  if (packageType === "custom") {
+  if (packageType === "custom" || packageType === "basic") {
     // Insert step 15 before 9 (Additional Activities)
     steps.splice(steps.indexOf(9), 0, 15);
   }
@@ -481,7 +481,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
     if (state.questType && state.questType !== "none" && state.questType !== "animator") {
       if (state.packageType === "custom") {
-        total += state.questType.startsWith("phygital_") ? 12000 : 16000;
+        total += state.questType.startsWith("phygital_") ? 9000 : 16000;
       } else if (state.questType.startsWith("classic_")) {
         if (state.packageType === "basic") total += 16000;
         else if (state.packageType === "premium") total += 9000;
@@ -490,7 +490,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (state.animators.length > 1) {
-      total += (state.animators.length - 1) * 8000;
+      total += (state.animators.length - 1) * 7000;
     }
 
     if (state.packageType === "exclusive") {
@@ -533,6 +533,8 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       if (act === "trash-box") total += 7000;
       if (act === "mini-disco") total += 6000;
       if (act === "challenge-party") total += 10000;
+      if (act === "surprise-balloon") total += 2000;
+      if (act === "pinata") total += 3000;
     }
 
     for (const srv of state.additionalServices) {

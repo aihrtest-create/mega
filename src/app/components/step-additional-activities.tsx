@@ -39,6 +39,24 @@ const ACTIVITIES = [
     gradient: "from-[#d4fc79] to-[#96e6a1]",
     image: "/activities/challenge_party.webp",
   },
+  {
+    id: "surprise-balloon",
+    name: "Шар-сюрприз",
+    price: 2000,
+    duration: "Финал праздника",
+    desc: 'Огромный шар с конфетти и маленькими шариками внутри, который эффектно лопается в финале праздника.',
+    gradient: "from-[#ffecd2] to-[#fcb69f]",
+    image: "/activities/red_balloon.png",
+  },
+  {
+    id: "pinata",
+    name: "Пиньята",
+    price: 3000,
+    duration: "Финал праздника",
+    desc: 'Разбивание пиньяты с конфетами, которое станет отличным финалом праздника.',
+    gradient: "from-[#ff9a9e] to-[#fecfef]",
+    image: "/activities/pinata_new.webp",
+  },
 ];
 
 export function StepAdditionalActivities() {

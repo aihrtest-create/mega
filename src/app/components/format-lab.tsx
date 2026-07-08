@@ -9,7 +9,7 @@ const BASE = (import.meta as any).env?.BASE_URL || "/";
 const url = (p: string) => (p.startsWith("http") ? p : BASE + p.replace(/^\//, ""));
 
 const QUESTS = [
-  { id: "voxels", emoji: "🟩", title: "Мир Майнкрафт", subtitle: "Спаси игры от Глитча", img: "/quests/voxels/03.webp", color: "#4CAF50" },
+  { id: "voxels", emoji: "🟩", title: "Мир Вокселей", subtitle: "Спаси игры от Глитча", img: "/quests/voxels/03.webp", color: "#4CAF50" },
   { id: "space", emoji: "🚀", title: "Космическое", subtitle: "Вечеринка на Марсе", img: "/quests/space/02.webp", color: "#3B4DD4" },
 ];
 

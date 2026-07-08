@@ -92,7 +92,9 @@ const ADDITIONAL_ACTIVITIES_NAMES: Record<string, string> = {
 
   "trash-box": "Трэш-коробка",
   "mini-disco": "Мини-диско",
-  "challenge-party": "Челлендж-пати"
+  "challenge-party": "Челлендж-пати",
+  "surprise-balloon": "Шар-сюрприз",
+  "pinata": "Пиньята"
 };
 
 const ADDITIONAL_SERVICES_NAMES: Record<string, string> = {
@@ -174,7 +176,7 @@ export function Step7Summary() {
   const getQuestPrice = () => {
     if (!state.questType || state.questType === "none" || state.questType === "animator") return 0;
     if (state.packageType === "custom") {
-      return state.questType.startsWith("phygital_") ? 12000 : 16000;
+      return state.questType.startsWith("phygital_") ? 9000 : 16000;
     } else if (state.questType.startsWith("classic_")) {
       if (state.packageType === "basic") return 16000;
       if (state.packageType === "premium") return 9000;
@@ -198,7 +200,7 @@ export function Step7Summary() {
 
   const getAnimatorsPrice = () => {
     if (state.animators.length > 1) {
-      return (state.animators.length - 1) * 8000;
+      return (state.animators.length - 1) * 7000;
     }
     return 0;
   };
@@ -237,6 +239,8 @@ export function Step7Summary() {
       if (act === "trash-box") p += 7000;
       if (act === "mini-disco") p += 6000;
       if (act === "challenge-party") p += 10000;
+      if (act === "surprise-balloon") p += 2000;
+      if (act === "pinata") p += 3000;
     }
     return p;
   };
@@ -367,7 +371,7 @@ export function Step7Summary() {
               if (index === 0) {
                 return state.packageType !== "custom" ? `${name} (Входит в пакет)` : name;
               }
-              return `${name} (+8 000 ₽)`;
+              return `${name} (+7 000 ₽ / час)`;
             }).join(", ")}
             priceText={formatPrice(getAnimatorsPrice())}
             stepNumber={4}

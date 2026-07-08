@@ -32,7 +32,7 @@ type QuestStory = {
 const PHYGITAL_QUESTS = [
   {
     id: "phygital_voxels" as const,
-    title: "Мир Майнкрафт",
+    title: "Мир Вокселей",
     subtitle: "Квест по спасению любимой игры!",
     emoji: "🟩",
     color: "#4CAF50",
@@ -54,7 +54,7 @@ const PHYGITAL_QUESTS = [
       { type: 'video' as const, url: '/quests/voxels/v3.mp4' },
     ],
     story: {
-      legend: "Лис Рокки приглашает именинника и его друзей в цифровое приключение: они отправляются в мир вокселей (мир Майнкрафт). **Их ждёт квест по спасению игр в парке.** Для этого нужно пройти цифровые испытания в играх и победить главного злодея — Глитча, который запустил багов во все игры и сломал их.",
+      legend: "Лис Рокки приглашает именинника и его друзей в цифровое приключение: они отправляются в мир вокселей. **Их ждёт квест по спасению игр в парке.** Для этого нужно пройти цифровые испытания в играх и победить главного злодея — Глитча, который запустил багов во все игры и сломал их.",
       whatHappened: "Рокки решил поиграть в свои любимые игры и постримить этот процесс. Но неожиданно все игры начали глючить и сломались. В этот момент на стрим залетает предводитель всех багов — Глитч и заявляет о том, что сломал все игры. Никакого стрима не будет! Рокки собирается бороться с багами и просит помощи у детей.",
       roles: [
         { role: "Лис Рокки", name: "Ведущий-навигатор", desc: "Отвечает за подачу сценария, дает подсказки и задания в играх.", icon: "🦊" },
@@ -299,7 +299,7 @@ function QuestPopup({
               <div className="flex items-center gap-2 bg-[#FF6022]/10 border border-[#FF6022]/20 rounded-xl px-3 py-2">
                 <span className="text-xs text-[#ABABAB] line-through font-medium">20 000 ₽</span>
                 <span className="text-sm font-bold text-[#FF6022]">
-                  {isCustom ? "Акция: 12 000 ₽" : "Акция: Входит в пакет!"}
+                  {isCustom ? "Акция: 9 000 ₽" : "Акция: Входит в пакет!"}
                 </span>
               </div>
             </div>
@@ -554,7 +554,7 @@ export function Step2Quests() {
                           {isCustom ? (
                             <div className="flex items-center gap-1.5">
                               <span className="text-[10px] text-[#ABABAB] line-through">20 000 ₽</span>
-                              <span className="text-[12px] text-[#FF6022] font-black">12 000 ₽</span>
+                              <span className="text-[12px] text-[#FF6022] font-black">9 000 ₽</span>
                               <span className="text-[9px] font-extrabold text-white bg-gradient-to-r from-[#FF6022] to-[#FF8A00] px-1.5 py-0.5 rounded-full shadow-sm">
                                 -40% Акция
                               </span>

@@ -31,7 +31,7 @@ type QuestMedia = { type: "image" | "video"; url: string };
 const PHYGITAL_QUESTS = [
   {
     id: "phygital_voxels" as const,
-    title: "Мир Майнкрафт",
+    title: "Мир Вокселей",
     subtitle: "Квест по спасению любимой игры!",
     emoji: "🟩",
     color: "#4CAF50",
@@ -54,7 +54,7 @@ const PHYGITAL_QUESTS = [
     ],
     story: {
       legend:
-        "Лис Рокки приглашает именинника и его друзей в цифровое приключение: они отправляются в мир вокселей (мир Майнкрафт). **Их ждёт квест по спасению игр в парке.** Для этого нужно пройти цифровые испытания в играх и победить главного злодея — Глитча, который запустил багов во все игры и сломал их.",
+        "Лис Рокки приглашает именинника и его друзей в цифровое приключение: они отправляются в мир вокселей. **Их ждёт квест по спасению игр в парке.** Для этого нужно пройти цифровые испытания в играх и победить главного злодея — Глитча, который запустил багов во все игры и сломал их.",
       whatHappened:
         "Рокки решил поиграть в свои любимые игры и постримить этот процесс. Но неожиданно все игры начали глючить и сломались. В этот момент на стрим залетает предводитель всех багов — Глитч и заявляет о том, что сломал все игры. Никакого стрима не будет! Рокки собирается бороться с багами и просит помощи у детей.",
       roles: [
@@ -268,7 +268,7 @@ function QuestPopup({
               <div className="flex items-center gap-2 bg-[#FF6022]/10 border border-[#FF6022]/20 rounded-xl px-3 py-2">
                 <span className="text-xs text-[#ABABAB] line-through font-medium">20 000 ₽</span>
                 <span className="text-sm font-bold text-[#FF6022]">
-                  {isCustom ? "Акция: 12 000 ₽" : isBasic ? "Входит в пакет Премиум" : "Акция: Входит в пакет!"}
+                  {isCustom ? "Акция: 9 000 ₽" : isBasic ? "Входит в пакет Премиум" : "Акция: Входит в пакет!"}
                 </span>
               </div>
             </div>
@@ -704,7 +704,7 @@ export function Step2Quests() {
                                 {isCustom ? (
                                   <>
                                     <span className="text-xs text-[#ABABAB] line-through font-semibold leading-none mb-0.5">20 000 ₽</span>
-                                    <span className="text-base font-black text-[#FF6022] leading-none">12 000 ₽</span>
+                                    <span className="text-base font-black text-[#FF6022] leading-none">9 000 ₽</span>
                                   </>
                                 ) : isBasic ? (
                                   <>

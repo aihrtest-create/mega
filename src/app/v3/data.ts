@@ -135,7 +135,7 @@ export const ANIMATORS: AnimatorItem[] = [
   { id: "chase",        name: "Чейз",             category: "cartoon",  image: "/animators/cropped/chase.webp" },
   { id: "skye",         name: "Скай",             category: "cartoon",  image: "/animators/cropped/skye.webp" },
   { id: "pikachu",      name: "Пикачу",           category: "cartoon",  image: "/animators/cropped/pikachu.webp" },
-  { id: "minecraft",    name: "Майнкрафт",        category: "game",     image: "/animators/cropped/minecraft_creeper.webp" },
+  { id: "minecraft",    name: "Воксели",        category: "game",     image: "/animators/cropped/minecraft_creeper.webp" },
   { id: "mario",        name: "Марио",            category: "game",     image: "/animators/cropped/mario.webp" },
   { id: "naruto",       name: "Наруто",           category: "game",     image: "/animators/cropped/naruto.webp" },
 ];
@@ -173,7 +173,7 @@ export const QUESTS: QuestItem[] = [
   },
   {
     id: "minecraft",
-    name: "Майнкрафт",
+    name: "Воксели",
     description: "Сами куём оружие, сражаемся с эндерменами",
     image: "/quests/transparent/new_classic_minecraft.png",
   },
@@ -235,7 +235,7 @@ export const MASTER_CLASSES: MasterClassItem[] = [
   { id: "twisting",   name: "Твистинг",          description: "Скручиваем фигурки из шариков-колбасок",    basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/twisting.png" },
   { id: "elsa_tiara", name: "Корона Эльзы",      description: "Украшаем сказочную корону блёстками",       basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/elsa_tiara.webp" },
   { id: "sand",       name: "Песочная картина",  description: "Цветной песок по трафарету",                basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/sand_picture.webp" },
-  { id: "mc_weapon",  name: "Оружие Майнкрафт",  description: "Конструируем тематическое оружие из пены",  basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/mc_weapon.webp" },
+  { id: "mc_weapon",  name: "Оружие из вокселей",  description: "Конструируем тематическое оружие из пены",  basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/mc_weapon.webp" },
   { id: "soap_make",  name: "Мыловарение",        description: "Варим ароматное цветное мыло",              basePrice: 15000, premiumSurcharge: 10000, image: "/masterclasses/jewelry.webp" },
   { id: "tshirt",     name: "Роспись футболок",   description: "Создаём свой принт на футболке",            basePrice: 15000, premiumSurcharge: 10000, image: "/masterclasses/birthday_card.webp" },
   { id: "dreamcatch", name: "Ловец снов",         description: "Плетём ловец снов с перьями и бусинами",    basePrice: 15000, premiumSurcharge: 10000, image: "/masterclasses/felt_toy.webp" },

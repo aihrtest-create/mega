@@ -366,7 +366,7 @@ export function Step3Animators() {
                         <div className="flex items-center justify-between w-full mt-2 pt-1.5 border-t border-gray-50 shrink-0">
                           <span className="text-[11px] text-[#FF6022] font-black">
                             {state.packageType === "custom" ? (
-                              state.animators.length >= 1 && !isSelected ? "+8 000 ₽" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+8 000 ₽" : "Включён"
+                              state.animators.length >= 1 && !isSelected ? "+7 000 ₽/час" : isSelected && state.animators.indexOf(anim.id) === 0 ? "Включён" : isSelected ? "+7 000 ₽/час" : "Включён"
                             ) : (
                               isSelected ? "Выбран" : "Добавить"
                             )}
@@ -436,7 +436,7 @@ export function Step3Animators() {
                   За дополнительного героя нужно доплатить
                 </p>
                 <p className="text-2xl font-black text-[#FF6022] mt-2">
-                  +8 000 ₽
+                  +7 000 ₽/час
                 </p>
               </div>
               <div className="flex gap-3">

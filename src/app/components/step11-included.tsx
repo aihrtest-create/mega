@@ -33,13 +33,7 @@ const ALL_EXTRAS = [
     emoji: "🎁",
     packages: ["basic", "premium", "exclusive"]
   },
-  {
-    id: "invite",
-    name: "Электронные пригласительные",
-    gradient: "from-[#d4fc79] to-[#96e6a1]",
-    emoji: "✉️",
-    packages: ["basic", "premium", "exclusive"]
-  },
+
   {
     id: "balloon_decor",
     name: "Украшение шарами",

@@ -21,7 +21,9 @@ import { FloatingPrice } from "./components/floating-price";
 import { AnimatePresence, motion } from "motion/react";
 import HParkLogo from "../imports/HParkLogo";
 import { AlertTriangle, RotateCcw, PlayCircle, RefreshCw } from "lucide-react";
-
+import InvitationService from "./components/invitation-service";
+import InvitationVariants from "./components/invitation-variants";
+import InvitationDashboard from "./components/invitation-dashboard";
 import FormatLab from "./components/format-lab";
 import DateTimeLab from "./components/datetime-lab";
 
@@ -232,7 +234,30 @@ export default function App() {
     return <DateTimeLab />;
   }
 
+  const isInviteVariants = window.location.pathname.includes('/invite-variants') || 
+                           window.location.hash.includes('/invite-variants') || 
+                           window.location.search.includes('view=variants');
 
+  if (isInviteVariants) {
+    return <InvitationVariants />;
+  }
+
+  const isDashboard = window.location.pathname.includes('/invite-dashboard') || 
+                      window.location.hash.includes('/invite-dashboard') ||
+                      window.location.search.includes('view=dashboard');
+
+  if (isDashboard) {
+    return <InvitationDashboard />;
+  }
+
+  const isInvite = window.location.pathname.includes('/invite') || 
+                   window.location.hash.includes('/invite') || 
+                   window.location.search.includes('invite=') || 
+                   window.location.search.includes('view=');
+
+  if (isInvite) {
+    return <InvitationService />;
+  }
 
   return (
     <WizardProvider>

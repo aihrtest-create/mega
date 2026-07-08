@@ -249,7 +249,7 @@ export interface CustomGift {
 }
 
 const ALL_CUSTOM_GIFTS: CustomGift[] = [
-
+  { id: "invite", name: "Электронные пригласительные", gradient: "from-[#d4fc79] to-[#96e6a1]", emoji: "✉️" },
   { id: "wow", name: "WOW-поздравление от Лиса Рокки", gradient: "from-[#a1c4fd] to-[#c2e9fb]", emoji: "🎉" },
   { id: "gift", name: "Подарок имениннику", gradient: "from-[#a18cd1] to-[#fbc2eb]", emoji: "🎁" },
   { id: "balloon_decor", name: "Украшение шарами", gradient: "from-[#fbc2eb] to-[#a6c1ee]", emoji: "🎈" },
@@ -269,6 +269,10 @@ export function getCustomGifts(state: WizardState): CustomGift[] {
   const hasFood = Object.values(state.megaFood).some(q => q > 0);
   const hasPatiroom = !!state.patiroom;
 
+  // Level 1: any service → invites
+  if (hasAnyService) {
+    gifts.push(ALL_CUSTOM_GIFTS.find(g => g.id === "invite")!);
+  }
   // Level 2: quest → wow + birthday gift
   if (hasQuest) {
     gifts.push(ALL_CUSTOM_GIFTS.find(g => g.id === "wow")!);

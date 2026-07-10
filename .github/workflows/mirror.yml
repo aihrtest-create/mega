@@ -1,0 +1,26 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mirror-to-gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Загружаем всю историю коммитов, чтобы пуш прошел успешно
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          # Настраиваем адрес GitLab с использованием токена авторизации
+          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/hp-tools/mega.git
+          
+          # Принудительно отправляем ветку main в GitLab
+          git push gitlab main --force

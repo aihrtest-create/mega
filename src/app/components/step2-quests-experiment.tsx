@@ -60,7 +60,7 @@ const PHYGITAL_QUESTS = [
       roles: [
         { role: "Лис Рокки", name: "Ведущий-навигатор", desc: "Отвечает за подачу сценария, дает подсказки и задания в играх.", icon: "🦊" },
         { role: "Команда Рокки", name: "Именинник и гости", desc: "Главные герои с цифровыми аватарами.", icon: "🟩" },
-        { role: "Аниматор", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
+        { role: "Ведущий", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
         { role: "Глитч", name: "Главный злодей", desc: "Сломал все игры вместе со своими багами.", icon: "👾" },
         { role: "Баги", name: "Команда Глитча", desc: "Злые персонажи, ломающие игры. Олицетворяют системные ошибки.", icon: "🐛" },
       ],
@@ -98,7 +98,7 @@ const PHYGITAL_QUESTS = [
       roles: [
         { role: "Лис Рокки", name: "Ведущий-навигатор", desc: "Отвечает за подачу сценария, дает подсказки и задания в играх.", icon: "🦊" },
         { role: "Команда Рокки", name: "Именинник и гости", desc: "Главные герои с цифровыми аватарами.", icon: "🧑‍🚀" },
-        { role: "Аниматор", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
+        { role: "Ведущий", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
         { role: "Глорг", name: "Главный злодей", desc: "Хочет помешать вечеринке вместе со своей командой.", icon: "👾" },
       ],
     },
@@ -263,7 +263,7 @@ function QuestPopup({
               </div>
               <div className="flex items-center gap-1.5 bg-[#F5F5F5] rounded-xl px-3 py-2">
                 <Zap className="w-4 h-4 text-[#747474]" />
-                <span className="text-sm font-medium text-[#1A1A1A]">{quest.animators} аниматор</span>
+                <span className="text-sm font-medium text-[#1A1A1A]">{quest.animators} ведущий</span>
               </div>
               <div className="flex items-center gap-2 bg-[#FF6022]/10 border border-[#FF6022]/20 rounded-xl px-3 py-2">
                 <span className="text-xs text-[#ABABAB] line-through font-medium">20 000 ₽</span>
@@ -515,7 +515,7 @@ export function Step2Quests() {
             Развлечения
           </h2>
           <p className="text-sm font-bold text-[#747474] mt-2 px-6 max-w-sm mx-auto">
-            {showFormatSwitcher ? "Квест с сюжетом или Герой" : "Выберите квест для праздника"}
+            {showFormatSwitcher ? "Ведущий или фиджитал квест" : "Выберите квест для праздника"}
           </p>
         </div>
 
@@ -532,7 +532,7 @@ export function Step2Quests() {
               onClick={handleAdventureClick}
               className={`relative z-10 flex-1 py-2.5 text-sm font-bold transition-colors ${formatMode === "adventure" ? "text-[#FF6022]" : "text-[#747474]"}`}
             >
-              🎈 Герой
+              🎈 Ведущий
             </button>
             <button
               onClick={handleQuestClick}
@@ -651,7 +651,7 @@ export function Step2Quests() {
                     Фиджитал квесты
                   </div>
                   {isBasic && <p className="text-xs text-[#5b21cc] font-bold text-center">Квест с сюжетом входит в пакет Премиум</p>}
-                  {isPremiumOrExclusive && <p className="text-xs text-[#747474] font-bold text-center mt-1">К фиджитал квесту можно выбрать любого героя на следующем шаге</p>}
+                  {isPremiumOrExclusive && <p className="text-xs text-[#747474] font-bold text-center mt-1">К фиджитал квесту можно выбрать любого ведущего на следующем шаге</p>}
                 </div>
 
                 <div className="flex flex-col gap-7">
@@ -745,7 +745,7 @@ export function Step2Quests() {
                 <div className="mb-5 mt-4">
                   <h2 className="text-[24px] tracking-[-0.5px] font-black text-[#1A1A1A] leading-tight mb-1.5">Или классические квесты</h2>
                   <div className="flex items-center justify-between text-[14px]">
-                    <span className="text-[#747474] font-medium">2 аниматора · до 20 детей · 60 мин.</span>
+                    <span className="text-[#747474] font-medium">2 ведущего · до 20 детей · 60 мин.</span>
                     {isCustom && <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">16 000 ₽</span>}
                     {state.packageType === "basic" && <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+16 000 ₽</span>}
                     {state.packageType === "premium" && <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">+16 000 ₽</span>}
@@ -787,7 +787,7 @@ export function Step2Quests() {
                               <span className="text-xl leading-none">{quest.emoji}</span>
                               <h4 className="text-[17px] font-black text-[#1A1A1A] tracking-tight group-hover:text-[#FF6022] transition-colors">{quest.name}</h4>
                             </div>
-                            <p className="text-[12px] text-gray-500 leading-relaxed font-medium mb-3">Классическая сюжетно-анимационная игра с ведущими-аниматорами.</p>
+                            <p className="text-[12px] text-gray-500 leading-relaxed font-medium mb-3">Классическая сюжетно-анимационная игра с ведущими-ведущими.</p>
                             <div className="flex flex-wrap items-center gap-1.5 mb-4">
                               <div className="flex items-center gap-1 bg-gray-100 rounded-lg px-2.5 py-1">
                                 <Clock className="w-3.5 h-3.5 text-gray-500" />
@@ -870,7 +870,7 @@ export function Step2Quests() {
               </div>
               <div className="p-5 overflow-y-auto overscroll-contain">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedClassicQuest.emoji} {selectedClassicQuest.name}</h3>
-                <div className="text-xs text-[#747474] mb-4">2 аниматора · до 20 детей · 60 мин.</div>
+                <div className="text-xs text-[#747474] mb-4">2 ведущего · до 20 детей · 60 мин.</div>
                 <p className="text-[#747474] text-sm leading-relaxed mb-5">{selectedClassicQuest.description}</p>
                 {selectedClassicQuest.highlights.length > 0 && (
                   <div className="mb-5">

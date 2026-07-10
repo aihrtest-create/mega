@@ -105,7 +105,7 @@ const slides = [
         <div className="space-y-6">
           <h2 className="text-3xl font-bold">Гибкая кастомизация</h2>
           <p className="text-lg text-gray-600">
-            После выбора базового пакета, клиент может настроить его под себя: выбрать квесты, шоу, добавить аниматоров или торт. 
+            После выбора базового пакета, клиент может настроить его под себя: выбрать квесты, шоу, добавить ведущих или торт. 
           </p>
           <div className="bg-gray-50 border-l-4 border-primary p-4 rounded-r-lg mt-6">
             <p className="text-gray-700 italic">

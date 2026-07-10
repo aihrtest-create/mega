@@ -63,7 +63,7 @@ export function ScreenSummary() {
     // hero / quest
     if (state.animatorId) {
       const a = ANIMATORS.find((x) => x.id === state.animatorId);
-      if (a) out.push({ label: `Аниматор «${a.name}»`, isFree: !isIndividual, price: 0 });
+      if (a) out.push({ label: `Ведущий «${a.name}»`, isFree: !isIndividual, price: 0 });
     } else if (state.questId) {
       const q = QUESTS.find((x) => x.id === state.questId);
       if (q) out.push({ label: `Квест «${q.name}»`, isFree: !isIndividual, price: 0 });
@@ -275,7 +275,7 @@ export function ScreenSummary() {
           <span className="text-2xl shrink-0">📞</span>
           <p className="text-[12.5px] leading-snug" style={{ color: v3.ink }}>
             После брони с вами свяжется менеджер по телефону, чтобы согласовать
-            тортик, аниматора и любые тонкости.
+            тортик, ведущего и любые тонкости.
           </p>
         </div>
       </div>

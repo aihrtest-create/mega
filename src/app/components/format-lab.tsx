@@ -201,7 +201,7 @@ function Variant3() {
                   <h4 className="text-[17px] font-black text-[#1A1A1A]">Фиджитал приключение</h4>
                   <PriceIncluded />
                 </div>
-                <p className="text-xs text-gray-500 leading-relaxed">Свободная игра с героем и инсталляциями, без сюжета — для самых маленьких. Активности на усмотрение аниматора.</p>
+                <p className="text-xs text-gray-500 leading-relaxed">Свободная игра с ведущим и инсталляциями, без сюжета — для самых маленьких. Активности на усмотрение ведущего.</p>
               </div>
             </div>
           </motion.div>

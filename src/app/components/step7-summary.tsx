@@ -39,6 +39,7 @@ import {
   MEGA_SHOW_PRICES,
   findMegaFoodItem,
   getMegaFoodTotal,
+  PREMIUM_MASTER_CLASSES,
 } from "../data/megaConfig";
 import { ALL_SHOWS } from "./step-shows";
 
@@ -221,13 +222,23 @@ export function Step7Summary() {
   };
 
   const getMCPrice = () => {
-    const mcPrice = MEGA_MC_PRICE;
-    if (state.packageType === "basic" || state.packageType === "custom") {
-      return state.masterClasses.length * mcPrice;
-    } else if (state.packageType === "premium" || state.packageType === "exclusive") {
-      return Math.max(0, state.masterClasses.length - 1) * mcPrice;
+    let total = 0;
+    const regularMcs = state.masterClasses.filter(id => !PREMIUM_MASTER_CLASSES.find(p => p.id === id));
+    const premiumMcs = state.masterClasses.filter(id => PREMIUM_MASTER_CLASSES.find(p => p.id === id));
+
+    if (state.packageType === "premium" || state.packageType === "exclusive") {
+      total += Math.max(0, regularMcs.length - 1) * MEGA_MC_PRICE;
+    } else {
+      total += regularMcs.length * MEGA_MC_PRICE;
     }
-    return 0;
+
+    for (const mcId of premiumMcs) {
+      const pmc = PREMIUM_MASTER_CLASSES.find(p => p.id === mcId);
+      if (pmc) {
+        total += state.packageType === "exclusive" ? pmc.excPrice : pmc.price;
+      }
+    }
+    return total;
   };
 
   const getFoodPrice = () => getMegaFoodTotal(state.megaFood);
@@ -466,10 +477,10 @@ export function Step7Summary() {
           label="Гости"
           value={guestsValue}
           stepNumber={1}
-          isLast={extraChildren === 0 || state.packageType !== "custom"}
+          isLast={extraChildren === 0}
         />
 
-        {extraChildren > 0 && state.packageType === "custom" && (
+        {extraChildren > 0 && (
           <SummaryRow
             icon={<UsersIcon className="w-4 h-4" />}
             label="Детские билеты"

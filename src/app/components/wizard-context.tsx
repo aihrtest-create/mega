@@ -543,7 +543,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       if (srv === "tattoos") total += 4000;
     }
 
-    if (state.packageType === "custom") {
+    if (state.packageType) {
       total += getExtraChildrenCost(state, effectiveWeekend);
     }
 

@@ -7,7 +7,7 @@
 
 **Ключевые файлы:**
 - `PRD.md` — бизнес-требования и user flow
-- `DATA.md` — весь контент: пакеты, цены, аниматоры, МК, торты
+- `DATA.md` — весь контент: пакеты, цены, ведущие, МК, торты
 - `src/app/App.tsx` — корень приложения, роутинг по шагам
 - `src/app/components/wizard-context.tsx` — глобальный state (Context API)
 - `src/app/components/step1-format.tsx` … `step7-summary.tsx` — шаги wizard'а

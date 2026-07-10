@@ -59,7 +59,7 @@ const PHYGITAL_QUESTS = [
       roles: [
         { role: "Лис Рокки", name: "Ведущий-навигатор", desc: "Отвечает за подачу сценария, дает подсказки и задания в играх.", icon: "🦊" },
         { role: "Команда Рокки", name: "Именинник и гости", desc: "Главные герои с цифровыми аватарами.", icon: "🟩" },
-        { role: "Аниматор", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
+        { role: "Ведущий", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
         { role: "Глитч", name: "Главный злодей", desc: "Сломал все игры вместе со своими багами.", icon: "👾" },
         { role: "Баги", name: "Команда Глитча", desc: "Злые персонажи, ломающие игры. Олицетворяют системные ошибки.", icon: "🐛" },
       ]
@@ -96,7 +96,7 @@ const PHYGITAL_QUESTS = [
       roles: [
         { role: "Лис Рокки", name: "Ведущий-навигатор", desc: "Отвечает за подачу сценария, дает подсказки и задания в играх.", icon: "🦊" },
         { role: "Команда Рокки", name: "Именинник и гости", desc: "Главные герои с цифровыми аватарами.", icon: "🧑‍🚀" },
-        { role: "Аниматор", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
+        { role: "Ведущий", name: "Координатор", desc: "Сопровождает детей, дает подводки и создает атмосферу праздника.", icon: "✨" },
         { role: "Глорг", name: "Главный злодей", desc: "Хочет помешать вечеринке вместе со своей командой.", icon: "👾" },
       ]
     }
@@ -294,7 +294,7 @@ function QuestPopup({
               </div>
               <div className="flex items-center gap-1.5 bg-[#F5F5F5] rounded-xl px-3 py-2">
                 <Zap className="w-4 h-4 text-[#747474]" />
-                <span className="text-sm font-medium text-[#1A1A1A]">{quest.animators} аниматор</span>
+                <span className="text-sm font-medium text-[#1A1A1A]">{quest.animators} ведущий</span>
               </div>
               <div className="flex items-center gap-2 bg-[#FF6022]/10 border border-[#FF6022]/20 rounded-xl px-3 py-2">
                 <span className="text-xs text-[#ABABAB] line-through font-medium">20 000 ₽</span>
@@ -596,7 +596,7 @@ export function Step2Quests() {
               Или классические квесты
             </h2>
             <div className="flex items-center justify-between text-[14px]">
-              <span className="text-[#747474] font-medium">2 аниматора · до 20 детей · 60 мин.</span>
+              <span className="text-[#747474] font-medium">2 ведущего · до 20 детей · 60 мин.</span>
               {isCustom && (
                 <span className="font-semibold text-[#FF6022] bg-[#FF6022]/10 px-2.5 py-0.5 rounded-md">16 000 ₽</span>
               )}
@@ -743,7 +743,7 @@ export function Step2Quests() {
 
               <div className="p-5 overflow-y-auto overscroll-contain">
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedClassicQuest.emoji} {selectedClassicQuest.name}</h3>
-                <div className="text-xs text-[#747474] mb-4">2 аниматора · до 20 детей · 60 мин.</div>
+                <div className="text-xs text-[#747474] mb-4">2 ведущего · до 20 детей · 60 мин.</div>
                 <p className="text-[#747474] text-sm leading-relaxed mb-5">
                   {selectedClassicQuest.description}
                 </p>

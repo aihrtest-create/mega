@@ -276,7 +276,7 @@ export function ScreenCustomize() {
       </div>
 
       {/* ── Cake ────────────────────────────── */}
-      <SectionTitle id="cake" caption="Торжественный вынос аниматором уже включён">
+      <SectionTitle id="cake" caption="Торжественный вынос ведущим уже включён">
         Праздничный торт
       </SectionTitle>
       <div className="max-w-lg mx-auto px-3 space-y-2">

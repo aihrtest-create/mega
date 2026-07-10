@@ -255,7 +255,7 @@ export function Step3Animators() {
             </h3>
             <p className="text-xs text-[#5A5A5A] leading-relaxed">
               Выбранный герой проведёт 40 минут весёлой игры с интерактивными
-              инсталляциями — без сюжета, активности на усмотрение аниматора.
+              инсталляциями — без сюжета, активности на усмотрение ведущего.
             </p>
           </div>
           <div className="absolute -bottom-2 -right-2 text-6xl opacity-20 transform rotate-12">

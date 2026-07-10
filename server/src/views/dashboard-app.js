@@ -82,7 +82,7 @@ function openLead(id) {
     if(cfg.time) h += ci('Время', cfg.time);
     h += ci('Дети', cfg.childrenCount||'—');
     h += ci('Взрослые', cfg.adultsCount||'—');
-    if(cfg.animators?.length) h += ci('Аниматоры', cfg.animators.join(', '));
+    if(cfg.animators?.length) h += ci('Ведущие', cfg.animators.join(', '));
     if(cfg.shows?.length) h += ci('Шоу', cfg.shows.join(', '));
     if(cfg.masterClasses?.length) h += ci('МК', cfg.masterClasses.join(', '));
     if(cfg.patiroomDetails) h += ci('Патирум', cfg.patiroomDetails);

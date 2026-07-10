@@ -1,21 +1,39 @@
-# Этот файл нужен, чтобы GitLab распознал проект как CI-проект.
-# Фактический деплой происходит автоматически: сервер Hello Park
-# делает git pull при получении пуша, и nginx раздаёт dist/.
-#
-# Пайплайн ниже просто проверяет, что проект собирается без ошибок.
-
 stages:
-  - build
+  - deploy
 
-build_check:
-  stage: build
-  image: node:22-alpine
+deploy_to_production:
+  stage: deploy
+  image: alpine:3.15
   only:
     - main
+  before_script:
+    # Установка ssh-клиента
+    - apk add --no-cache openssh-client
+    # Инициализация ssh-agent
+    - eval $(ssh-agent -s)
+    # Добавление приватного ключа сервера (переменная SSH_PRIVATE_KEY в GitLab)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # Создание директории .ssh и добавление хоста в известные
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - npm ci
-    - npm run build
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 week
+    # Подключение к VPS и выполнение команд обновления
+    - |
+      ssh root@$SERVER_IP "
+        if [ -d '/root/mega' ]; then
+          cd /root/mega
+        else
+          cd /root/planner-park
+        fi
+        
+        # Обновляем URL репозитория на случай перехода на GitLab
+        git remote set-url origin https://gitlab.com/hp-tools/mega.git || true
+        
+        # Стягиваем изменения
+        git pull origin main
+        
+        # Пересобираем и перезапускаем проект в Docker-контейнере
+        docker compose up -d --build || docker-compose up -d --build
+      "

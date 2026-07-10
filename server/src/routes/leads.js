@@ -16,7 +16,7 @@ function validateLeadSignature(req, res, next) {
   if (!isAmoLeadId(leadId)) {
     return next();
   }
-  const sig = req.query.sig || req.body.sig;
+  const sig = req.query.sig || req.body?.sig;
   const expectedSig = signLeadId(leadId);
   if (!sig || sig !== expectedSig) {
     console.warn(`[SECURITY] Unauthorized access attempt to lead ${leadId} (sig: ${sig || 'missing'}, expected: ${expectedSig})`);

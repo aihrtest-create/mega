@@ -22,5 +22,5 @@ jobs:
           # Настраиваем адрес GitLab с использованием токена авторизации
           git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/hp-tools/mega.git
           
-          # Отправляем ветку main в GitLab
-          git push gitlab main
+          # Принудительно отправляем ветку main в GitLab
+          git push gitlab main --force

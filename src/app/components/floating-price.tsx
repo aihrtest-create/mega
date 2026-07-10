@@ -166,6 +166,11 @@ export function FloatingPrice() {
   const getNextButtonClasses = () => {
     const base = `h-[52px] rounded-full shadow-lg transition-all duration-300 active:scale-[0.98] flex items-center justify-center px-6 whitespace-nowrap`;
 
+    // Summary/Submit step — bright active orange button with clear feedback, no transparency, font-bold
+    if (step === 12) {
+      return `${base} bg-[#FF6022] text-white font-bold shadow-xl shadow-[#FF6022]/30 scale-[1.02] hover:scale-[1.04] transition-all`;
+    }
+
     // Bonuses step — special gradient CTA
     if (step === 11) {
       return `${base} flex-1 bg-gradient-to-r from-[#FF6022] to-[#FF8000] scale-[1.02] shadow-xl shadow-[#FF6022]/30 text-white font-bold`;

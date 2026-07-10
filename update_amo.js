@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const animatorsFile = fs.readFileSync('src/app/components/step3-animators.tsx', 'utf8');
 const animatorsMap = {};
@@ -92,6 +92,7 @@ const SHOW_LABELS = {
 
 const ADDITIONAL_LABELS = {
   "trash-box": "Трэш-коробка",
+  "trash_box": "Трэш-коробка",
   "trash-animals": "Трэш-коробка с животными",
   "mini-disco": "Мини-диско",
   "challenge-party": "Челлендж-пати",

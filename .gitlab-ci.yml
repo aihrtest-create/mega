@@ -1,45 +1,21 @@
-stages:
-  - deploy
+# Этот файл нужен, чтобы GitLab распознал проект как CI-проект.
+# Фактический деплой происходит автоматически: сервер Hello Park
+# делает git pull при получении пуша, и nginx раздаёт dist/.
+#
+# Пайплайн ниже просто проверяет, что проект собирается без ошибок.
 
-deploy_to_production:
-  stage: deploy
+stages:
+  - build
+
+build_check:
+  stage: build
   image: node:22-alpine
   only:
     - main
-  before_script:
-    # Установка ssh-клиента
-    - apk add --no-cache openssh-client rsync
-    # Инициализация ssh-agent
-    - eval $(ssh-agent -s)
-    # Добавление приватного ключа сервера (переменная SSH_PRIVATE_KEY в GitLab)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    # Создание директории .ssh и добавление хоста в известные
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
   script:
-    # 1. Собираем фронтенд прямо в CI
     - npm ci
     - npm run build
-
-    # 2. Копируем собранный dist/ на сервер
-    - rsync -avz --delete dist/ root@$SERVER_IP:/root/mega/dist/
-
-    # 3. Подключаемся к серверу и обновляем серверный код + перезапускаем
-    - |
-      ssh root@$SERVER_IP "
-        cd /root/mega
-
-        # Обновляем URL репозитория и стягиваем изменения
-        git remote set-url origin https://gitlab.com/hp-tools/mega.git || true
-        git pull origin main
-
-        # Обновляем зависимости серверной части
-        cd server && npm install --production
-
-        # Перезапускаем API-сервер
-        pm2 restart dr-server --update-env
-
-        echo '✅ Деплой завершён!'
-      "
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week

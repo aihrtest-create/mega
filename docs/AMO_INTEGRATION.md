@@ -143,7 +143,7 @@ server/
    {{contact.name}}, чтобы мы подготовили точную смету на день рождения,
    заполните конфигуратор — это займёт 3 минуты:
 
-   https://aihrtest-create.github.io/planner-park/?lead={{lead.id}}
+   https://party.hello-park.io/mega/?lead={{lead.id}}
 
    После заполнения мы получим вашу заявку и сразу свяжемся 🎂
    ```

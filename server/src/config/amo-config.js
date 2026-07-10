@@ -16,7 +16,7 @@ export const AMO_FIELDS = {
   CONFIG_LINK: 1328901,      // «Ссылка на банкетный лист» (url) — кладём ссылку на смету
 };
 
-export const CONFIGURATOR_URL = process.env.CONFIGURATOR_URL || 'https://aihrtest-create.github.io/planner-park/';
+export const CONFIGURATOR_URL = process.env.CONFIGURATOR_URL || 'https://party.hello-park.io/mega/';
 
 // Returns true when the id looks like an AmoCRM lead id (digits only)
 export function isAmoLeadId(id) {

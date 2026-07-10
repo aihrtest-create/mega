@@ -44,10 +44,7 @@ export function FloatingPrice() {
       case 8: return state.packageType === "basic" ? true : (state.masterClasses || []).length > 0;
       case 13: return !!state.discoChoice;
       case 14: return !!state.balloonChoice;
-      case 12: {
-        const phoneDigits = state.contactPhone ? state.contactPhone.replace(/\D/g, "") : "";
-        return !!state.contactName && phoneDigits.length === 11;
-      }
+      case 12: return true;
       default: return true;
     }
   })();
@@ -269,7 +266,7 @@ export function FloatingPrice() {
               ) : (
                 <div className="flex items-center gap-2">
                   <Send className="w-4 h-4" />
-                  <span>Оставить заявку</span>
+                  <span>Отправить</span>
                 </div>
               )
             ) : step === 11 ? (

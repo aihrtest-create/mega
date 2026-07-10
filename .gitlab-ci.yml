@@ -1,0 +1,43 @@
+stages:
+  - deploy
+
+deploy_to_production:
+  stage: deploy
+  image: alpine:latest
+  only:
+    - main
+  before_script:
+    # Установка ssh-клиента
+    - apk add --no-cache openssh-client
+    # Инициализация ssh-agent
+    - eval $(ssh-agent -s)
+    # Добавление приватного ключа сервера (переменная SSH_PRIVATE_KEY в GitLab)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # Создание директории .ssh и добавление хоста в известные
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    # Подключение к VPS и выполнение команд обновления
+    - |
+      ssh root@$SERVER_IP "
+        if [ -d '/root/mega' ]; then
+          cd /root/mega
+        else
+          cd /root/planner-park
+        fi
+        
+        # Обновляем URL репозитория на случай перехода на GitLab
+        git remote set-url origin https://gitlab.com/hp-tools/mega.git || true
+        
+        # Стягиваем изменения
+        git pull origin main
+        
+        # Перезапускаем сервер
+        # Если используется PM2:
+        cd server && npm install --production && pm2 restart dr-server --update-env
+        
+        # Если используется Docker Compose:
+        # docker compose down && docker compose up -d --build
+      "

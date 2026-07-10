@@ -1,6 +1,10 @@
 #!/bin/bash
 # Быстрое обновление сервера после пуша в гит
-cd /root/planner-park
+if [ -d "/root/mega" ]; then
+  cd /root/mega
+else
+  cd /root/planner-park
+fi
 git pull origin main
 cd server
 npm install --production

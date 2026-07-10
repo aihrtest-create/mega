@@ -31,11 +31,11 @@ apt install -y git
 # 6. Клонирование репозитория
 echo "📂 Клонирование проекта..."
 cd /root
-if [ -d "planner-park" ]; then
-  cd planner-park && git pull origin main
+if [ -d "mega" ]; then
+  cd mega && git pull origin main
 else
-  git clone https://github.com/aihrtest-create/planner-park.git
-  cd planner-park
+  git clone https://gitlab.com/hp-tools/mega.git
+  cd mega
 fi
 
 # 7. Установка зависимостей сервера
@@ -48,7 +48,7 @@ if [ ! -f .env ]; then
   echo "⚙️ Создание .env файла..."
   cp .env.example .env
   echo ""
-  echo "⚠️  ВАЖНО: Отредактируйте /root/planner-park/server/.env"
+  echo "⚠️  ВАЖНО: Отредактируйте /root/mega/server/.env"
   echo "   Вставьте токены ботов и URL сервера!"
   echo ""
 fi
@@ -99,7 +99,7 @@ echo "📄 Лендинг:  http://$(curl -s ifconfig.me)/landing"
 echo "🔗 API:      http://$(curl -s ifconfig.me)/api/leads"
 echo ""
 echo "📝 Следующие шаги:"
-echo "   1. Отредактируйте /root/planner-park/server/.env"
+echo "   1. Отредактируйте /root/mega/server/.env"
 echo "   2. Перезапустите: pm2 restart dr-server"
 echo "   3. Для HTTPS: установите certbot (см. ниже)"
 echo ""

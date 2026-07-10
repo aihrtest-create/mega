@@ -2,7 +2,7 @@ import { statements } from '../database.js';
 
 let bot = null;
 
-const CONFIGURATOR_URL = process.env.CONFIGURATOR_URL || 'https://aihrtest-create.github.io/planner-park/';
+const CONFIGURATOR_URL = process.env.CONFIGURATOR_URL || 'https://party.hello-park.io/mega/';
 
 /**
  * Генерирует текст приветственного сообщения

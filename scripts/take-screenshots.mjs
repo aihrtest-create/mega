@@ -19,7 +19,7 @@ async function captureScreenshots() {
   }
 
   // 1. Splash Page
-  await page.goto('http://localhost:5173/planner-park/', { waitUntil: 'networkidle0' });
+  await page.goto('http://localhost:5173/mega/', { waitUntil: 'networkidle0' });
   await page.screenshot({ path: path.join(publicDir, '1-splash.png') });
 
   // 2. Base Package Step

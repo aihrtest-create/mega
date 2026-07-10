@@ -11,11 +11,17 @@ deploy_to_production:
     - apk add --no-cache openssh-client
     # Инициализация ssh-agent
     - eval $(ssh-agent -s)
-    # Добавление приватного ключа сервера (переменная SSH_PRIVATE_KEY в GitLab)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    # Создание директории .ssh и добавление хоста в известные
+    # Создаем папку .ssh
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    # Записываем ключ в файл для отладки структуры
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    # Проверяем размер ключа (если 0 или 1 байт - переменная пуста)
+    - ls -lh ~/.ssh/id_rsa
+    # Добавляем ключ в агент
+    - ssh-add ~/.ssh/id_rsa
+    # Добавляем хост в известные
     - ssh-keyscan -H "$SERVER_IP" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:

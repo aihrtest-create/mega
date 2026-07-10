@@ -1,4 +1,5 @@
 import { statements } from '../database.js';
+import { buildConfiguratorUrl } from '../config/amo-config.js';
 
 let bot = null;
 
@@ -72,7 +73,7 @@ export async function initMaxBot() {
       }));
 
       // Отправляем приветствие + кнопку
-      const configUrl = `${CONFIGURATOR_URL}?lead=${leadId}`;
+      const configUrl = buildConfiguratorUrl(leadId);
       const welcomeText = getWelcomeMessage(lead.name);
 
       const keyboard = Keyboard.inlineKeyboard([

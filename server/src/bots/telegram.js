@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { statements } from '../database.js';
+import { buildConfiguratorUrl } from '../config/amo-config.js';
 
 let bot = null;
 
@@ -92,7 +93,7 @@ export function initTelegramBot() {
     }));
 
     // Отправляем приветствие + кнопку с конфигуратором
-    const configUrl = `${CONFIGURATOR_URL}?lead=${leadId}`;
+    const configUrl = buildConfiguratorUrl(leadId);
     const welcomeText = getWelcomeMessage(lead.name);
 
     await bot.sendMessage(chatId, welcomeText, {

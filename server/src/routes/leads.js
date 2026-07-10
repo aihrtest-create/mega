@@ -8,8 +8,22 @@ import { statements } from '../database.js';
 import { sendMessage as sendTelegramMessage, sendAttachment as sendTelegramAttachment } from '../bots/telegram.js';
 import { sendMessage as sendMaxMessage, sendAttachment as sendMaxAttachment } from '../bots/max.js';
 import { amo } from '../services/amo.js';
-import { isAmoLeadId, AMO_FIELDS } from '../config/amo-config.js';
+import { isAmoLeadId, AMO_FIELDS, signLeadId } from '../config/amo-config.js';
 import { buildAmoNoteText, buildAmoFieldUpdates } from '../services/amo-format.js';
+
+function validateLeadSignature(req, res, next) {
+  const leadId = req.params.id;
+  if (!isAmoLeadId(leadId)) {
+    return next();
+  }
+  const sig = req.query.sig || req.body.sig;
+  const expectedSig = signLeadId(leadId);
+  if (!sig || sig !== expectedSig) {
+    console.warn(`[SECURITY] Unauthorized access attempt to lead ${leadId} (sig: ${sig || 'missing'}, expected: ${expectedSig})`);
+    return res.status(403).json({ error: 'Access denied: invalid URL signature' });
+  }
+  next();
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, '..', 'data', 'uploads');
@@ -134,7 +148,7 @@ router.post('/', (req, res) => {
  * GET /api/leads/:id — Получить информацию о лиде
  * Если id числовой и в локальной БД не найден — пробуем достать из AmoCRM.
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateLeadSignature, async (req, res) => {
   try {
     const lead = statements.getLead.get(req.params.id);
     if (lead) return res.json({ success: true, lead });
@@ -172,7 +186,7 @@ router.get('/:id', async (req, res) => {
  * POST /api/leads/:id/opened — Отметить что клиент открыл конфигуратор
  * Для Amo-лидов добавляем примечание в карточку, чтобы менеджер видел факт открытия.
  */
-router.post('/:id/opened', async (req, res) => {
+router.post('/:id/opened', validateLeadSignature, async (req, res) => {
   try {
     const lead = statements.getLead.get(req.params.id);
     if (lead) {
@@ -208,7 +222,7 @@ router.post('/:id/opened', async (req, res) => {
  * Для Amo-лидов (числовой id) пишем примечание + обновляем кастомные поля и цену.
  * Для локальных лидов сохраняем в SQLite как раньше.
  */
-router.post('/:id/configure', async (req, res) => {
+router.post('/:id/configure', validateLeadSignature, async (req, res) => {
   try {
     const lead = statements.getLead.get(req.params.id);
     if (lead) {

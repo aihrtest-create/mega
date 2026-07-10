@@ -306,6 +306,12 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     return params.get('lead');
   });
 
+  // Signature from URL parameter (?sig=xyz)
+  const [leadSig] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('sig');
+  });
+
   const cacheKey = getCacheKey(leadId);
   const parkInitialState = React.useMemo(() => createInitialState(), []);
 
@@ -407,10 +413,10 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     if (!leadId || !API_BASE) return;
 
     // Notify server that configurator was opened
-    fetch(`${API_BASE}/api/leads/${leadId}/opened`, { method: 'POST' }).catch(() => {});
+    fetch(`${API_BASE}/api/leads/${leadId}/opened?sig=${leadSig || ''}`, { method: 'POST' }).catch(() => {});
 
     // Fetch lead data to pre-fill name and phone
-    fetch(`${API_BASE}/api/leads/${leadId}`)
+    fetch(`${API_BASE}/api/leads/${leadId}?sig=${leadSig || ''}`)
       .then(r => r.json())
       .then(data => {
         if (data.success && data.lead) {
@@ -422,7 +428,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         }
       })
       .catch(() => {});
-  }, [leadId]);
+  }, [leadId, leadSig]);
 
   // Submit configuration to API
   // Note: totalPrice is passed by the component calling submitToAPI
@@ -435,7 +441,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
         date: state.date?.toISOString(),
         totalPrice: price ?? 0,
       };
-      const res = await fetch(`${API_BASE}/api/leads/${leadId}/configure`, {
+      const res = await fetch(`${API_BASE}/api/leads/${leadId}/configure?sig=${leadSig || ''}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -446,7 +452,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
       console.error('Failed to submit to API');
       return false;
     }
-  }, [leadId, state]);
+  }, [leadId, leadSig, state]);
 
   const nextStep = useCallback(() => {
     setStep((s) => {

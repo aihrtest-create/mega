@@ -85,10 +85,7 @@ export function FloatingPrice() {
       case 13: return "Выберите диско или треш-коробку";
       case 14: return "Выберите шар-сюрприз или пиньяту";
       case 12: {
-        if (!state.contactName) return "Укажите ваше имя";
-        const phoneDigits = state.contactPhone ? state.contactPhone.replace(/\D/g, "") : "";
-        if (phoneDigits.length < 11) return "Введите номер телефона полностью";
-        return "Укажите номер телефона";
+        return "";
       }
       default: return "Сделайте выбор для продолжения";
     }
@@ -98,25 +95,15 @@ export function FloatingPrice() {
   const handleNext = async () => {
     // Final step — submit
     if (step === 12) {
-      const phoneDigits = state.contactPhone ? state.contactPhone.replace(/\D/g, "") : "";
-      if (state.contactName && phoneDigits.length === 11) {
-        setIsSubmitting(true);
-        try {
-          await submitToAPI(totalPrice);
-        } catch {
-          // Submit even if API fails — don't block the user
-        }
-        clearCache(); // Clear saved state after successful submission
-        setSubmitted(true);
-        setIsSubmitting(false);
-      } else {
-        // Trigger validation on final step too
-        setIsShaking(true);
-        setToastMessage(getValidationMessage());
-        setShowToast(true);
-        setTimeout(() => setIsShaking(false), 500);
-        setTimeout(() => setShowToast(false), 2500);
+      setIsSubmitting(true);
+      try {
+        await submitToAPI(totalPrice);
+      } catch {
+        // Submit even if API fails — don't block the user
       }
+      clearCache(); // Clear saved state after successful submission
+      setSubmitted(true);
+      setIsSubmitting(false);
       return;
     }
 

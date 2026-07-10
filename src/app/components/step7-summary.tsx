@@ -17,9 +17,6 @@ import {
   Palette,
   UtensilsCrossed,
   Calendar,
-  Phone,
-  User,
-  MessageSquare,
   PartyPopper,
   Check,
   Star,
@@ -118,40 +115,6 @@ export function Step7Summary() {
   const { state, updateState, totalPrice, submitted, resetWizard } = useWizard();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    if (!val) {
-      updateState({ contactPhone: "" });
-      return;
-    }
-    let numbers = val.replace(/\D/g, "");
-    if (numbers.length === 0) {
-      updateState({ contactPhone: "" });
-      return;
-    }
-    if (numbers[0] === "8") {
-      numbers = "7" + numbers.slice(1);
-    } else if (numbers[0] === "9") {
-      numbers = "79" + numbers.slice(1);
-    } else if (numbers[0] !== "7") {
-      numbers = "7" + numbers;
-    }
-    numbers = numbers.substring(0, 11);
-    let formatted = "+7";
-    if (numbers.length > 1) {
-      formatted += " (" + numbers.substring(1, 4);
-    }
-    if (numbers.length >= 5) {
-      formatted += ") " + numbers.substring(4, 7);
-    }
-    if (numbers.length >= 8) {
-      formatted += "-" + numbers.substring(7, 9);
-    }
-    if (numbers.length >= 10) {
-      formatted += "-" + numbers.substring(9, 11);
-    }
-    updateState({ contactPhone: formatted });
-  };
 
   const effectiveWeekend = state.date ? isWeekendOrHoliday2026(state.date) : state.isWeekend;
 
@@ -302,7 +265,7 @@ export function Step7Summary() {
             Итого: <span className="text-lg text-[#FF6022]">{totalPrice.toLocaleString("ru-RU")} ₽</span>
           </p>
           <p className="text-xs text-[#ABABAB] mt-1">
-            {state.contactName}, мы готовим для вас незабываемый праздник!
+            {state.contactName ? `${state.contactName}, мы` : "Мы"} готовим для вас незабываемый праздник!
           </p>
         </div>
       </motion.div>
@@ -511,45 +474,6 @@ export function Step7Summary() {
         </p>
       </div>
 
-      {/* Contact form */}
-      <div className="bg-white rounded-2xl border border-[#E5E5E5] p-5 mb-6">
-        <h3 className="text-[#1A1A1A] mb-4">Контактные данные</h3>
-
-        <div className="space-y-3">
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#ABABAB]" />
-            <input
-              type="text"
-              placeholder="Ваше имя"
-              value={state.contactName}
-              onChange={(e) => updateState({ contactName: e.target.value })}
-              className="w-full bg-[#F5F5F5] rounded-xl py-3 pl-10 pr-4 text-sm border border-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FF6022]"
-            />
-          </div>
-
-          <div className="relative">
-            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#ABABAB]" />
-            <input
-              type="tel"
-              placeholder="+7 (___) ___-__-__"
-              value={state.contactPhone}
-              onChange={handlePhoneChange}
-              maxLength={18}
-              className="w-full bg-[#F5F5F5] rounded-xl py-3 pl-10 pr-4 text-sm border border-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FF6022]"
-            />
-          </div>
-
-          <div className="relative">
-            <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-[#ABABAB]" />
-            <textarea
-              placeholder="Комментарий или пожелания..."
-              value={state.contactComment}
-              onChange={(e) => updateState({ contactComment: e.target.value })}
-              className="w-full bg-[#F5F5F5] rounded-xl py-3 pl-10 pr-4 text-sm border border-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FF6022] resize-none h-20"
-            />
-          </div>
-        </div>
-      </div>
 
       {/* Reset Button */}
       <button

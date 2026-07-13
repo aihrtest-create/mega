@@ -26,6 +26,7 @@ services:
       - ./server/uploads:/app/uploads
     environment:
       - NODE_ENV=production
+      - PORT=3002
     env_file:
       - ./server/.env
     restart: unless-stopped

@@ -11,28 +11,21 @@ deploy_to_production:
     - apk add --no-cache openssh-client
     # Инициализация ssh-agent
     - eval $(ssh-agent -s)
-    
-    # --- ДИАГНОСТИКА КЛЮЧА ---
-    - echo "Длина переменной SSH_PRIVATE_KEY составляет ${#SSH_PRIVATE_KEY} символов."
+
+    # Поддерживаем оба типа GitLab CI variable: File и обычную переменную.
+    # Сам ключ в лог не печатаем.
     - |
       if [ -f "$SSH_PRIVATE_KEY" ]; then
         echo "Обнаружен FILE-тип переменной. Путь к файлу: $SSH_PRIVATE_KEY"
         echo "Размер файла:" && ls -lh "$SSH_PRIVATE_KEY"
-        echo "Первая строка файла:" && head -n 1 "$SSH_PRIVATE_KEY"
-        echo "Последняя строка файла:" && tail -n 1 "$SSH_PRIVATE_KEY"
-        # Копируем содержимое файла в id_rsa
         mkdir -p ~/.ssh && chmod 700 ~/.ssh
         cat "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
       else
         echo "Обнаружен STRING-тип переменной."
-        echo "Первая строка переменной:" && echo "$SSH_PRIVATE_KEY" | head -n 1
-        echo "Последняя строка переменной:" && echo "$SSH_PRIVATE_KEY" | tail -n 1
-        # Записываем значение в id_rsa
+        echo "Длина переменной SSH_PRIVATE_KEY составляет ${#SSH_PRIVATE_KEY} символов."
         mkdir -p ~/.ssh && chmod 700 ~/.ssh
         echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
       fi
-    # -------------------------
-
     - chmod 600 ~/.ssh/id_rsa
     # Добавляем ключ в агент
     - ssh-add ~/.ssh/id_rsa
@@ -42,19 +35,41 @@ deploy_to_production:
   script:
     # Подключение к VPS и выполнение команд обновления
     - |
-      ssh root@$SERVER_IP "
+      ssh root@"$SERVER_IP" 'sh -s' <<'REMOTE'
+        set -e
+
         if [ -d '/root/mega' ]; then
           cd /root/mega
-        else
+        elif [ -d '/root/planner-park' ]; then
           cd /root/planner-park
+        else
+          echo "Не найдена директория проекта: /root/mega или /root/planner-park"
+          exit 1
         fi
+
+        echo "Каталог проекта: $(pwd)"
+        echo "Текущий origin: $(git remote get-url origin || true)"
+        echo "Коммит до обновления: $(git rev-parse --short HEAD || true)"
         
         # Обновляем URL репозитория на случай перехода на GitLab
-        git remote set-url origin https://gitlab.com/hp-tools/mega.git || true
+        git remote set-url origin https://gitlab.com/hp-tools/mega.git
         
         # Стягиваем изменения
-        git pull origin main
+        git fetch origin main
+        git pull --ff-only origin main
+        echo "Коммит после обновления: $(git rev-parse --short HEAD)"
+
+        if [ ! -f server/.env ]; then
+          echo "Не найден server/.env. Docker Compose не сможет запустить backend."
+          exit 1
+        fi
         
         # Пересобираем и перезапускаем проект в Docker-контейнере
-        docker compose up -d --build || docker-compose up -d --build
-      "
+        if command -v docker-compose >/dev/null 2>&1; then
+          docker-compose up -d --build --remove-orphans
+          docker-compose ps
+        else
+          docker compose up -d --build --remove-orphans
+          docker compose ps
+        fi
+      REMOTE

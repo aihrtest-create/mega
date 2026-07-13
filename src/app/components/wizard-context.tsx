@@ -222,8 +222,8 @@ function getMegaSteps(packageType: WizardState["packageType"], questType: Wizard
 // Every package is priced for 8 children. Each additional child costs extra.
 // Does not apply to "custom" (no fixed package base) or when no package is chosen.
 export const INCLUDED_CHILDREN = 8;
-export const EXTRA_CHILD_WEEKDAY = 855;
-export const EXTRA_CHILD_WEEKEND = 1215;
+export const EXTRA_CHILD_WEEKDAY = 1250;
+export const EXTRA_CHILD_WEEKEND = 1650;
 export const CUSTOM_CHILD_WEEKDAY = 1250;
 export const CUSTOM_CHILD_WEEKEND = 1650;
 

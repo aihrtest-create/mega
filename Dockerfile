@@ -1,6 +1,10 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
+# puppeteer и sharp нужны только локальным скриптам — в сборке фронтенда
+# их бинарники (Chromium ~300МБ) не используются, не качаем
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN npm install
 COPY . .
 # IT-команда должна передать URL своего сервера при сборке

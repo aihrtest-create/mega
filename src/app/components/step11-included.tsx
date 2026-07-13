@@ -66,7 +66,7 @@ const ALL_EXTRAS = [
     name: "Подарки всем гостям",
     gradient: "from-[#84fab0] to-[#8fd3f4]",
     emoji: "🛍️",
-    packages: ["premium", "exclusive"]
+    packages: ["exclusive"]
   }
 ];
 

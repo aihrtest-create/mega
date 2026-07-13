@@ -46,7 +46,7 @@ const ACTIVITIES = [
     duration: "Финал праздника",
     desc: 'Огромный шар с конфетти и маленькими шариками внутри, который эффектно лопается в финале праздника.',
     gradient: "from-[#ffecd2] to-[#fcb69f]",
-    image: "/activities/red_balloon.png",
+    image: "/activities/red_balloon.webp",
   },
   {
     id: "pinata",

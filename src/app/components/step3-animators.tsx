@@ -32,7 +32,7 @@ export const SECTION_CATEGORIES: { id: AnimatorCategory; label: string; emoji: s
 
 export const ANIMATORS: Animator[] = [
   // 👑 Принцессы
-  { id: "elsa", name: "Эльза", category: "princesses", image: "/animators/cropped/elsa_extended_trans.png" },
+  { id: "elsa", name: "Эльза", category: "princesses", image: "/animators/cropped/elsa_extended_trans.webp" },
   { id: "anna", name: "Анна", category: "princesses", image: "/animators/cropped/anna.webp" },
   { id: "ariel", name: "Ариэль", category: "princesses", image: "/animators/cropped/ariel.webp" },
   { id: "rapunzel", name: "Рапунцель", category: "princesses", image: "/animators/cropped/rapunzel.webp" },

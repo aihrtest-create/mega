@@ -87,7 +87,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Картофель фри + кетчуп — 8 порций",
           "Кесадилья с курицей + сметана — 2 порции",
         ],
-        image: "/images/food/mega_udc_1.png",
+        image: "/images/food/mega_udc_1.webp",
       },
       {
         id: "mega_udc_2",
@@ -99,7 +99,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Наггетсы + сырный соус — 4 порции",
           "Куриный шашлычок + кетчуп + фри — 8 порций",
         ],
-        image: "/images/food/mega_udc_2.png",
+        image: "/images/food/mega_udc_2.webp",
       },
       {
         id: "mega_udc_3",
@@ -112,7 +112,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Кесадилья с курицей + сметана — 2 порции",
           "Фруктовая тарелка",
         ],
-        image: "/images/food/mega_udc_3.png",
+        image: "/images/food/mega_udc_3.webp",
       },
     ],
   },
@@ -132,7 +132,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Картофель фри + кетчуп — 8 порций",
           "Пицца маргарита — 4 порции",
         ],
-        image: "/images/food/mega_osterio_1.png",
+        image: "/images/food/mega_osterio_1.webp",
       },
       {
         id: "mega_osterio_2",
@@ -145,7 +145,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Наггетсы + сырный соус — 6 порций",
           "Картофель фри + кетчуп — 8 порций",
         ],
-        image: "/images/food/mega_osterio_2.png",
+        image: "/images/food/mega_osterio_2.webp",
       },
       {
         id: "mega_osterio_3",
@@ -159,7 +159,7 @@ export const MEGA_FOOD_CATEGORIES: MegaFoodCategory[] = [
           "Пицца с ветчиной — 4 порции",
           "Пицца маргарита — 4 порции",
         ],
-        image: "/images/food/mega_osterio_3.png",
+        image: "/images/food/mega_osterio_3.webp",
       },
     ],
   },

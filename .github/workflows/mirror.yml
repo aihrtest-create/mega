@@ -19,8 +19,24 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
+          set -euo pipefail
+
+          if [ -z "${GITLAB_TOKEN}" ]; then
+            echo "GITLAB_TOKEN is empty. Add it in GitHub repository secrets."
+            exit 1
+          fi
+
+          echo "GitHub commit: $(git rev-parse HEAD)"
+
           # Настраиваем адрес GitLab с использованием токена авторизации
           git remote add gitlab https://oauth2:${GITLAB_TOKEN}@gitlab.com/hp-tools/mega.git
-          
-          # Принудительно отправляем ветку main в GitLab
-          git push gitlab main --force
+
+          echo "GitLab main before push:"
+          git ls-remote gitlab refs/heads/main || true
+
+          # Отправляем текущий commit в GitLab. Не используем --force:
+          # protected main в корпоративном GitLab часто запрещает force-push.
+          git push gitlab HEAD:main
+
+          echo "GitLab main after push:"
+          git ls-remote gitlab refs/heads/main

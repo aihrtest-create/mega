@@ -110,7 +110,7 @@ const CLASSIC_QUESTS = [
     id: "classic_harry",
     name: "Гарри Поттер",
     emoji: "⚡",
-    image: "/quests/transparent/new_classic_harry.png",
+    image: "/quests/transparent/new_classic_harry.webp",
     gradient: "from-[#7B1FA2] to-[#4A148C]",
     description:
       "Участники оказываются в мире волшебства: их ждёт знакомство с легендой, викторина по истории Хогвартса, магические уроки, прохождение лабиринта и командные испытания, включая поиск философского камня и игру в квиддич.",
@@ -120,7 +120,7 @@ const CLASSIC_QUESTS = [
     id: "classic_harley",
     name: "Харли Квин",
     emoji: "🃏",
-    image: "/quests/transparent/new_classic_harley.png",
+    image: "/quests/transparent/new_classic_harley.webp",
     gradient: "from-[#E53935] to-[#B71C1C]",
     description:
       "В этом безумном приключении ребята создадут собственный отряд антигероев, примут участие в весёлых эстафетах, сыграют в азартные игры, попробуют свои силы в квесте «из злодеев в герои» и снимут клип в стиле «новые антигерои».",
@@ -130,7 +130,7 @@ const CLASSIC_QUESTS = [
     id: "classic_fort",
     name: "Форт Боярд",
     emoji: "🏰",
-    image: "/quests/transparent/new_classic_fort.png",
+    image: "/quests/transparent/new_classic_fort.webp",
     gradient: "from-[#C8A97E] to-[#8B6914]",
     description:
       "Команды соревнуются, чтобы первыми добраться до форта и разгадать его тайны, преодолевая паутинные лабиринты, пробираясь к ключам сквозь препятствия, открывая сокровищницу и собирая зашифрованное финальное слово.",
@@ -140,7 +140,7 @@ const CLASSIC_QUESTS = [
     id: "classic_bloggers",
     name: "Блогеры",
     emoji: "📱",
-    image: "/quests/transparent/new_classic_bloggers.png",
+    image: "/quests/transparent/new_classic_bloggers.webp",
     gradient: "from-[#00BCD4] to-[#E91E63]",
     description:
       "Блогеры сталкиваются с угрозой удаления аккаунтов от таинственного Анонима и должны пройти череду заданий: искать подсказки, разгадывать пароли и выполнять необычные испытания, чтобы спасти свои соцсети и набрать лайки.",

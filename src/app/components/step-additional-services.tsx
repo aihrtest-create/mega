@@ -19,7 +19,7 @@ const SERVICES = [
     extra: "10 человек",
     desc: 'Классные детские мини-тату переводилки на руки и лицо. Модно, стильно и безопасно для кожи!',
     gradient: "from-[#fad0c4] to-[#ffd1ff]",
-    image: "/activities/tattoos.png",
+    image: "/activities/tattoos.webp",
     imageClass: "object-cover object-[center_18%]",
   },
   {
@@ -30,7 +30,7 @@ const SERVICES = [
     extra: "40–50 фото",
     desc: 'Профессиональный фотограф запечатлеет самые яркие моменты праздника. В комплект входит 40–50 обработанных фотографий, которые останутся на память навсегда.',
     gradient: "from-[#d4fc79] to-[#96e6a1]",
-    image: "/activities/photographer.png",
+    image: "/activities/photographer.webp",
   },
   {
     id: "aqua",
@@ -40,7 +40,7 @@ const SERVICES = [
     extra: "10 человек",
     desc: 'Профессиональный аквагримёр создаст яркие рисунки на лицах детей — бабочки, супергерои, тигры и всё что пожелает маленький гость.',
     gradient: "from-[#fbc2eb] to-[#a6c1ee]",
-    image: "/activities/aquagrim.png",
+    image: "/activities/aquagrim.webp",
   },
 ];
 

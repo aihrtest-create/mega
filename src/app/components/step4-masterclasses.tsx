@@ -17,8 +17,8 @@ const MASTER_CLASSES = [
   { id: "mc_weapon", name: "Оружие из вокселей", emoji: "⛏️", desc: "Дети создают свои оригинальные версии алмазных мечей, в основе которых - деревянная заготовка и детали для создания меча - разноцветные квадраты.", gradient: "from-[#d4fc79] to-[#96e6a1]", image: "/masterclasses/mc_weapon.webp" },
   { id: "sand_picture", name: "Песочная картина", emoji: "⏳", desc: "Дети создают свои уникальные картины с помощью разноцветного декоративного песка. Можно воспользоваться уже придуманной заготовкой с картинкой или создать свой собственный шедевр.", gradient: "from-[#e6b980] to-[#eacda3]", image: "/masterclasses/sand_picture.webp" },
   { id: "gingerbread", name: "Роспись пряников", emoji: "🍪", desc: "Дети самостоятельно расписывают пряники глазурью и кондитерскими украшениями (бусинами, красителями, кокосовой стружкой и тд). Сами пряники изготавливают вручную наши мастера накануне праздника.", gradient: "from-[#f6d365] to-[#fda085]", image: "/masterclasses/gingerbread.webp" },
-  { id: "pinwheel", name: "Игрушка-ветерок", emoji: "🌬️", desc: "Дети создают красочную бумажную вертушку своими руками, украшая её по своему вкусу.", gradient: "from-[#ffecd2] to-[#fcb69f]", image: "/masterclasses/pinwheel.png" },
-  { id: "twisting", name: "Твистинг", emoji: "🎈", desc: "Увлекательное моделирование из длинных воздушных шаров. Дети научатся скручивать различные фигуры животных, цветов и игрушек.", gradient: "from-[#fccb90] to-[#d57eeb]", image: "/masterclasses/twisting.png" }
+  { id: "pinwheel", name: "Игрушка-ветерок", emoji: "🌬️", desc: "Дети создают красочную бумажную вертушку своими руками, украшая её по своему вкусу.", gradient: "from-[#ffecd2] to-[#fcb69f]", image: "/masterclasses/pinwheel.webp" },
+  { id: "twisting", name: "Твистинг", emoji: "🎈", desc: "Увлекательное моделирование из длинных воздушных шаров. Дети научатся скручивать различные фигуры животных, цветов и игрушек.", gradient: "from-[#fccb90] to-[#d57eeb]", image: "/masterclasses/twisting.webp" }
 ];
 
 export function Step4MasterClasses() {

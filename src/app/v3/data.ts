@@ -163,31 +163,31 @@ export const QUESTS: QuestItem[] = [
     id: "harry",
     name: "Гарри Поттер",
     description: "Магический мир, викторина, лабиринт и квиддич",
-    image: "/quests/transparent/new_classic_harry.png",
+    image: "/quests/transparent/new_classic_harry.webp",
   },
   {
     id: "harley",
     name: "Харли Квин",
     description: "Безумный отряд антигероев и съёмка клипа",
-    image: "/quests/transparent/new_classic_harley.png",
+    image: "/quests/transparent/new_classic_harley.webp",
   },
   {
     id: "minecraft",
     name: "Воксели",
     description: "Сами куём оружие, сражаемся с эндерменами",
-    image: "/quests/transparent/new_classic_minecraft.png",
+    image: "/quests/transparent/new_classic_minecraft.webp",
   },
   {
     id: "fort",
     name: "Форт Боярд",
     description: "Паутинные лабиринты, ключи и сокровищница",
-    image: "/quests/transparent/new_classic_fort.png",
+    image: "/quests/transparent/new_classic_fort.webp",
   },
   {
     id: "bloggers",
     name: "Блогеры",
     description: "Спасаем соцсети от таинственного Анонима",
-    image: "/quests/transparent/new_classic_bloggers.png",
+    image: "/quests/transparent/new_classic_bloggers.webp",
   },
 ];
 
@@ -204,15 +204,15 @@ export interface ShowItem {
 }
 
 export const SHOWS: ShowItem[] = [
-  { id: "neon_pillows", name: "Шоу неоновых подушек",      basePrice: 18000, exclusiveSurcharge: 0,     image: "/shows/neon.png"  },
-  { id: "science",      name: "Научное шоу",                basePrice: 15000, exclusiveSurcharge: 0,     image: "/shows/science.png" },
-  { id: "paper",        name: "Бумажное шоу",               basePrice: 16000, exclusiveSurcharge: 0,     image: "/shows/paper.png" },
-  { id: "soap",         name: "Шоу мыльных пузырей",        basePrice: 15000, exclusiveSurcharge: 0,     image: "/shows/soap.png"  },
-  { id: "neon_soap",    name: "Шоу неоновых мыльных пузырей", basePrice: 16000, exclusiveSurcharge: 4000,  image: "/shows/soap.png"  },
-  { id: "neon_paper",   name: "Неоновое бумажное шоу",      basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/paper.png", badge: "top" },
-  { id: "ribbon",       name: "Ленточное шоу",              basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/neon.png"  },
+  { id: "neon_pillows", name: "Шоу неоновых подушек",      basePrice: 18000, exclusiveSurcharge: 0,     image: "/shows/neon.webp"  },
+  { id: "science",      name: "Научное шоу",                basePrice: 15000, exclusiveSurcharge: 0,     image: "/shows/science.webp" },
+  { id: "paper",        name: "Бумажное шоу",               basePrice: 16000, exclusiveSurcharge: 0,     image: "/shows/paper.webp" },
+  { id: "soap",         name: "Шоу мыльных пузырей",        basePrice: 15000, exclusiveSurcharge: 0,     image: "/shows/soap.webp"  },
+  { id: "neon_soap",    name: "Шоу неоновых мыльных пузырей", basePrice: 16000, exclusiveSurcharge: 4000,  image: "/shows/soap.webp"  },
+  { id: "neon_paper",   name: "Неоновое бумажное шоу",      basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/paper.webp", badge: "top" },
+  { id: "ribbon",       name: "Ленточное шоу",              basePrice: 18000, exclusiveSurcharge: 7000,  image: "/shows/neon.webp"  },
   { id: "illusionist",  name: "Фокусник-иллюзионист",       basePrice: 30000, exclusiveSurcharge: 16000, image: "/shows/tesla.webp" },
-  { id: "cryo",         name: "Крио-шоу с мороженым",       basePrice: 20000, exclusiveSurcharge: 5000,  image: "/shows/science.png", badge: "hit" },
+  { id: "cryo",         name: "Крио-шоу с мороженым",       basePrice: 20000, exclusiveSurcharge: 5000,  image: "/shows/science.webp", badge: "hit" },
 ];
 
 // ──────────────────────────────────────────────
@@ -231,8 +231,8 @@ export interface MasterClassItem {
 export const MASTER_CLASSES: MasterClassItem[] = [
   { id: "slime",      name: "Слаймы",            description: "Дети мешают и тянут разноцветные слаймы",     basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/slime.webp" },
   { id: "gingerbread",name: "Роспись пряников",  description: "Раскрашиваем пряники глазурью и посыпкой",    basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/gingerbread.webp" },
-  { id: "pinwheel",   name: "Игрушка-ветерок",   description: "Собираем крутящуюся игрушку из бумаги",      basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/pinwheel.png" },
-  { id: "twisting",   name: "Твистинг",          description: "Скручиваем фигурки из шариков-колбасок",    basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/twisting.png" },
+  { id: "pinwheel",   name: "Игрушка-ветерок",   description: "Собираем крутящуюся игрушку из бумаги",      basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/pinwheel.webp" },
+  { id: "twisting",   name: "Твистинг",          description: "Скручиваем фигурки из шариков-колбасок",    basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/twisting.webp" },
   { id: "elsa_tiara", name: "Корона Эльзы",      description: "Украшаем сказочную корону блёстками",       basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/elsa_tiara.webp" },
   { id: "sand",       name: "Песочная картина",  description: "Цветной песок по трафарету",                basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/sand_picture.webp" },
   { id: "mc_weapon",  name: "Оружие из вокселей",  description: "Конструируем тематическое оружие из пены",  basePrice: 15000, premiumSurcharge: 0,     image: "/masterclasses/mc_weapon.webp" },

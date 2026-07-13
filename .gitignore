@@ -32,6 +32,8 @@ tmp_img_processor/
 *.xlsx
 *.pdf
 *.MP4
+!public/**/*.mp4
+!public/**/*.MP4
 .venv/
 .tmp-img/
 Видео локаций/

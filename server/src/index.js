@@ -21,6 +21,8 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+// Вебхуки AmoCRM (в т.ч. шаг SalesBot «Отправить webhook») приходят form-encoded
+app.use(express.urlencoded({ extended: true }));
 
 // ---- API Routes ----
 app.use('/api/leads', leadsRouter);

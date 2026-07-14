@@ -59,6 +59,14 @@ router.post('/start-config', async (req, res) => {
       console.warn(`[AMO] Redis недоступен, отдаём длинную ссылку: ${e.message}`);
     }
 
+    // Кладём ссылку примечанием в карточку: SalesBot-вебхук не умеет читать наш ответ,
+    // поэтому менеджер забирает персональную ссылку из ленты лида
+    try {
+      await amo.addNoteToLead(leadId, `🔗 Персональная ссылка на конфигуратор: ${url}`);
+    } catch (e) {
+      console.warn(`[AMO] Не удалось добавить примечание со ссылкой: ${e.message}`);
+    }
+
     console.log(`[AMO] start-config: lead_id=${leadId} → ${url}`);
     return res.json({ url, name, lead_id: leadId });
   } catch (e) {
@@ -74,6 +82,8 @@ function extractLeadId(body) {
     body.leadId,
     body.id,
     body?.leads?.add?.[0]?.id,
+    body?.leads?.status?.[0]?.id,
+    body?.leads?.update?.[0]?.id,
     body?.lead?.id,
   ];
   for (const v of candidates) {

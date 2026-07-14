@@ -88,6 +88,19 @@ export function StepCustomGuests() {
           </div>
         </div>
 
+        {state.childrenCount > 10 && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 bg-[#FFF3EE] rounded-2xl px-4 py-3 border border-[#FF6022]/20 flex items-start gap-3 shadow-sm"
+          >
+            <span className="text-xl">💬</span>
+            <p className="text-sm text-[#FF6022] font-semibold leading-snug">
+              При выборе больше 10 детей цена обсуждается индивидуально с менеджером
+            </p>
+          </motion.div>
+        )}
+
         <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed text-center">
           В тарифе «Соберу сам» каждый детский билет оплачивается отдельно (+1250 ₽ в будни / +1650 ₽ в выходные).
         </p>

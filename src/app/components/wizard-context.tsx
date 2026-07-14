@@ -229,8 +229,10 @@ export const CUSTOM_CHILD_WEEKEND = 1650;
 
 export function getExtraChildrenCount(state: WizardState): number {
   if (!state.packageType) return 0;
-  if (state.packageType === "custom") return state.childrenCount || 0;
-  return Math.max(0, (state.childrenCount || 0) - INCLUDED_CHILDREN);
+  // Cap the effective children count at 10 for pricing purposes
+  const effectiveCount = Math.min(state.childrenCount || 0, 10);
+  if (state.packageType === "custom") return effectiveCount;
+  return Math.max(0, effectiveCount - INCLUDED_CHILDREN);
 }
 
 export function getExtraChildrenCost(state: WizardState, isWeekend: boolean): number {

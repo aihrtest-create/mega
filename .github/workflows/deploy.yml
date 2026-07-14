@@ -35,6 +35,10 @@ jobs:
         
       - name: Build
         run: npm run build
+        env:
+          # GitHub Pages не имеет своего бэкенда — приглашения и конфигуратор
+          # ходят на корпоративный сервер (иначе RSVP уйдут в никуда)
+          VITE_API_URL: https://party.hello-park.io
         
       - name: Setup Pages
         uses: actions/configure-pages@v4

@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { amo } from '../services/amo.js';
-import { buildConfiguratorUrl } from '../config/amo-config.js';
+import { buildConfiguratorUrl, signLeadId, CONFIGURATOR_URL } from '../config/amo-config.js';
+import { redis } from '../services/redis.js';
+import { nanoid } from 'nanoid';
 
 const router = Router();
 
@@ -35,7 +37,28 @@ router.post('/start-config', async (req, res) => {
       // Не блокируем выдачу URL из-за этой ошибки
     }
 
-    const url = buildConfiguratorUrl(leadId);
+    const originalUrl = buildConfiguratorUrl(leadId);
+
+    // Короткая ссылка: параметры лежат в Redis 60 дней.
+    // Если Redis недоступен — отдаём длинную ссылку, SalesBot должен получить URL в любом случае.
+    let url = originalUrl;
+    try {
+      const sig = signLeadId(leadId);
+      const inviteData = JSON.stringify({ leadId, sig, originalUrl });
+      // NX не даёт перезаписать чужой ключ при коллизии nanoid — пробуем заново
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const id = nanoid(6);
+        const stored = await redis.set(`invite:${id}`, inviteData, 'EX', 5184000, 'NX');
+        if (stored === 'OK') {
+          const base = CONFIGURATOR_URL.replace(/\/+$/, '');
+          url = `${base}/?id=${id}`;
+          break;
+        }
+      }
+    } catch (e) {
+      console.warn(`[AMO] Redis недоступен, отдаём длинную ссылку: ${e.message}`);
+    }
+
     console.log(`[AMO] start-config: lead_id=${leadId} → ${url}`);
     return res.json({ url, name, lead_id: leadId });
   } catch (e) {

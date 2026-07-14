@@ -8,8 +8,8 @@ import {
   getMegaFoodTotal,
 } from "../data/megaConfig";
 
-// Backend API URL — Timeweb VPS (HTTPS через nip.io)
-const API_BASE = import.meta.env.VITE_API_URL || 'https://194-87-118-33.nip.io';
+// Backend API URL — пустая строка в проде = относительные /api/-пути (nginx проксирует на backend)
+const API_BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3002' : '');
 
 // ──────────────────────────────────────────────
 // localStorage cache helpers
@@ -410,7 +410,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
 
   // On mount: if we have a leadId, notify server and pre-fill contact data
   useEffect(() => {
-    if (!leadId || !API_BASE) return;
+    if (!leadId) return;
 
     // Notify server that configurator was opened
     fetch(`${API_BASE}/api/leads/${leadId}/opened?sig=${leadSig || ''}`, { method: 'POST' }).catch(() => {});
@@ -433,7 +433,7 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
   // Submit configuration to API
   // Note: totalPrice is passed by the component calling submitToAPI
   const submitToAPI = useCallback(async (price?: number): Promise<boolean> => {
-    if (!leadId || !API_BASE) return true; // No lead = standalone mode, always OK
+    if (!leadId) return true; // No lead = standalone mode, always OK
     try {
       const payload = {
         ...state,

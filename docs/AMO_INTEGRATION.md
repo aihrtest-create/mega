@@ -174,7 +174,7 @@ cd /root/planner-park && git pull origin main && pm2 restart dr-server --update-
 
 ### Проверить что интеграция работает
 ```bash
-curl -s -X POST https://194-87-118-33.nip.io/api/amo/start-config \
+curl -s -X POST https://party.hello-park.io/api/amo/start-config \
   -H "Content-Type: application/json" \
   -d '{"lead_id": 33153603}'
 # Должен вернуть: {"url":"https://.../?lead=33153603","name":"...","lead_id":"33153603"}

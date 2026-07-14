@@ -160,7 +160,7 @@ export default function InvitationDashboard() {
 
   const fetchDashboardData = async (id: string) => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3002' : 'https://194-87-118-33.nip.io');
+      const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3002' : '');
       const [statsRes, rsvpsRes] = await Promise.all([
         fetch(`${apiBaseUrl}/api/rsvps/${id}/stats`),
         fetch(`${apiBaseUrl}/api/rsvps/${id}`)

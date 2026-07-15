@@ -224,8 +224,8 @@ function getMegaSteps(packageType: WizardState["packageType"], questType: Wizard
 export const INCLUDED_CHILDREN = 8;
 export const EXTRA_CHILD_WEEKDAY = 1250;
 export const EXTRA_CHILD_WEEKEND = 1650;
-export const CUSTOM_CHILD_WEEKDAY = 1250;
-export const CUSTOM_CHILD_WEEKEND = 1650;
+export const CUSTOM_CHILD_WEEKDAY = 1500;
+export const CUSTOM_CHILD_WEEKEND = 1900;
 
 export function getExtraChildrenCount(state: WizardState): number {
   if (!state.packageType) return 0;
@@ -236,10 +236,22 @@ export function getExtraChildrenCount(state: WizardState): number {
 }
 
 export function getExtraChildrenCost(state: WizardState, isWeekend: boolean): number {
+  const count = getExtraChildrenCount(state);
+  if (count === 0) return 0;
+
   if (state.packageType === "custom") {
-    return getExtraChildrenCount(state) * (isWeekend ? CUSTOM_CHILD_WEEKEND : CUSTOM_CHILD_WEEKDAY);
+    return count * (isWeekend ? CUSTOM_CHILD_WEEKEND : CUSTOM_CHILD_WEEKDAY);
   }
-  return getExtraChildrenCount(state) * (isWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY);
+
+  if (state.packageType === "basic") {
+    return count * (isWeekend ? 1900 : 1500);
+  }
+
+  if (state.packageType === "premium" || state.packageType === "exclusive") {
+    return count * (isWeekend ? 2900 : 2500);
+  }
+
+  return count * (isWeekend ? EXTRA_CHILD_WEEKEND : EXTRA_CHILD_WEEKDAY);
 }
 
 // ── Custom mode: gift logic based on selected services ──

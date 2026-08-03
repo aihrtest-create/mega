@@ -53,6 +53,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
   CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
   CREATE INDEX IF NOT EXISTS idx_events_lead ON lead_events(lead_id);
+  CREATE INDEX IF NOT EXISTS idx_events_type ON lead_events(event_type);
 
   CREATE TABLE IF NOT EXISTS rsvps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -131,6 +132,20 @@ const statements = {
 
   getStats: db.prepare(`
     SELECT status, COUNT(*) as count FROM leads GROUP BY status
+  `),
+
+  // ---- Analytics Queries ----
+  getEventsCountByType: db.prepare(`
+    SELECT event_type, COUNT(DISTINCT lead_id) as unique_leads, COUNT(*) as total_events
+    FROM lead_events
+    GROUP BY event_type
+  `),
+
+  getStepEvents: db.prepare(`
+    SELECT event_data, COUNT(DISTINCT lead_id) as unique_leads, COUNT(*) as total_views
+    FROM lead_events
+    WHERE event_type = 'step_view'
+    GROUP BY event_data
   `),
 
   createRsvp: db.prepare(`

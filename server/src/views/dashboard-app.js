@@ -272,7 +272,134 @@ function timeAgo(ds) {
   return Math.floor(h/24)+' дн назад';
 }
 
+// ---- Funnel Analytics Logic ----
+let currentTab = 'leads';
+
+function switchMainTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-btn-leads').classList.toggle('active', tab === 'leads');
+  document.getElementById('tab-btn-funnel').classList.toggle('active', tab === 'funnel');
+  
+  document.getElementById('tab-content-leads').style.display = tab === 'leads' ? 'block' : 'none';
+  document.getElementById('tab-content-funnel').style.display = tab === 'funnel' ? 'block' : 'none';
+
+  if (tab === 'funnel') {
+    loadFunnelAnalytics();
+  }
+}
+
+async function loadFunnelAnalytics() {
+  try {
+    const res = await fetch('/api/analytics/funnel');
+    const data = await res.json();
+    renderFunnel(data);
+  } catch (e) {
+    console.error('Ошибка загрузки аналитики воронки:', e);
+  }
+}
+
+const STEP_LABELS = {
+  'step1-datetime': '1. Дата, время и гости',
+  'step2-format': '2. Выбор формата',
+  'step-custom-guests': '3. Уточнение гостей (Кастом)',
+  'step3-quests': '4. Выбор квеста / приключения',
+  'step4-animators': '5. Выбор ведущих / героев',
+  'step5-masterclasses': '6. Мастер-классы',
+  'step-shows': '7. Шоу-программы',
+  'step-disco': '8. Дискотека / Треш-коробка',
+  'step-additional-activities': '9. Доп. активности',
+  'step-balloon': '10. Шар-сюрприз / Пиньята',
+  'step-additional-services': '11. Дополнительные услуги',
+  'step6-food': '12. Питание и кейтеринг',
+  'step7-summary': '13. Итог и финал (Смета)'
+};
+
+function renderFunnel(data) {
+  const summary = data.summary || {};
+  const steps = data.steps || [];
+
+  // 1. Render Summary Cards
+  document.getElementById('funnel-summary-cards').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Сгенерировано ссылок</div>
+      <div class="stat-value orange">${summary.links_generated || 0}</div>
+      <div style="font-size:12px;color:#71717A;margin-top:4px">В AmoCRM (Отправить)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Открыто конфигураторов</div>
+      <div class="stat-value blue">${summary.config_opened || 0}</div>
+      <div style="font-size:12px;color:#3B82F6;margin-top:4px">Конверсия: ${summary.opened_conversion_percent || 0}%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Заполнено полностью</div>
+      <div class="stat-value green">${summary.config_submitted || 0}</div>
+      <div style="font-size:12px;color:#22C55E;margin-top:4px">Конверсия от откр.: ${summary.submit_conversion_from_opened_percent || 0}%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Сквозная конверсия</div>
+      <div class="stat-value orange">${summary.overall_conversion_percent || 0}%</div>
+      <div style="font-size:12px;color:#71717A;margin-top:4px">Ссылка ➔ Заявка</div>
+    </div>
+  `;
+
+  // 2. Render Main Flow Bars
+  const total = Math.max(summary.links_generated || 1, 1);
+  const stages = [
+    { name: '1. Ссылка сгенерирована в AmoCRM', count: summary.links_generated || 0, color: '#FF6022' },
+    { name: '2. Конфигуратор открыт клиентом', count: summary.config_opened || 0, color: '#3B82F6' },
+    { name: '3. Дошли до итогового экрана сметы', count: steps.find(s=>s.step_id==='step7-summary')?.unique_leads_count || summary.config_submitted || 0, color: '#A855F7' },
+    { name: '4. Заявка успешно отправлена', count: summary.config_submitted || 0, color: '#22C55E' }
+  ];
+
+  document.getElementById('funnel-flow-bars').innerHTML = stages.map(st => {
+    const pct = ((st.count / total) * 100).toFixed(1);
+    return `
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:#E4E4E7;margin-bottom:4px">
+          <span>${st.name}</span>
+          <span style="font-weight:700">${st.count} <span style="color:#71717A;font-weight:400">(${pct}%)</span></span>
+        </div>
+        <div style="width:100%;height:10px;background:#27272A;border-radius:5px;overflow:hidden">
+          <div style="width:${Math.min(pct, 100)}%;height:100%;background:${st.color};border-radius:5px;transition:width 0.5s"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // 3. Render Steps Table
+  if (!steps.length) {
+    document.getElementById('funnel-steps-table').innerHTML = `
+      <tr><td colspan="5" style="padding:20px;text-align:center;color:#71717A">
+        Данные по шагам собираются. Откройте конфигуратор на клиенте, чтобы увидеть прохождение шагов.
+      </td></tr>
+    `;
+    return;
+  }
+
+  document.getElementById('funnel-steps-table').innerHTML = steps.map(s => {
+    const label = STEP_LABELS[s.step_id] || s.step_name || s.step_id;
+    const isHighDrop = s.drop_off_rate_percent >= 30; // Подсветить отвал > 30%
+    return `
+      <tr style="border-bottom:1px solid #27272A">
+        <td style="padding:12px 14px;color:#71717A;font-weight:600">Шаг ${s.step_index}</td>
+        <td style="padding:12px 14px;color:#FAFAFA;font-weight:500">${esc(label)}</td>
+        <td style="padding:12px 14px;color:#3B82F6;font-weight:700">${s.unique_leads_count}</td>
+        <td style="padding:12px 14px;color:#22C55E">${s.step_conversion_percent}%</td>
+        <td style="padding:12px 14px">
+          <span style="display:inline-block;padding:3px 8px;border-radius:6px;font-size:12px;font-weight:600;background:${isHighDrop ? 'rgba(239,68,68,0.2)' : 'rgba(255,255,255,0.05)'};color:${isHighDrop ? '#EF4444' : '#A1A1AA'}">
+            -${s.drop_off_count} лидов (${s.drop_off_rate_percent}%) ${isHighDrop ? '⚠️' : ''}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
 document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 loadLeads();
-setInterval(loadLeads, 10000);
+setInterval(() => {
+  if (currentTab === 'leads') loadLeads();
+  else if (currentTab === 'funnel') loadFunnelAnalytics();
+}, 10000);
+

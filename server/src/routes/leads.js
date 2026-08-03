@@ -242,6 +242,13 @@ router.post('/:id/configure', validateLeadSignature, async (req, res) => {
       const noteText = buildAmoNoteText(req.body);
       const fieldUpdates = buildAmoFieldUpdates(req.body, amoLeadId);
 
+      // Record analytics event
+      try {
+        statements.addEvent.run(amoLeadId, 'config_submitted', JSON.stringify({ totalPrice: req.body?.totalPrice || 0 }));
+      } catch (e) {
+        console.warn(`[ANALYTICS] Не удалось записать config_submitted: ${e.message}`);
+      }
+
       // Add note (всегда — это самое важное)
       try {
         await amo.addNoteToLead(amoLeadId, noteText);

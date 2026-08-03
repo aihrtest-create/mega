@@ -7,6 +7,7 @@ import leadsRouter from './routes/leads.js';
 import amoRouter from './routes/amo.js';
 import rsvpsRouter from './routes/rsvps.js';
 import shortenRouter from './routes/shorten.js';
+import analyticsRouter from './routes/analytics.js';
 import { initTelegramBot, getTelegramBot } from './bots/telegram.js';
 import { initMaxBot, getMaxBot } from './bots/max.js';
 
@@ -29,6 +30,7 @@ app.use('/api/leads', leadsRouter);
 app.use('/api/amo', amoRouter);
 app.use('/api/rsvps', rsvpsRouter);
 app.use('/api/shorten', shortenRouter);
+app.use('/api/analytics', analyticsRouter);
 
 // ---- Telegram Webhook ----
 app.post('/webhook/telegram', (req, res) => {

@@ -146,16 +146,60 @@
   <div class="header">
     <div class="header-left">
       <div class="logo">H</div>
-      <div><div class="header-title">Hello Park CRM</div></div>
+      <div><div class="header-title">Hello Park CRM & Analytics</div></div>
+      <div style="margin-left:20px;display:flex;gap:8px">
+        <button class="filter-btn active" id="tab-btn-leads" onclick="switchMainTab('leads')">📋 Заявки</button>
+        <button class="filter-btn" id="tab-btn-funnel" onclick="switchMainTab('funnel')">📊 Воронка и Отвал</button>
+      </div>
     </div>
     <div><span class="dot-live"></span><span style="color:#71717A;font-size:12px">Онлайн</span></div>
   </div>
-  <div class="stats-bar" id="stats-bar"></div>
-  <div class="filters" id="filters"></div>
-  <div class="table-wrap">
-    <table><thead><tr><th>Клиент</th><th>Телефон</th><th>Мессенджер</th><th>Статус</th><th>Создано</th><th>Сумма</th></tr></thead>
-    <tbody id="leads-table"></tbody></table>
+
+  <!-- LEADS TAB CONTENT -->
+  <div id="tab-content-leads">
+    <div class="stats-bar" id="stats-bar"></div>
+    <div class="filters" id="filters"></div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Клиент</th><th>Телефон</th><th>Мессенджер</th><th>Статус</th><th>Создано</th><th>Сумма</th></tr></thead>
+      <tbody id="leads-table"></tbody></table>
+    </div>
   </div>
+
+  <!-- FUNNEL TAB CONTENT -->
+  <div id="tab-content-funnel" style="display:none;padding:24px">
+    <div style="max-width:1100px;margin:0 auto">
+      <h2 style="font-size:20px;font-weight:700;color:#FAFAFA;margin-bottom:16px">Воронка конверсии и анализ отвала по шагам</h2>
+      
+      <!-- Summary metrics cards -->
+      <div id="funnel-summary-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px"></div>
+
+      <!-- Main Funnel Flow Bar -->
+      <div style="background:#18181B;border:1px solid #27272A;border-radius:16px;padding:20px;margin-bottom:24px">
+        <h3 style="font-size:14px;color:#A1A1AA;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">Сквозной прогресс конверсии</h3>
+        <div id="funnel-flow-bars" style="display:flex;flex-direction:column;gap:12px"></div>
+      </div>
+
+      <!-- Step Drop-off Table -->
+      <div style="background:#18181B;border:1px solid #27272A;border-radius:16px;padding:20px">
+        <h3 style="font-size:14px;color:#A1A1AA;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">Где клиенты останавливаются (Drop-off по шагам)</h3>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr>
+                <th style="padding:10px 14px">Шаг</th>
+                <th style="padding:10px 14px">Название экрана</th>
+                <th style="padding:10px 14px">Просмотров (лидов)</th>
+                <th style="padding:10px 14px">Конверсия с предыд. шага</th>
+                <th style="padding:10px 14px">Потери (Drop-off)</th>
+              </tr>
+            </thead>
+            <tbody id="funnel-steps-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
       <div class="modal-header"><div class="modal-title" id="modal-title"></div><button class="modal-close" onclick="closeModal()">&times;</button></div>

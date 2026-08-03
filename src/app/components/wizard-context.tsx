@@ -391,6 +391,56 @@ export function WizardProvider({ children }: { children: React.ReactNode }) {
     clearCacheByKey(cacheKey);
   }, [cacheKey]);
 
+  // Analytics: send step_view event on step change
+  useEffect(() => {
+    const currentLead = leadId || 'anonymous';
+    try {
+      const stepNames: Record<number, string> = {
+        1: 'step1-datetime',
+        2: 'step2-format',
+        3: 'step-custom-guests',
+        4: 'step3-quests',
+        5: 'step4-animators',
+        6: 'step5-masterclasses',
+        7: 'step-shows',
+        8: 'step-disco',
+        9: 'step-additional-activities',
+        10: 'step-balloon',
+        11: 'step-additional-services',
+        12: 'step6-food',
+        13: 'step7-summary',
+      };
+      const stepName = stepNames[step] || `step-${step}`;
+
+      // Яндекс Метрика цель
+      if (typeof window !== 'undefined' && (window as any).ym && (window as any).YANDEX_METRIKA_ID) {
+        (window as any).ym((window as any).YANDEX_METRIKA_ID, 'reachGoal', `step_${step}_${stepName}`, { lead_id: currentLead });
+      }
+
+      const payload = JSON.stringify({
+        lead_id: currentLead,
+        sig: leadSig,
+        step_id: stepName,
+        step_index: step,
+        step_name: stepName,
+      });
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(`${API_BASE}/api/analytics/step`, blob);
+      } else {
+        fetch(`${API_BASE}/api/analytics/step`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload,
+          keepalive: true,
+        }).catch(() => {});
+      }
+    } catch {
+      // Игнорируем сетевые ошибки
+    }
+  }, [step, leadId, leadSig]);
+
   // Reset entire wizard state
   const resetWizard = useCallback(() => {
     clearCacheByKey(cacheKey);

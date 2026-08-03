@@ -188,24 +188,33 @@ router.get('/:id', validateLeadSignature, async (req, res) => {
  */
 router.post('/:id/opened', validateLeadSignature, async (req, res) => {
   try {
-    const lead = statements.getLead.get(req.params.id);
-    if (lead) {
-      if (['link_sent', 'bot_connected'].includes(lead.status)) {
-        statements.markConfigOpened.run(req.params.id);
-        statements.addEvent.run(req.params.id, 'config_opened', null);
-        console.log(`[LEAD] Конфигуратор открыт: ${lead.name} [${lead.id}]`);
+    let lead = statements.getLead.get(req.params.id);
+    
+    // Если лид из AmoCRM ещё не был сохранён в SQLite — создаём его
+    if (!lead && isAmoLeadId(req.params.id)) {
+      try {
+        statements.createLead.run(String(req.params.id), `AmoCRM Лид #${req.params.id}`, '', 'telegram');
+        lead = statements.getLead.get(req.params.id);
+      } catch (e) {
+        console.warn(`[AMO] Не удалось создать лида в SQLite при открытии: ${e.message}`);
       }
-      return res.json({ success: true, lead: statements.getLead.get(req.params.id) });
     }
 
-    if (isAmoLeadId(req.params.id)) {
-      try {
-        await amo.addNoteToLead(req.params.id, '👀 Клиент открыл конфигуратор');
-        console.log(`[AMO] Лид ${req.params.id}: открыл конфигуратор → примечание добавлено`);
-      } catch (e) {
-        console.warn(`[AMO] Не удалось добавить примечание об открытии: ${e.message}`);
+    if (lead) {
+      statements.markConfigOpened.run(req.params.id);
+      statements.addEvent.run(req.params.id, 'config_opened', null);
+      console.log(`[LEAD] Конфигуратор открыт: ${lead.name} [${lead.id}]`);
+
+      if (isAmoLeadId(req.params.id)) {
+        try {
+          await amo.addNoteToLead(req.params.id, '👀 Клиент открыл конфигуратор');
+          console.log(`[AMO] Лид ${req.params.id}: открыл конфигуратор → примечание добавлено`);
+        } catch (e) {
+          console.warn(`[AMO] Не удалось добавить примечание об открытии: ${e.message}`);
+        }
       }
-      return res.json({ success: true });
+
+      return res.json({ success: true, lead: statements.getLead.get(req.params.id) });
     }
 
     return res.status(404).json({ error: 'Лид не найден' });
@@ -239,8 +248,20 @@ router.post('/:id/configure', validateLeadSignature, async (req, res) => {
 
     if (isAmoLeadId(req.params.id)) {
       const amoLeadId = req.params.id;
+      const configData = JSON.stringify(req.body);
       const noteText = buildAmoNoteText(req.body);
       const fieldUpdates = buildAmoFieldUpdates(req.body, amoLeadId);
+
+      // Сохраняем в локальную SQLite БД
+      try {
+        const existing = statements.getLead.get(amoLeadId);
+        if (!existing) {
+          statements.createLead.run(String(amoLeadId), `AmoCRM Лид #${amoLeadId}`, req.body?.contactPhone || '', 'telegram');
+        }
+        statements.saveConfiguration.run(configData, amoLeadId);
+      } catch (e) {
+        console.warn(`[AMO] Не удалось сохранить конфигурацию в SQLite: ${e.message}`);
+      }
 
       // Record analytics event
       try {

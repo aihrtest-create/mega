@@ -46,6 +46,17 @@ router.post('/start-config', async (req, res) => {
       console.warn(`[AMO] Redis недоступен, отдаём длинную ссылку: ${e.message}`);
     }
 
+    // Создаём/гарантируем наличие лида в локальной базе leads
+    try {
+      const existing = statements.getLead.get(String(leadId));
+      if (!existing) {
+        statements.createLead.run(String(leadId), name || `AmoCRM Лид #${leadId}`, '', 'telegram');
+      }
+      statements.markLinkSent.run(String(leadId));
+    } catch (e) {
+      console.warn(`[AMO] Ошибка гарантии лида в БД: ${e.message}`);
+    }
+
     // Записываем событие аналитики
     try {
       statements.addEvent.run(String(leadId), 'link_generated', JSON.stringify({ url }));

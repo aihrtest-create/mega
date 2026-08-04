@@ -395,11 +395,58 @@ function renderFunnel(data) {
   }).join('');
 }
 
+// ---- Authentication Logic ----
+const AUTH_KEY = 'hp_crm_auth_token_v1';
+const VALID_USER = 'admin';
+const VALID_PASS = 'Helloio88';
+
+function checkAuth() {
+  const savedToken = localStorage.getItem(AUTH_KEY);
+  if (savedToken === btoa(`${VALID_USER}:${VALID_PASS}`)) {
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('header-user-info').style.display = 'flex';
+    document.getElementById('current-user-name').textContent = 'Admin';
+    return true;
+  } else {
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('header-user-info').style.display = 'none';
+    return false;
+  }
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById('login-username').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+
+  if (user.toLowerCase() === VALID_USER && pass === VALID_PASS) {
+    const token = btoa(`${VALID_USER}:${VALID_PASS}`);
+    localStorage.setItem(AUTH_KEY, token);
+    errEl.style.display = 'none';
+    checkAuth();
+    loadLeads();
+  } else {
+    errEl.style.display = 'block';
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem(AUTH_KEY);
+  checkAuth();
+}
+
 document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-loadLeads();
+
+if (checkAuth()) {
+  loadLeads();
+}
+
 setInterval(() => {
-  if (currentTab === 'leads') loadLeads();
-  else if (currentTab === 'funnel') loadFunnelAnalytics();
+  if (checkAuth()) {
+    if (currentTab === 'leads') loadLeads();
+    else if (currentTab === 'funnel') loadFunnelAnalytics();
+  }
 }, 10000);
 

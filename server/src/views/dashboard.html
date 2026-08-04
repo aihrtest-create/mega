@@ -139,10 +139,65 @@
     textarea.notes-input:focus{outline:none;border-color:#FF6022}
     .empty-state{text-align:center;padding:60px 20px;color:#52525B}
     .empty-state-icon{font-size:48px;margin-bottom:12px}
+    
+    /* Login Modal Styles */
+    .login-overlay {
+      position: fixed; inset: 0; background: #0F0F12; z-index: 9999;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .login-card {
+      background: #18181B; border: 1px solid #27272A; border-radius: 20px;
+      padding: 32px; width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+    .login-logo {
+      width: 48px; height: 48px; background: linear-gradient(135deg,#FF6022,#FF8A50);
+      border-radius: 14px; margin: 0 auto 16px; display: flex; align-items: center;
+      justify-content: center; font-size: 24px; font-weight: 800; color: #fff;
+    }
+    .login-title { font-size: 20px; font-weight: 700; color: #FAFAFA; margin-bottom: 6px; }
+    .login-subtitle { font-size: 13px; color: #71717A; margin-bottom: 24px; }
+    .login-group { margin-bottom: 16px; text-align: left; }
+    .login-label { font-size: 11px; text-transform: uppercase; color: #A1A1AA; letter-spacing: 0.5px; margin-bottom: 6px; display: block; font-weight: 600; }
+    .login-input {
+      width: 100%; background: #1C1C1F; border: 1px solid #27272A; border-radius: 10px;
+      padding: 12px 14px; color: #fff; font-family: inherit; font-size: 14px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .login-input:focus { border-color: #FF6022; }
+    .login-btn {
+      width: 100%; padding: 12px; border-radius: 10px; background: linear-gradient(135deg,#FF6022,#FF8A50);
+      color: #fff; font-weight: 700; font-size: 14px; border: none; cursor: pointer;
+      margin-top: 8px; font-family: inherit; transition: opacity 0.2s;
+    }
+    .login-btn:hover { opacity: 0.9; }
+    .login-error { color: #EF4444; font-size: 12px; margin-top: 12px; display: none; }
+
     @media(max-width:768px){.stats-bar{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
+  <!-- LOGIN OVERLAY -->
+  <div class="login-overlay" id="login-overlay">
+    <div class="login-card">
+      <div class="login-logo">H</div>
+      <div class="login-title">Вход в панель Hello Park</div>
+      <div class="login-subtitle">Введите логин и пароль для доступа</div>
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="login-group">
+          <label class="login-label">Логин</label>
+          <input type="text" id="login-username" class="login-input" placeholder="Admin" required autocomplete="username">
+        </div>
+        <div class="login-group">
+          <label class="login-label">Пароль</label>
+          <input type="password" id="login-password" class="login-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <div class="login-error" id="login-error">Неверный логин или пароль</div>
+        <button type="submit" class="login-btn">Войти в панель</button>
+      </form>
+    </div>
+  </div>
+
   <div class="header">
     <div class="header-left">
       <div class="logo">H</div>
@@ -152,7 +207,13 @@
         <button class="filter-btn" id="tab-btn-funnel" onclick="switchMainTab('funnel')">📊 Воронка и Отвал</button>
       </div>
     </div>
-    <div><span class="dot-live"></span><span style="color:#71717A;font-size:12px">Онлайн</span></div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div><span class="dot-live"></span><span style="color:#71717A;font-size:12px">Онлайн</span></div>
+      <div id="header-user-info" style="display:none;align-items:center;gap:10px;padding-left:14px;border-left:1px solid #27272A">
+        <span style="font-size:13px;color:#E4E4E7;font-weight:600">👤 <span id="current-user-name">Admin</span></span>
+        <button onclick="handleLogout()" style="background:transparent;border:1px solid #27272A;color:#A1A1AA;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer">Выйти</button>
+      </div>
+    </div>
   </div>
 
   <!-- LEADS TAB CONTENT -->

@@ -44,5 +44,7 @@ tmp_img_processor/
 processed_pdfs/
 scratch/
 server/.env
+analytics/.env
+.env
 server/data/
 фото и видео космос/

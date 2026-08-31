@@ -13,6 +13,7 @@ services:
       - "80:80"
     depends_on:
       - backend
+      - analytics
     restart: unless-stopped
 
   backend:
@@ -33,6 +34,19 @@ services:
     depends_on:
       - redis
 
+  analytics:
+    build:
+      context: ./analytics
+      dockerfile: Dockerfile
+    expose:
+      - "5001"
+    environment:
+      - PORT=5001
+      - GRAFANA_API_TOKEN=${GRAFANA_API_TOKEN:-}
+    env_file:
+      - ./server/.env
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     volumes:
@@ -41,3 +55,4 @@ services:
 
 volumes:
   redis_data:
+

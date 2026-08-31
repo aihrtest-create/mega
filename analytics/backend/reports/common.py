@@ -11,7 +11,14 @@ GRAFANA_URL = "https://stat.hello.io"
 DATASOURCE_UID = "adg0kymjjbf28a"
 
 def get_api_token():
-    return os.environ.get("GRAFANA_API_TOKEN", "").strip()
+    token = (
+        os.environ.get("GRAFANA_API_TOKEN") or
+        os.environ.get("API_TOKEN") or
+        os.environ.get("GRAFANA_TOKEN") or
+        ""
+    ).strip().strip('"').strip("'")
+    return token
+
 
 
 

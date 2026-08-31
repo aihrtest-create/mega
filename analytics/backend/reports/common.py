@@ -28,24 +28,26 @@ def get_headers():
         "Content-Type": "application/json"
     }
 
-# Для обратной совместимости
 class DynamicHeaders(dict):
     def __getitem__(self, key):
-        if key == "Authorization":
-            return f"Bearer {get_api_token()}"
-        return super().get(key, "application/json")
-    
+        return get_headers()[key]
     def get(self, key, default=None):
-        if key == "Authorization":
-            return f"Bearer {get_api_token()}"
-        return super().get(key, default)
-        
+        return get_headers().get(key, default)
+    def items(self):
+        return get_headers().items()
+    def keys(self):
+        return get_headers().keys()
+    def values(self):
+        return get_headers().values()
+    def __iter__(self):
+        return iter(get_headers())
+    def __len__(self):
+        return len(get_headers())
     def copy(self):
         return get_headers()
 
-HEADERS = DynamicHeaders({
-    "Content-Type": "application/json"
-})
+HEADERS = DynamicHeaders()
+
 
 # Жестко заданный порядок парков согласно скриншоту
 PARK_ORDER = [

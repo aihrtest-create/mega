@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime
-from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, HEADERS, get_time_boundaries
+from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries
 from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.utils import get_column_letter
 
@@ -41,7 +41,8 @@ def generate_playtime(date_val: str, period_type: str, selected_parks: list, out
         "from": "0", "to": "9999999999999"
     }
 
-    response = requests.post(f"{GRAFANA_URL}/api/ds/query", headers=HEADERS, json=payload, timeout=30)
+    response = requests.post(f"{GRAFANA_URL}/api/ds/query", headers=get_headers(), json=payload, timeout=30)
+
     response.raise_for_status()
     
     results_dict = {}

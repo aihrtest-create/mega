@@ -4,12 +4,16 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
+load_dotenv(dotenv_path="../server/.env")
+load_dotenv(dotenv_path="./server/.env")
 
 GRAFANA_URL = "https://stat.hello.io"
 DATASOURCE_UID = "adg0kymjjbf28a"
 
 def get_api_token():
-    return os.environ.get("GRAFANA_API_TOKEN", "")
+    return os.environ.get("GRAFANA_API_TOKEN", "").strip()
+
+
 
 def get_headers():
     return {

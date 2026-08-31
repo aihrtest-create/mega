@@ -42,7 +42,6 @@ services:
       - "5001"
     environment:
       - PORT=5001
-      - GRAFANA_API_TOKEN=${GRAFANA_API_TOKEN:-}
     env_file:
       - ./server/.env
     restart: unless-stopped

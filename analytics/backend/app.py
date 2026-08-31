@@ -20,6 +20,19 @@ CORS(app)
 def serve_index():
     return app.send_static_file("index.html")
 
+@app.route("/api/health")
+def health_check():
+    from backend.reports.common import get_api_token
+    token = get_api_token()
+    masked = f"{token[:4]}...{token[-4:]}" if len(token) > 8 else ("EMPTY" if len(token) == 0 else "SHORT")
+    return jsonify({
+        "status": "ok",
+        "token_present": len(token) > 0,
+        "token_length": len(token),
+        "token_preview": masked
+    })
+
+
 @app.route("/api/generate", methods=["POST"])
 def generate_report():
     data = request.json or {}

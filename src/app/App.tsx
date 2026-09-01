@@ -214,7 +214,16 @@ function WizardContent() {
 }
 
 export default function App() {
-  const isPresentation = window.location.pathname === '/presentation' || window.location.pathname === '/mega/presentation';
+  const isPresentation =
+    window.location.pathname === '/presentation' ||
+    window.location.pathname === '/mega/presentation' ||
+    window.location.pathname.endsWith('/presentation') ||
+    window.location.pathname.endsWith('/slides') ||
+    window.location.search.includes('view=presentation') ||
+    window.location.search.includes('view=slides') ||
+    window.location.search.includes('slide=') ||
+    window.location.hash.includes('presentation') ||
+    window.location.hash.includes('slides');
 
   if (isPresentation) {
     return <Presentation />;

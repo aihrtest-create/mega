@@ -242,8 +242,8 @@ export function Step6DateTime() {
           </motion.div>
         )}
 
-        <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed">
-          В пакеты включено 8 детей. Для более 8 детей условия проговариваются индивидуально с менеджером
+        <p className="text-xs text-[#ABABAB] mt-3 px-1 leading-relaxed text-center">
+          В пакеты включено 8 детей. Доплата за 9 и 10 ребенка рассчитывается автоматически.
         </p>
       </div>
     </motion.div>

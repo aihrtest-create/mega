@@ -48,3 +48,23 @@ analytics/.env
 .env
 server/data/
 фото и видео космос/
+
+# Temporary scratch & deck files
+/*.py
+/*.mjs
+/*.scpt
+/*.pptx
+/*.bak
+*.inspect.ndjson
+.codex-*/
+template-inspect/
+animators-8-cards-sample/
+animators-8-cards-sample.*
+hello-park-*/
+tmp*/
+/*.jpg
+/*.png
+public/presentation/*.png
+public/presentation/*.jpg
+public/presentation/quest-heroes/
+

@@ -1,306 +1,494 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, ChevronLeft, Sparkles, Zap, Layers, BarChart3, Smartphone, CheckCircle2 } from "lucide-react";
+import {
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Maximize2,
+  Minimize2,
+  Copy,
+  Check,
+  Home,
+  Printer,
+  Grid,
+} from "lucide-react";
+import { SlideCover } from "./components/slides/SlideCover";
+import { SlideNewFormat } from "./components/slides/SlideNewFormat";
+import { SlideStepsStart } from "./components/slides/SlideStepsStart";
+import { SlideStepsContinue } from "./components/slides/SlideStepsContinue";
+import { SlidePackages } from "./components/slides/SlidePackages";
+import { SlideHowToBook } from "./components/slides/SlideHowToBook";
+import { SlidePhygitalVoxels } from "./components/slides/SlidePhygitalVoxels";
+import { SlidePhygitalSpace } from "./components/slides/SlidePhygitalSpace";
+import { SlideClassicQuests } from "./components/slides/SlideClassicQuests";
+import { SlideShows } from "./components/slides/SlideShows";
+import { SlideMasterclasses } from "./components/slides/SlideMasterclasses";
+import { SlideActivities } from "./components/slides/SlideActivities";
+import { SlideCatering } from "./components/slides/SlideCatering";
+import { SlideContacts } from "./components/slides/SlideContacts";
 
-const slides = [
-  {
-    id: "intro",
-    title: "Инновационный Конфигуратор Праздников",
-    subtitle: "Увеличьте конверсию и средний чек с помощью интерактивного бронирования",
-    content: (
-      <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
-        <div className="bg-primary/10 p-6 rounded-full mb-4">
-          <Sparkles className="w-16 h-16 text-primary" />
-        </div>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 leading-tight">
-          Будущее продаж <br />
-          <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
-            Детских Праздников
-          </span>
-        </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mt-6">
-          Презентация нового цифрового продукта для менеджеров парков. Удобный, быстрый и прозрачный способ для клиентов собрать свой идеальный праздник.
-        </p>
-      </div>
-    ),
-  },
-  {
-    id: "step1",
-    title: "Шаг 1: Вовлечение пользователя",
-    subtitle: "Яркий стартовый экран, который продает эмоции",
-    content: (
-      <div className="grid md:grid-cols-2 gap-12 items-center h-full">
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold">Простой старт</h2>
-          <p className="text-lg text-gray-600">
-            Пользователь начинает путь с ввода базовой информации: даты, времени и количества гостей. Никаких сложных форм — только легкий диалог.
-          </p>
-          <ul className="space-y-4 mt-8">
-            <li className="flex items-center gap-3 text-gray-700">
-              <CheckCircle2 className="text-primary w-6 h-6" />
-              <span>Минималистичный дизайн без отвлекающих факторов</span>
-            </li>
-            <li className="flex items-center gap-3 text-gray-700">
-              <CheckCircle2 className="text-primary w-6 h-6" />
-              <span>Фокус на ключевом действии (Call to Action)</span>
-            </li>
-            <li className="flex items-center gap-3 text-gray-700">
-              <CheckCircle2 className="text-primary w-6 h-6" />
-              <span>Адаптация под любые устройства</span>
-            </li>
-          </ul>
-        </div>
-        <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-tr from-primary/20 to-purple-500/20 rounded-3xl blur-xl" />
-          <img 
-            src="/mega/screenshots/1-splash.webp" 
-            alt="Splash Screen" 
-            className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: "step2",
-    title: "Шаг 2: Выбор формата",
-    subtitle: "Упакованные пакеты вместо сложного прайса",
-    content: (
-      <div className="grid md:grid-cols-2 gap-12 items-center h-full">
-        <div className="order-2 md:order-1 relative">
-          <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-emerald-500/20 rounded-3xl blur-xl" />
-          <img 
-            src="/mega/screenshots/2-base-package.webp" 
-            alt="Base Packages" 
-            className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
-          />
-        </div>
-        <div className="order-1 md:order-2 space-y-6">
-          <h2 className="text-3xl font-bold">Структурированный выбор</h2>
-          <p className="text-lg text-gray-600">
-            Вместо того, чтобы заставлять клиента собирать праздник с нуля, мы предлагаем готовые форматы (пакеты), которые уже включают всё необходимое.
-          </p>
-          <div className="grid grid-cols-2 gap-6 mt-8">
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-              <Layers className="w-8 h-8 text-blue-500 mb-3" />
-              <h4 className="font-semibold mb-1">Готовые пакеты</h4>
-              <p className="text-sm text-gray-500">Упрощают принятие решения</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-              <Zap className="w-8 h-8 text-amber-500 mb-3" />
-              <h4 className="font-semibold mb-1">Быстрый старт</h4>
-              <p className="text-sm text-gray-500">Меньше отказов на старте</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: "step3",
-    title: "Шаг 3: Настройка и Upsale",
-    subtitle: "Увеличение чека через прозрачные опции",
-    content: (
-      <div className="grid md:grid-cols-2 gap-12 items-center h-full">
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold">Гибкая кастомизация</h2>
-          <p className="text-lg text-gray-600">
-            После выбора базового пакета, клиент может настроить его под себя: выбрать квесты, шоу, добавить ведущих или торт. 
-          </p>
-          <div className="bg-gray-50 border-l-4 border-primary p-4 rounded-r-lg mt-6">
-            <p className="text-gray-700 italic">
-              "Плавающая панель с итоговой ценой всегда на виду. Клиент сразу видит, как добавление услуг влияет на стоимость, что повышает доверие."
-            </p>
-          </div>
-          <ul className="space-y-3 mt-6">
-            <li className="flex items-center gap-3 text-gray-700">
-              <div className="w-2 h-2 rounded-full bg-primary" />
-              <span>Прозрачный расчет цены</span>
-            </li>
-            <li className="flex items-center gap-3 text-gray-700">
-              <div className="w-2 h-2 rounded-full bg-primary" />
-              <span>Нативная продажа дополнительных услуг</span>
-            </li>
-          </ul>
-        </div>
-        <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-tr from-pink-500/20 to-orange-500/20 rounded-3xl blur-xl" />
-          <img 
-            src="/mega/screenshots/3-package-selected.webp" 
-            alt="Customization" 
-            className="relative rounded-2xl shadow-2xl border border-gray-100 object-cover w-full h-auto aspect-[16/10]"
-            style={{ objectPosition: 'top' }}
-          />
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: "benefits",
-    title: "Преимущества для бизнеса",
-    subtitle: "Почему этот инструмент нужен вашему парку",
-    content: (
-      <div className="h-full flex flex-col justify-center">
-        <div className="grid md:grid-cols-3 gap-8">
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 text-center"
-          >
-            <div className="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <BarChart3 className="w-8 h-8 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Рост среднего чека</h3>
-            <p className="text-gray-600">
-              Визуальные подсказки и удобный интерфейс стимулируют клиентов добавлять больше дополнительных услуг.
-            </p>
-          </motion.div>
-          
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 text-center"
-          >
-            <div className="bg-emerald-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Layers className="w-8 h-8 text-emerald-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Разгрузка менеджеров</h3>
-            <p className="text-gray-600">
-              Менеджеры получают уже сформированные и оплаченные заявки, вместо того чтобы часами консультировать по телефону.
-            </p>
-          </motion.div>
-
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="bg-white p-8 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 text-center"
-          >
-            <div className="bg-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Smartphone className="w-8 h-8 text-purple-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Mobile-First</h3>
-            <p className="text-gray-600">
-              80% клиентов бронируют с телефона. Наш конфигуратор идеально адаптирован под мобильные устройства.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-    ),
-  }
-];
+export interface SlideDefinition {
+  id: string;
+  title: string;
+  category: string;
+  component: React.ReactNode;
+}
 
 export function Presentation() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [isGridOpen, setIsGridOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 14 Complete Image-First Presentation Slides
+  const slides: SlideDefinition[] = [
+    {
+      id: "cover",
+      title: "Обложка",
+      category: "Титул",
+      component: <SlideCover key="slide-cover" />,
+    },
+    {
+      id: "new-format",
+      title: "Новый формат праздника",
+      category: "Концепция",
+      component: <SlideNewFormat key="slide-new-format" />,
+    },
+    {
+      id: "steps-start",
+      title: "Как начинается приключение?",
+      category: "Шаги 01-03",
+      component: <SlideStepsStart key="slide-steps-start" />,
+    },
+    {
+      id: "steps-continue",
+      title: "Как продолжается приключение",
+      category: "Шаги 04-06",
+      component: <SlideStepsContinue key="slide-steps-continue" />,
+    },
+    {
+      id: "packages",
+      title: "Пакеты праздника",
+      category: "Тарифы",
+      component: <SlidePackages key="slide-packages" />,
+    },
+    {
+      id: "how-to-book",
+      title: "Как отметить день рождения",
+      category: "Организация",
+      component: <SlideHowToBook key="slide-how-to-book" />,
+    },
+    {
+      id: "voxels",
+      title: "Квест «Мир Вокселей»",
+      category: "Фиджитал",
+      component: <SlidePhygitalVoxels key="slide-voxels" />,
+    },
+    {
+      id: "space",
+      title: "«Космическое приключение»",
+      category: "Фиджитал",
+      component: <SlidePhygitalSpace key="slide-space" />,
+    },
+    {
+      id: "classic-quests",
+      title: "Классические квесты",
+      category: "Сюжеты",
+      component: <SlideClassicQuests key="slide-classic-quests" />,
+    },
+    {
+      id: "shows",
+      title: "Шоу программы",
+      category: "Шоу",
+      component: <SlideShows key="slide-shows" />,
+    },
+    {
+      id: "masterclasses",
+      title: "Мастер-классы",
+      category: "Творчество",
+      component: <SlideMasterclasses key="slide-masterclasses" />,
+    },
+    {
+      id: "activities",
+      title: "Дополнительные активности",
+      category: "Развлечения",
+      component: <SlideActivities key="slide-activities" />,
+    },
+    {
+      id: "catering",
+      title: "Праздничный кейтеринг",
+      category: "Еда & Торты",
+      component: <SlideCatering key="slide-catering" />,
+    },
+    {
+      id: "contacts",
+      title: "Контакты и бронирование",
+      category: "Финал",
+      component: <SlideContacts key="slide-contacts" />,
+    },
+  ];
 
   const nextSlide = () => {
     if (currentSlide < slides.length - 1) {
-      setCurrentSlide(s => s + 1);
+      setCurrentSlide((s) => s + 1);
     }
   };
 
   const prevSlide = () => {
     if (currentSlide > 0) {
-      setCurrentSlide(s => s - 1);
+      setCurrentSlide((s) => s - 1);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
     }
   };
 
   useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
       if (e.key === "ArrowRight" || e.key === "Space") {
+        e.preventDefault();
         nextSlide();
       } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
         prevSlide();
+      } else if (e.key === "f" || e.key === "F") {
+        e.preventDefault();
+        toggleFullscreen();
+      } else if (e.key === "g" || e.key === "G") {
+        e.preventDefault();
+        setIsGridOpen((prev) => !prev);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentSlide]);
+  }, [currentSlide, slides.length]);
+
+  const handleCopyLink = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", "presentation");
+    url.searchParams.set("slide", slides[currentSlide].id);
+    navigator.clipboard.writeText(url.toString());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const slide = slides[currentSlide];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans overflow-hidden">
-      {/* Header */}
-      <header className="px-8 py-6 flex justify-between items-center bg-white border-b border-gray-200 shadow-sm z-10">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xl font-bold text-gray-900">DR-construct</span>
-        </div>
-        <div className="text-sm font-medium text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
-          Слайд {currentSlide + 1} из {slides.length}
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 relative max-w-7xl w-full mx-auto p-8 lg:p-12 flex flex-col">
-        {currentSlide > 0 && (
-          <div className="mb-8">
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              key={`header-${currentSlide}`}
+    <div
+      ref={containerRef}
+      className={`min-h-screen bg-[#0A0A10] text-white flex flex-col font-cy select-none overflow-x-hidden ${
+        isFullscreen ? "p-0" : "p-3 sm:p-5 md:p-6"
+      }`}
+      style={{
+        fontFamily: "'Cy Grotesk', 'Cy Grotesk Grand', 'Unbounded', 'Gilroy', sans-serif",
+      }}
+    >
+      {/* Top Header Bar */}
+      {!isFullscreen && (
+        <header className="max-w-[1600px] w-full mx-auto mb-3 flex items-center justify-between gap-4 px-2">
+          {/* Logo & Navigation to Configurator */}
+          <div className="flex items-center gap-3">
+            <a
+              href="/mega/"
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-xl border border-white/10 transition-all active:scale-95 text-white no-underline text-xs font-bold"
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">{slide.title}</h1>
-              <p className="text-xl text-gray-500">{slide.subtitle}</p>
-            </motion.div>
+              <Home className="w-3.5 h-3.5 text-[#FF6022]" />
+              <span>Конфигуратор</span>
+            </a>
+
+            <div className="hidden sm:flex items-center gap-2 text-white/40 text-xs">
+              <span>/</span>
+              <span className="text-white/80 font-bold flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#FFE600]" />
+                Презентация для клиентов
+              </span>
+            </div>
           </div>
+
+          {/* Center: Slide indicator */}
+          <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-bold">
+            <span className="text-[#FFE600] font-black">{currentSlide + 1}</span>
+            <span className="text-white/40">/</span>
+            <span className="text-white/60">{slides.length}</span>
+            <span className="ml-1 text-white/50 hidden md:inline">({slide.title})</span>
+          </div>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-2">
+            {/* Grid Overview Button */}
+            <button
+              onClick={() => setIsGridOpen(!isGridOpen)}
+              title="Все слайды (G)"
+              className={`p-2 rounded-xl transition-all active:scale-95 text-xs font-bold flex items-center gap-1.5 ${
+                isGridOpen ? "bg-[#5822E5] text-white" : "bg-white/10 hover:bg-white/15 text-white/80"
+              }`}
+            >
+              <Grid className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Слайды</span>
+            </button>
+
+            {/* Copy link */}
+            <button
+              onClick={handleCopyLink}
+              title="Скопировать ссылку на слайд"
+              className="p-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 transition-all active:scale-95 text-white/80"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+
+            {/* Print / Export to PDF */}
+            <button
+              onClick={handlePrint}
+              title="Печать всей презентации в PDF"
+              className="hidden sm:flex p-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 transition-all active:scale-95 text-white/80"
+            >
+              <Printer className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Fullscreen Button */}
+            <button
+              onClick={toggleFullscreen}
+              title={isFullscreen ? "Выйти из полноэкранного режима (Esc)" : "На весь экран (F)"}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#5822E5] hover:bg-[#6833F5] text-white font-extrabold text-xs shadow-lg shadow-[#5822E5]/30 transition-all active:scale-95"
+            >
+              {isFullscreen ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">Свернуть</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span className="hidden md:inline">На весь экран</span>
+                </>
+              )}
+            </button>
+          </div>
+        </header>
+      )}
+
+      {/* Grid Modal Selector */}
+      <AnimatePresence>
+        {isGridOpen && !isFullscreen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="max-w-[1600px] w-full mx-auto mb-4 bg-white/5 border border-white/15 rounded-2xl p-4 backdrop-blur-xl z-20"
+          >
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">
+              {slides.map((s, idx) => {
+                const isActive = idx === currentSlide;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      setCurrentSlide(idx);
+                      setIsGridOpen(false);
+                    }}
+                    className={`p-2 rounded-xl text-left transition-all border ${
+                      isActive
+                        ? "bg-[#5822E5] border-[#FFE600] text-white shadow-lg"
+                        : "bg-white/5 hover:bg-white/10 border-white/10 text-white/70"
+                    }`}
+                  >
+                    <span className="text-[10px] font-mono text-[#FFE600] block mb-0.5">
+                      Слайд {idx + 1}
+                    </span>
+                    <span className="text-xs font-bold line-clamp-1 block">{s.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
         )}
+      </AnimatePresence>
 
-        <div className="flex-1 relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={slide.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="h-full"
-            >
-              {slide.content}
-            </motion.div>
-          </AnimatePresence>
+      {/* Main Slide Presentation Canvas (Strict 16:9 Aspect Ratio) */}
+      <main className="flex-1 flex items-center justify-center relative max-w-[1600px] w-full mx-auto my-auto">
+        <div
+          className={`w-full relative shadow-[0_24px_80px_rgba(0,0,0,0.65)] rounded-[20px] sm:rounded-[28px] md:rounded-[36px] overflow-hidden border border-white/10 transition-all ${
+            isFullscreen
+              ? "h-screen max-w-none rounded-none border-none shadow-none flex items-center justify-center bg-black"
+              : ""
+          }`}
+        >
+          {/* Inner 16:9 Aspect Ratio Box */}
+          <div className="w-full aspect-[16/9] relative bg-white overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, scale: 0.985 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.015 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full h-full"
+              >
+                {slide.component}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Fullscreen Floating Controls */}
+          {isFullscreen && (
+            <>
+              <div className="absolute top-4 left-4 z-30 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-xs font-bold text-white flex items-center gap-2">
+                <span className="text-[#FFE600]">{currentSlide + 1}</span>
+                <span className="text-white/40">/</span>
+                <span>{slides.length}</span>
+                <span className="text-white/70 ml-1">({slide.title})</span>
+              </div>
+
+              <button
+                onClick={toggleFullscreen}
+                className="absolute top-4 right-4 z-30 p-2.5 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full border border-white/20 text-white transition-all"
+                title="Свернуть (Esc)"
+              >
+                <Minimize2 className="w-4 h-4" />
+              </button>
+            </>
+          )}
+
+          {/* Hover Arrows on Canvas */}
+          <div className="absolute inset-y-0 left-0 w-24 flex items-center justify-start pl-4 opacity-0 hover:opacity-100 transition-opacity pointer-events-none z-20">
+            {currentSlide > 0 && (
+              <button
+                onClick={prevSlide}
+                className="pointer-events-auto p-3 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md transition-all shadow-xl active:scale-95"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+            )}
+          </div>
+          <div className="absolute inset-y-0 right-0 w-24 flex items-center justify-end pr-4 opacity-0 hover:opacity-100 transition-opacity pointer-events-none z-20">
+            {currentSlide < slides.length - 1 && (
+              <button
+                onClick={nextSlide}
+                className="pointer-events-auto p-3 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md transition-all shadow-xl active:scale-95"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            )}
+          </div>
         </div>
       </main>
 
-      {/* Controls */}
-      <footer className="bg-white border-t border-gray-200 p-6 flex justify-between items-center shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-10">
-        <button
-          onClick={prevSlide}
-          disabled={currentSlide === 0}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-            currentSlide === 0 
-              ? "text-gray-400 bg-gray-100 cursor-not-allowed" 
-              : "text-gray-700 bg-gray-100 hover:bg-gray-200 active:scale-95"
-          }`}
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Назад
-        </button>
-
-        <div className="flex gap-2">
-          {slides.map((_, i) => (
+      {/* Bottom Control Bar & Thumbnail Strip */}
+      {!isFullscreen && (
+        <footer className="max-w-[1600px] w-full mx-auto mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 px-2">
+          {/* Prev / Next Buttons */}
+          <div className="flex items-center gap-2">
             <button
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                i === currentSlide ? "bg-primary scale-125" : "bg-gray-300 hover:bg-gray-400"
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-black text-xs transition-all ${
+                currentSlide === 0
+                  ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
+                  : "bg-white/10 hover:bg-white/20 text-white border border-white/15 active:scale-95 shadow-md"
               }`}
-            />
-          ))}
-        </div>
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Назад</span>
+            </button>
 
-        <button
-          onClick={nextSlide}
-          disabled={currentSlide === slides.length - 1}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-            currentSlide === slides.length - 1
-              ? "text-gray-400 bg-gray-100 cursor-not-allowed"
-              : "text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30 active:scale-95"
-          }`}
-        >
-          Далее
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </footer>
+            <button
+              onClick={nextSlide}
+              disabled={currentSlide === slides.length - 1}
+              className={`flex items-center gap-1.5 px-5 py-2 rounded-xl font-black text-xs transition-all ${
+                currentSlide === slides.length - 1
+                  ? "bg-white/5 text-white/30 cursor-not-allowed border border-white/5"
+                  : "bg-[#FF6022] hover:bg-[#FF7338] text-white shadow-lg shadow-[#FF6022]/30 active:scale-95"
+              }`}
+            >
+              <span>Далее</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Quick Slide Strip (1-14) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto py-1 max-w-full">
+            {slides.map((s, idx) => {
+              const isActive = idx === currentSlide;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setCurrentSlide(idx)}
+                  title={`${idx + 1}. ${s.title}`}
+                  className={`w-7 h-7 rounded-lg text-xs font-black transition-all flex items-center justify-center ${
+                    isActive
+                      ? "bg-[#5822E5] text-[#FFE600] shadow-md shadow-[#5822E5]/50 scale-110 border border-[#FFE600]/60"
+                      : "bg-white/5 hover:bg-white/10 text-white/60 border border-white/10"
+                  }`}
+                >
+                  {idx + 1}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Hotkeys */}
+          <div className="hidden lg:flex items-center gap-2 text-[11px] text-white/40">
+            <span>Клавиши:</span>
+            <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white/70 font-mono text-[10px]">
+              ←
+            </kbd>
+            <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white/70 font-mono text-[10px]">
+              →
+            </kbd>
+            <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white/70 font-mono text-[10px]">
+              F (Full)
+            </kbd>
+            <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white/70 font-mono text-[10px]">
+              G (Grid)
+            </kbd>
+          </div>
+        </footer>
+      )}
+
+      {/* Print Styles for PDF Export (Clean 16:9 Landscape page breaks) */}
+      <style>{`
+        @media print {
+          body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+          }
+          header, footer, nav, button {
+            display: none !important;
+          }
+          .font-cy {
+            font-family: 'Cy Grotesk', 'Gilroy', sans-serif !important;
+          }
+          @page {
+            size: 1920px 1080px landscape;
+            margin: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }

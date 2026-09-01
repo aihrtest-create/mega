@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime
-from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries
+from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries, normalize_park_name
 from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.utils import get_column_letter
 
@@ -63,7 +63,7 @@ def generate_playtime(date_val: str, period_type: str, selected_parks: list, out
         if val_idx == -1 and len(fields) > 0:
             val_idx = len(fields) - 1
                 
-        park = labels.get("park", "Unknown")
+        park = normalize_park_name(labels.get("park", "Unknown"))
         if park not in selected_parks:
             continue
             
@@ -78,7 +78,8 @@ def generate_playtime(date_val: str, period_type: str, selected_parks: list, out
             val_seconds = vals[val_idx][0]
             if val_seconds is not None:
                 val_hours = val_seconds / 3600.0
-                results_dict[(park, zone, scene)] = val_hours
+                key = (park, zone, scene)
+                results_dict[key] = results_dict.get(key, 0.0) + val_hours
                 
     # Process PlayerEnteredInstallation (others with 0 hours)
     if not strict_mode:
@@ -91,7 +92,7 @@ def generate_playtime(date_val: str, period_type: str, selected_parks: list, out
                 if "labels" in field:
                     labels = field["labels"]
                     
-            park = labels.get("park", "Unknown")
+            park = normalize_park_name(labels.get("park", "Unknown"))
             if park not in selected_parks:
                 continue
                 
@@ -101,8 +102,10 @@ def generate_playtime(date_val: str, period_type: str, selected_parks: list, out
 
             scene = labels.get("scene", "Unknown")
             
-            if (park, zone, scene) not in results_dict:
-                results_dict[(park, zone, scene)] = 0.0
+            key = (park, zone, scene)
+            if key not in results_dict:
+                results_dict[key] = 0.0
+
 
     results = []
     for (park, zone, scene), hours in results_dict.items():

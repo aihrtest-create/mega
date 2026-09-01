@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries
+from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries, normalize_park_name
 from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.utils import get_column_letter
 
@@ -47,7 +47,7 @@ def generate_sessions(date_val: str, period_type: str, selected_parks: list, out
         if val_idx == -1 and len(fields) > 0:
             val_idx = len(fields) - 1
                 
-        park = labels.get("park", "Unknown")
+        park = normalize_park_name(labels.get("park", "Unknown"))
         if park not in selected_parks:
             continue
             
@@ -67,7 +67,8 @@ def generate_sessions(date_val: str, period_type: str, selected_parks: list, out
                 key = (park, zone, scene)
                 if key not in raw_results:
                     raw_results[key] = {}
-                raw_results[key][measurement] = val_count
+                raw_results[key][measurement] = raw_results[key].get(measurement, 0) + val_count
+
 
     results = []
     for (park, zone, scene), meas_counts in raw_results.items():

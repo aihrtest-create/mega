@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
-from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries
+from backend.reports.common import GRAFANA_URL, DATASOURCE_UID, get_headers, get_time_boundaries, normalize_park_name
 from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.utils import get_column_letter
 
@@ -35,6 +35,9 @@ def generate_avatars(date_val: str, period_type: str, selected_parks: list, outp
             if "park" in field.get("labels", {}):
                 park_name = field["labels"]["park"]
                 break
+        
+        park_name = normalize_park_name(park_name)
+
         
         vals = frame.get("data", {}).get("values", [])
         if len(vals) >= 2:

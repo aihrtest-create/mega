@@ -1,11 +1,14 @@
 import os
 import calendar
 from datetime import datetime
-from dotenv import load_dotenv
 
-load_dotenv()
-load_dotenv(dotenv_path="../server/.env")
-load_dotenv(dotenv_path="./server/.env")
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    load_dotenv(dotenv_path="../server/.env")
+    load_dotenv(dotenv_path="./server/.env")
+except ImportError:
+    pass
 
 GRAFANA_URL = "https://stat.hello.io"
 DATASOURCE_UID = "adg0kymjjbf28a"
@@ -49,11 +52,35 @@ class DynamicHeaders(dict):
 HEADERS = DynamicHeaders()
 
 
-# Жестко заданный порядок парков согласно скриншоту
 PARK_ORDER = [
     "AVIAPARK", "Atyrau", "BAKU", "BOGOTA-NUESTRO", "DUBAI", "KASPIYSK",
     "MEGA", "OMAN", "RIVIERA", "SAKHALIN", "SELIGERSKAYA", "SOCHI", "VLADIKAVKAZ", "VORONEZH"
 ]
+
+def normalize_park_name(park: str) -> str:
+    if not park:
+        return "Unknown"
+    if park == "Kaspiysk":
+        return "KASPIYSK"
+    if park == "Seligerskaya":
+        return "SELIGERSKAYA"
+    if park == "BOGOTA NUESTRO":
+        return "BOGOTA-NUESTRO"
+    return park
+
+def expand_selected_parks(selected_parks: list) -> list:
+    expanded = set(selected_parks)
+    if "KASPIYSK" in expanded or "Kaspiysk" in expanded:
+        expanded.add("KASPIYSK")
+        expanded.add("Kaspiysk")
+    if "SELIGERSKAYA" in expanded or "Seligerskaya" in expanded:
+        expanded.add("SELIGERSKAYA")
+        expanded.add("Seligerskaya")
+    if "BOGOTA-NUESTRO" in expanded or "BOGOTA NUESTRO" in expanded:
+        expanded.add("BOGOTA-NUESTRO")
+        expanded.add("BOGOTA NUESTRO")
+    return list(expanded)
+
 
 def get_time_boundaries(date_val: str, period_type: str):
     """

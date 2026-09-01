@@ -51,7 +51,7 @@ HEADERS = DynamicHeaders()
 
 # Жестко заданный порядок парков согласно скриншоту
 PARK_ORDER = [
-    "AVIAPARK", "Atyrau", "BAKU", "BOGOTA-NUESTRO", "DUBAI", "Kaspiysk",
+    "AVIAPARK", "Atyrau", "BAKU", "BOGOTA-NUESTRO", "DUBAI", "KASPIYSK",
     "MEGA", "OMAN", "RIVIERA", "SAKHALIN", "SELIGERSKAYA", "SOCHI", "VLADIKAVKAZ", "VORONEZH"
 ]
 
